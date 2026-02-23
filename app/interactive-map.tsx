@@ -83,11 +83,13 @@ export function InteractiveMap({
 
     const script = document.createElement("script");
     script.src = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";
-    script.async = true;
+    script.async = false;
     script.onload = () => {
-      initializeMap();
+      setTimeout(() => {
+        initializeMap();
+      }, 100);
     };
-    document.body.appendChild(script);
+    document.head.appendChild(script);
 
     return () => {
       try {
@@ -98,8 +100,12 @@ export function InteractiveMap({
       } catch (e) {
         // Ignore cleanup errors
       }
-      document.body.removeChild(script);
-      document.head.removeChild(link);
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+      if (link.parentNode) {
+        link.parentNode.removeChild(link);
+      }
     };
   }, []);
 
