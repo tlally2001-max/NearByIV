@@ -126,16 +126,6 @@ export default function Home() {
               Find a Provider
             </Link>
           </div>
-          {/* Mobile Menu */}
-          <div className="md:hidden flex items-center gap-3">
-            <Link
-              href="/providers"
-              className="text-sm font-semibold text-white px-3 py-1.5 rounded-lg transition-colors"
-              style={{ backgroundColor: "#0066FF" }}
-            >
-              Find Provider
-            </Link>
-          </div>
         </div>
       </nav>
 
