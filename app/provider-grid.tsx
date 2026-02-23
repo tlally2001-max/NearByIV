@@ -188,7 +188,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
               onChange={(e) => handleStateChange(e.target.value)}
               className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0066FF]/30 transition-all"
             >
-              <option value="all">All States ({providers.length})</option>
+              <option value="all">All States ({states.length})</option>
               {states.map((state) => {
                 const count = providers.filter((p) => p.state === state).length;
                 return (
@@ -214,7 +214,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
               onChange={(e) => setSelectedCity(e.target.value)}
               className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0066FF]/30 transition-all"
             >
-              <option value="all">All Cities ({filtered.length})</option>
+              <option value="all">All Cities ({cities.length})</option>
               {cities.map((city) => {
                 const count = filtered.filter((p) => p.city === city).length;
                 return (
