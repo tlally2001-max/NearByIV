@@ -87,7 +87,7 @@ async function MapSection() {
     ]) as any;
 
     // Create coordinates using predefined list
-    const coordinates = (providers ?? []).map((provider) => {
+    const coordinates = (providers ?? []).map((provider: any) => {
       const key = `${provider.city?.toLowerCase()},${provider.state?.toLowerCase()}`;
       const coords = CITY_COORDINATES[key];
 
