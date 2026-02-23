@@ -319,11 +319,6 @@ export default function Home() {
                   <p className="text-sm font-semibold mb-4 text-gray-600">
                     {pillar.subtext}
                   </p>
-                  {pillar.desc && (
-                    <p className="text-sm leading-relaxed text-gray-700">
-                      {pillar.desc}
-                    </p>
-                  )}
                 </div>
 
                 {/* State Filter for Active Teams On-Call */}
