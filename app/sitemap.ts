@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       // Return static pages only if credentials missing
     } else {
       const response = await Promise.race([
-        fetch(`${supabaseUrl}/rest/v1/providers?is_confirmed_mobile=eq.true&select=slug,id,state,updated_at`, {
+        fetch(`${supabaseUrl}/rest/v1/providers?is_confirmed_mobile=true&select=slug,id,state,updated_at`, {
           headers: {
             apikey: publishableKey,
             "Content-Type": "application/json",
