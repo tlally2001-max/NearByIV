@@ -5,24 +5,25 @@ const BASE_URL = "https://nearbyiv.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createClient();
+
+  // Fetch all confirmed mobile providers
   const { data: providers } = await supabase
     .from("providers")
-    .select("slug, id")
+    .select("slug, id, state, updated_at")
     .eq("is_confirmed_mobile", true);
 
-  const providerUrls: MetadataRoute.Sitemap = (providers ?? []).map((p) => ({
-    url: `${BASE_URL}/providers/${p.slug}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly",
-    priority: 0.8,
-  }));
+  // Get unique states for category pages
+  const states = Array.from(
+    new Set((providers ?? []).map((p) => p.state).filter(Boolean))
+  ).sort();
 
-  return [
+  // Static pages
+  const staticPages: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
       lastModified: new Date(),
       changeFrequency: "daily",
-      priority: 1,
+      priority: 1.0,
     },
     {
       url: `${BASE_URL}/providers`,
@@ -30,6 +31,41 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "daily",
       priority: 0.9,
     },
-    ...providerUrls,
+    {
+      url: `${BASE_URL}/how-it-works`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${BASE_URL}/privacy`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
+    {
+      url: `${BASE_URL}/terms`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
   ];
+
+  // State filtering pages for better SEO
+  const statePages: MetadataRoute.Sitemap = states.map((state) => ({
+    url: `${BASE_URL}/providers?state=${encodeURIComponent(state)}`,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.8,
+  }));
+
+  // Provider detail pages
+  const providerUrls: MetadataRoute.Sitemap = (providers ?? []).map((p) => ({
+    url: `${BASE_URL}/providers/${p.slug}`,
+    lastModified: p.updated_at ? new Date(p.updated_at) : new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
+  return [...staticPages, ...statePages, ...providerUrls];
 }

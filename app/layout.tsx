@@ -5,7 +5,9 @@ import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+  : process.env.NODE_ENV === "production"
+    ? "https://nearbyiv.com"
+    : "http://localhost:3000";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -18,7 +20,6 @@ export const metadata: Metadata = {
     default: "NearbyIV — Find Mobile IV Therapy Providers Near You",
     template: "%s | NearbyIV",
   },
-  // Trigger deployment refresh v2
   description:
     "The most trusted directory of RN-led mobile IV therapy providers. Find verified concierge IV hydration, NAD+, GLP-1, and wellness treatments delivered to your home or office.",
   keywords: [
@@ -31,6 +32,7 @@ export const metadata: Metadata = {
     "mobile hydration",
     "RN IV therapy",
     "at-home IV therapy",
+    "IV therapy directory",
   ],
   authors: [{ name: "NearbyIV" }],
   creator: "NearbyIV",
@@ -39,6 +41,12 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
     googleBot: { index: true, follow: true },
+  },
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "NearbyIV",
   },
   openGraph: {
     type: "website",

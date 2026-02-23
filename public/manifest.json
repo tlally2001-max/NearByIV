@@ -1,0 +1,55 @@
+{
+  "name": "NearbyIV - Mobile IV Therapy Providers Directory",
+  "short_name": "NearbyIV",
+  "description": "Find verified mobile IV therapy providers near you. Browse RN-led concierge IV hydration, NAD+, GLP-1, and wellness services.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#0066FF",
+  "background_color": "#ffffff",
+  "categories": ["medical", "lifestyle", "wellness"],
+  "screenshots": [
+    {
+      "src": "/iv-bag-default.jpg",
+      "sizes": "540x720",
+      "type": "image/jpeg",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/iv-bag-default.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/iv-bag-default.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/iv-bag-default.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse Providers",
+      "short_name": "Providers",
+      "description": "Browse all mobile IV therapy providers",
+      "url": "/providers",
+      "icons": [
+        {
+          "src": "/iv-bag-default.jpg",
+          "sizes": "192x192",
+          "type": "image/jpeg"
+        }
+      ]
+    }
+  ]
+}
