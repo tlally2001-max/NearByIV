@@ -18,6 +18,7 @@ export const metadata: Metadata = {
     default: "NearbyIV — Find Mobile IV Therapy Providers Near You",
     template: "%s | NearbyIV",
   },
+  // Trigger deployment refresh
   description:
     "The most trusted directory of RN-led mobile IV therapy providers. Find verified concierge IV hydration, NAD+, GLP-1, and wellness treatments delivered to your home or office.",
   keywords: [
