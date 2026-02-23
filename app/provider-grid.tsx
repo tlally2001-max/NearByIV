@@ -18,6 +18,34 @@ type Provider = {
 };
 
 // Normalize service names to group similar services
+// Normalize state abbreviations to full names
+const STATE_NAME_MAP: Record<string, string> = {
+  "al": "Alabama", "ak": "Alaska", "az": "Arizona", "ar": "Arkansas",
+  "ca": "California", "co": "Colorado", "ct": "Connecticut", "de": "Delaware",
+  "fl": "Florida", "ga": "Georgia", "hi": "Hawaii", "id": "Idaho",
+  "il": "Illinois", "in": "Indiana", "ia": "Iowa", "ks": "Kansas",
+  "ky": "Kentucky", "la": "Louisiana", "me": "Maine", "md": "Maryland",
+  "ma": "Massachusetts", "mi": "Michigan", "mn": "Minnesota", "ms": "Mississippi",
+  "mo": "Missouri", "mt": "Montana", "ne": "Nebraska", "nv": "Nevada",
+  "nh": "New Hampshire", "nj": "New Jersey", "nm": "New Mexico", "ny": "New York",
+  "nc": "North Carolina", "nd": "North Dakota", "oh": "Ohio", "ok": "Oklahoma",
+  "or": "Oregon", "pa": "Pennsylvania", "ri": "Rhode Island", "sc": "South Carolina",
+  "sd": "South Dakota", "tn": "Tennessee", "tx": "Texas", "ut": "Utah",
+  "vt": "Vermont", "va": "Virginia", "wa": "Washington", "wv": "West Virginia",
+  "wi": "Wisconsin", "wy": "Wyoming",
+};
+
+function normalizeState(state: string | null): string | null {
+  if (!state) return null;
+  const normalized = state.toLowerCase().trim();
+  // If it's an abbreviation, convert to full name
+  if (STATE_NAME_MAP[normalized]) {
+    return STATE_NAME_MAP[normalized];
+  }
+  // If it's already a full name, capitalize properly
+  return normalized.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+}
+
 const SERVICE_ALIASES: Record<string, string> = {
   "nad": "NAD+",
   "nad+": "NAD+",
@@ -94,7 +122,11 @@ function normalizeService(service: string): string {
 
 export function ProviderGrid({ providers }: { providers: Provider[] }) {
   const states = Array.from(
-    new Set(providers.map((p) => p.state).filter(Boolean))
+    new Set(
+      providers
+        .map((p) => normalizeState(p.state))
+        .filter(Boolean)
+    )
   ).sort() as string[];
 
   const [selectedState, setSelectedState] = useState("all");
@@ -105,7 +137,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
   const cities = useMemo(() => {
     let cityProviders = providers;
     if (selectedState !== "all") {
-      cityProviders = providers.filter((p) => p.state === selectedState);
+      cityProviders = providers.filter((p) => normalizeState(p.state) === selectedState);
     }
     return Array.from(
       new Set(cityProviders.map((p) => p.city).filter(Boolean))
@@ -146,7 +178,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
 
     // Filter by state
     if (selectedState !== "all") {
-      result = result.filter((p) => p.state === selectedState);
+      result = result.filter((p) => normalizeState(p.state) === selectedState);
     }
 
     // Filter by city
@@ -190,7 +222,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
             >
               <option value="all">All States ({providers.length})</option>
               {states.map((state) => {
-                const count = providers.filter((p) => p.state === state).length;
+                const count = providers.filter((p) => normalizeState(p.state) === state).length;
                 return (
                   <option key={state} value={state}>
                     {state} ({count})
