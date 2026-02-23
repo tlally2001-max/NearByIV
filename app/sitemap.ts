@@ -4,13 +4,28 @@ import type { MetadataRoute } from "next";
 const BASE_URL = "https://nearbyiv.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const supabase = await createClient();
+  let providers: any[] = [];
 
-  // Fetch all confirmed mobile providers
-  const { data: providers } = await supabase
-    .from("providers")
-    .select("slug, id, state, updated_at")
-    .eq("is_confirmed_mobile", true);
+  try {
+    const supabase = await createClient();
+
+    // Fetch all confirmed mobile providers with timeout
+    const { data } = await Promise.race([
+      supabase
+        .from("providers")
+        .select("slug, id, state, updated_at")
+        .eq("is_confirmed_mobile", true),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Supabase timeout")), 10000)
+      ),
+    ]) as any;
+
+    providers = data ?? [];
+  } catch (error) {
+    console.error("Sitemap: Error fetching providers:", error);
+    // Continue with empty providers array on error
+    providers = [];
+  }
 
   // Get unique states for category pages
   const states = Array.from(
