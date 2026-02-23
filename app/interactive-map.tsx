@@ -153,8 +153,8 @@ export function InteractiveMap({
       maxZoom: 19,
     }).addTo(map);
 
-    // Add provider markers
-    providers.forEach((provider) => {
+    // Add provider markers (limit to 5 for performance)
+    providers.slice(0, 5).forEach((provider) => {
       const coords = coordMap.current[provider.id];
 
       if (coords) {
