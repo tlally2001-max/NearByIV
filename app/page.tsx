@@ -71,26 +71,39 @@ const jsonLd = {
 };
 
 async function MapSection() {
-  const supabase = await createClient();
-  const { data: providers } = await supabase
-    .from("providers")
-    .select("id, slug, name, city, state, rating, reviews")
-    .eq("is_confirmed_mobile", true)
-    .order("rating", { ascending: false });
+  try {
+    const supabase = await createClient();
+    // Limit to top 50 providers for better performance
+    const { data: providers } = await Promise.race([
+      supabase
+        .from("providers")
+        .select("id, slug, name, city, state, rating, reviews")
+        .eq("is_confirmed_mobile", true)
+        .order("rating", { ascending: false })
+        .limit(50),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Map query timeout")), 8000)
+      ),
+    ]) as any;
 
-  // Create coordinates using predefined list
-  const coordinates = (providers ?? []).map((provider) => {
-    const key = `${provider.city?.toLowerCase()},${provider.state?.toLowerCase()}`;
-    const coords = CITY_COORDINATES[key];
+    // Create coordinates using predefined list
+    const coordinates = (providers ?? []).map((provider) => {
+      const key = `${provider.city?.toLowerCase()},${provider.state?.toLowerCase()}`;
+      const coords = CITY_COORDINATES[key];
 
-    return {
-      providerId: provider.id,
-      lat: coords?.lat ?? 39,
-      lng: coords?.lng ?? -98,
-    };
-  });
+      return {
+        providerId: provider.id,
+        lat: coords?.lat ?? 39,
+        lng: coords?.lng ?? -98,
+      };
+    });
 
-  return <InteractiveMap providers={providers ?? []} coordinates={coordinates} />;
+    return <InteractiveMap providers={providers ?? []} coordinates={coordinates} />;
+  } catch (error) {
+    console.error("MapSection error:", error);
+    // Return map with empty providers on error
+    return <InteractiveMap providers={[]} coordinates={[]} />;
+  }
 }
 
 export default function Home() {
