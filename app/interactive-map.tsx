@@ -53,6 +53,8 @@ const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
   "lower manhattan,new york": { lat: 40.705, lng: -74.012 },
   "hollywood,ca": { lat: 34.0901, lng: -118.3267 },
   "hollywood,california": { lat: 34.0901, lng: -118.3267 },
+  "las vegas,nv": { lat: 36.1699, lng: -115.1398 },
+  "las vegas,nevada": { lat: 36.1699, lng: -115.1398 },
 };
 
 export function InteractiveMap({
@@ -157,6 +159,8 @@ export function InteractiveMap({
     const targetCities = [
       "new york,ny",
       "new york,new york",
+      "los angeles,ca",
+      "los angeles,california",
       "las vegas,nv",
       "las vegas,nevada",
       "miami,fl",
