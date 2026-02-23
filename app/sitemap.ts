@@ -6,18 +6,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let providers: any[] = [];
 
   try {
-    // Use REST API directly with service role key (more reliable)
+    // Use REST API with publishable key (works for RLS-disabled tables)
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-    if (!supabaseUrl || !serviceRoleKey) {
+    if (!supabaseUrl || !publishableKey) {
       console.warn("Sitemap: Missing Supabase credentials");
       // Return static pages only if credentials missing
     } else {
       const response = await Promise.race([
         fetch(`${supabaseUrl}/rest/v1/providers?is_confirmed_mobile=eq.true&select=slug,id,state,updated_at`, {
           headers: {
-            Authorization: `Bearer ${serviceRoleKey}`,
+            apikey: publishableKey,
             "Content-Type": "application/json",
           },
         }),
