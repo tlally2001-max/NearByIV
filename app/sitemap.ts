@@ -1,4 +1,3 @@
-import { createClient as createServiceClient } from "@supabase/supabase-js";
 import type { MetadataRoute } from "next";
 
 const BASE_URL = "https://nearbyiv.com";
@@ -7,24 +6,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let providers: any[] = [];
 
   try {
-    // Use service role key for server-only operations (no cookies needed)
-    const supabase = createServiceClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-      process.env.SUPABASE_SERVICE_ROLE_KEY || "",
-    );
+    // Use REST API directly with service role key (more reliable)
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    // Fetch all confirmed mobile providers with timeout
-    const { data } = await Promise.race([
-      supabase
-        .from("providers")
-        .select("slug, id, state, updated_at")
-        .eq("is_confirmed_mobile", true),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Supabase timeout")), 15000)
-      ),
-    ]) as any;
+    if (!supabaseUrl || !serviceRoleKey) {
+      console.warn("Sitemap: Missing Supabase credentials");
+      // Return static pages only if credentials missing
+    } else {
+      const response = await Promise.race([
+        fetch(`${supabaseUrl}/rest/v1/providers?is_confirmed_mobile=eq.true&select=slug,id,state,updated_at`, {
+          headers: {
+            Authorization: `Bearer ${serviceRoleKey}`,
+            "Content-Type": "application/json",
+          },
+        }),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Supabase timeout")), 15000)
+        ),
+      ]) as any;
 
-    providers = data ?? [];
+      if (response.ok) {
+        providers = await response.json();
+      } else {
+        console.error("Sitemap: Supabase API error:", response.status, response.statusText);
+      }
+    }
   } catch (error) {
     console.error("Sitemap: Error fetching providers:", error instanceof Error ? error.message : String(error));
     // Continue with empty providers array on error
