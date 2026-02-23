@@ -153,8 +153,34 @@ export function InteractiveMap({
       maxZoom: 19,
     }).addTo(map);
 
-    // Add provider markers (limit to 5 for performance)
-    providers.slice(0, 5).forEach((provider) => {
+    // Filter providers to top-rated from specific cities only
+    const targetCities = [
+      "new york,ny",
+      "new york,new york",
+      "las vegas,nv",
+      "las vegas,nevada",
+      "miami,fl",
+      "miami,florida",
+      "chicago,il",
+      "chicago,illinois",
+      "seattle,wa",
+      "seattle,washington",
+    ];
+
+    const providersByCity = new Map<string, Provider>();
+    providers.forEach((provider) => {
+      const key = `${provider.city?.toLowerCase()},${provider.state?.toLowerCase()}`;
+      if (targetCities.includes(key)) {
+        const existing = providersByCity.get(key);
+        // Keep the one with higher rating
+        if (!existing || (provider.rating ?? 0) > (existing.rating ?? 0)) {
+          providersByCity.set(key, provider);
+        }
+      }
+    });
+
+    // Add provider markers
+    providersByCity.forEach((provider) => {
       const coords = coordMap.current[provider.id];
 
       if (coords) {
