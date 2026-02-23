@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  cacheComponents: true,
+  // Disable cacheComponents due to Hostinger incompatibility
+  // Instead use aggressive static generation and caching headers
   async headers() {
     return [
       {
@@ -22,12 +23,23 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Aggressive caching for static provider pages
+      {
+        source: "/providers/:slug",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, s-maxage=86400",
+          },
+        ],
+      },
+      // Cache other pages for 1 hour
       {
         source: "/:path*",
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=3600, must-revalidate",
+            value: "public, max-age=3600, s-maxage=3600",
           },
         ],
       },
