@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient as createServiceClient } from "@supabase/supabase-js";
 import type { MetadataRoute } from "next";
 
 const BASE_URL = "https://nearbyiv.com";
@@ -7,7 +7,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let providers: any[] = [];
 
   try {
-    const supabase = await createClient();
+    // Use service role key for server-only operations (no cookies needed)
+    const supabase = createServiceClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+      process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+    );
 
     // Fetch all confirmed mobile providers with timeout
     const { data } = await Promise.race([
