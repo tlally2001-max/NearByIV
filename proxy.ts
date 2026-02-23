@@ -37,18 +37,7 @@ function checkRateLimit(ip: string): boolean {
 }
 
 export async function proxy(request: NextRequest) {
-  const clientIP = getClientIP(request);
-
-  // Block known problematic IPs
-  if (blockedIPs.has(clientIP)) {
-    return new NextResponse("Access Denied", { status: 403 });
-  }
-
-  // Rate limit requests per IP
-  if (!checkRateLimit(clientIP)) {
-    return new NextResponse("Too Many Requests", { status: 429 });
-  }
-
+  // Skip rate limiting for now - diagnosing request issue
   return await updateSession(request);
 }
 
