@@ -22,6 +22,30 @@ type Provider = {
   is_confirmed_mobile: boolean;
 };
 
+/* ── Pre-generate all provider pages at build time ── */
+export async function generateStaticParams() {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=slug&order=slug.asc`,
+      {
+        headers: {
+          apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "",
+        },
+      }
+    );
+
+    if (!response.ok) return [];
+
+    const providers: Array<{ slug: string }> = await response.json();
+    return providers.map((provider) => ({
+      slug: provider.slug,
+    }));
+  } catch (error) {
+    console.error("Failed to generate static params:", error);
+    return [];
+  }
+}
+
 /* ── SEO Metadata ── */
 export async function generateMetadata({
   params,
