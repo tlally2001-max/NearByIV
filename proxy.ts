@@ -37,7 +37,13 @@ function checkRateLimit(ip: string): boolean {
 }
 
 export async function proxy(request: NextRequest) {
-  // Skip rate limiting for now - diagnosing request issue
+  const clientIP = getClientIP(request);
+
+  // Rate limit requests per IP to prevent bot abuse
+  if (!checkRateLimit(clientIP)) {
+    return new NextResponse("Too Many Requests", { status: 429 });
+  }
+
   return await updateSession(request);
 }
 
