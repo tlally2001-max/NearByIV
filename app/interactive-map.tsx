@@ -65,6 +65,7 @@ export function InteractiveMap({
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [shouldLoadMap, setShouldLoadMap] = useState(false);
 
   // Create a map of provider ID to coordinates for quick lookup
   const coordMap = useRef<Record<string, { lat: number; lng: number }>>(
@@ -74,7 +75,27 @@ export function InteractiveMap({
     }, {} as Record<string, { lat: number; lng: number }>)
   );
 
+  // Lazy load map only when container is visible
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoadMap(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (mapContainer.current) {
+      observer.observe(mapContainer.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!shouldLoadMap) return;
     // Load Leaflet CSS and JS
     const link = document.createElement("link");
     link.rel = "stylesheet";
@@ -107,7 +128,7 @@ export function InteractiveMap({
         link.parentNode.removeChild(link);
       }
     };
-  }, []);
+  }, [shouldLoadMap]);
 
   const initializeMap = () => {
     if (!mapContainer.current) return;
