@@ -206,12 +206,12 @@ export default function TermsPage() {
 
       {/* ── Footer ── */}
       <footer className="bg-gray-950 text-gray-500 py-10">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col items-center justify-center gap-6 text-center">
           <div className="text-sm">
             <span className="text-white font-semibold">NearbyIV.com</span>
             <span className="text-gray-600"> — Mobile IV and Hangover Recovery Directory</span>
           </div>
-          <div className="flex items-center gap-6 text-sm">
+          <div className="flex items-center justify-center gap-6 text-sm">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
             <a href="mailto:hello@nearbyiv.com" className="hover:text-white transition-colors">Contact</a>
