@@ -1,45 +1,7 @@
 import Link from "next/link";
 import { InteractiveMap } from "./interactive-map";
 import { StateFilterDropdown } from "@/components/state-filter-dropdown";
-import { Suspense } from "react";
 import type { Metadata } from "next";
-
-const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
-  "los angeles,ca": { lat: 34.0522, lng: -118.2437 },
-  "los angeles,california": { lat: 34.0522, lng: -118.2437 },
-  "new york,ny": { lat: 40.7128, lng: -74.006 },
-  "new york,new york": { lat: 40.7128, lng: -74.006 },
-  "chicago,il": { lat: 41.8781, lng: -87.6298 },
-  "chicago,illinois": { lat: 41.8781, lng: -87.6298 },
-  "houston,tx": { lat: 29.7604, lng: -95.3698 },
-  "houston,texas": { lat: 29.7604, lng: -95.3698 },
-  "phoenix,az": { lat: 33.4484, lng: -112.074 },
-  "phoenix,arizona": { lat: 33.4484, lng: -112.074 },
-  "philadelphia,pa": { lat: 39.9526, lng: -75.1652 },
-  "philadelphia,pennsylvania": { lat: 39.9526, lng: -75.1652 },
-  "san antonio,tx": { lat: 29.4241, lng: -98.4936 },
-  "san antonio,texas": { lat: 29.4241, lng: -98.4936 },
-  "san diego,ca": { lat: 32.7157, lng: -117.1611 },
-  "san diego,california": { lat: 32.7157, lng: -117.1611 },
-  "dallas,tx": { lat: 32.7767, lng: -96.797 },
-  "dallas,texas": { lat: 32.7767, lng: -96.797 },
-  "miami,fl": { lat: 25.7617, lng: -80.1918 },
-  "miami,florida": { lat: 25.7617, lng: -80.1918 },
-  "denver,co": { lat: 39.7392, lng: -104.9903 },
-  "denver,colorado": { lat: 39.7392, lng: -104.9903 },
-  "seattle,wa": { lat: 47.6062, lng: -122.3321 },
-  "seattle,washington": { lat: 47.6062, lng: -122.3321 },
-  "boston,ma": { lat: 42.3601, lng: -71.0589 },
-  "boston,massachusetts": { lat: 42.3601, lng: -71.0589 },
-  "glendale,ca": { lat: 34.1404, lng: -118.255 },
-  "glendale,california": { lat: 34.1404, lng: -118.255 },
-  "west hollywood,ca": { lat: 34.0901, lng: -118.3619 },
-  "west hollywood,california": { lat: 34.0901, lng: -118.3619 },
-  "lower manhattan,ny": { lat: 40.705, lng: -74.012 },
-  "lower manhattan,new york": { lat: 40.705, lng: -74.012 },
-  "hollywood,ca": { lat: 34.0901, lng: -118.3267 },
-  "hollywood,california": { lat: 34.0901, lng: -118.3267 },
-};
 
 export const metadata: Metadata = {
   title: "NearbyIV — Find Mobile IV Therapy Providers Near You",
@@ -69,37 +31,65 @@ const jsonLd = {
   },
 };
 
-async function MapSection() {
-  try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+// Hardcoded featured providers - 1 per city (update slugs when you select featured listings)
+const FEATURED_PROVIDERS = [
+  {
+    id: "new-york",
+    slug: "providers?state=New+York",
+    name: "Top Rated IV Therapy",
+    city: "New York",
+    state: "NY",
+    rating: null,
+    reviews: null,
+  },
+  {
+    id: "miami",
+    slug: "providers?state=Florida",
+    name: "Top Rated IV Therapy",
+    city: "Miami",
+    state: "FL",
+    rating: null,
+    reviews: null,
+  },
+  {
+    id: "los-angeles",
+    slug: "providers?state=California",
+    name: "Top Rated IV Therapy",
+    city: "Los Angeles",
+    state: "CA",
+    rating: null,
+    reviews: null,
+  },
+  {
+    id: "las-vegas",
+    slug: "providers?state=Nevada",
+    name: "Top Rated IV Therapy",
+    city: "Las Vegas",
+    state: "NV",
+    rating: null,
+    reviews: null,
+  },
+  {
+    id: "chicago",
+    slug: "providers?state=Illinois",
+    name: "Top Rated IV Therapy",
+    city: "Chicago",
+    state: "IL",
+    rating: null,
+    reviews: null,
+  },
+];
 
-    const res = await fetch(
-      `${supabaseUrl}/rest/v1/providers?is_confirmed_mobile=eq.true&select=id,slug,name,city,state,rating,reviews&order=rating.desc&limit=50`,
-      {
-        headers: { apikey: publishableKey ?? "" },
-        next: { revalidate: 3600 }, // Cache for 1 hour
-      }
-    );
+const FEATURED_COORDINATES = [
+  { providerId: "new-york", lat: 40.7128, lng: -74.006 },
+  { providerId: "miami", lat: 25.7617, lng: -80.1918 },
+  { providerId: "los-angeles", lat: 34.0522, lng: -118.2437 },
+  { providerId: "las-vegas", lat: 36.1699, lng: -115.1398 },
+  { providerId: "chicago", lat: 41.8781, lng: -87.6298 },
+];
 
-    const providers: any[] = res.ok ? await res.json() : [];
-
-    // Create coordinates using predefined list
-    const coordinates = providers.map((provider: any) => {
-      const key = `${provider.city?.toLowerCase()},${provider.state?.toLowerCase()}`;
-      const coords = CITY_COORDINATES[key];
-      return {
-        providerId: provider.id,
-        lat: coords?.lat ?? 39,
-        lng: coords?.lng ?? -98,
-      };
-    });
-
-    return <InteractiveMap providers={providers} coordinates={coordinates} />;
-  } catch (error) {
-    console.error("MapSection error:", error);
-    return <InteractiveMap providers={[]} coordinates={[]} />;
-  }
+function MapSection() {
+  return <InteractiveMap providers={FEATURED_PROVIDERS} coordinates={FEATURED_COORDINATES} />;
 }
 
 export default function Home() {
@@ -195,13 +185,7 @@ export default function Home() {
           {/* Interactive Map with Provider Markers */}
           <div className="w-full mt-12">
             <div className="max-w-7xl mx-auto px-6">
-              <Suspense
-                fallback={
-                  <div className="rounded-2xl border border-gray-200 shadow-sm bg-gray-50 animate-pulse" style={{ height: "500px" }} />
-                }
-              >
-                <MapSection />
-              </Suspense>
+              <MapSection />
             </div>
           </div>
         </div>
