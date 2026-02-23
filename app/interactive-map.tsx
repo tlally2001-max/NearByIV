@@ -174,8 +174,19 @@ export function InteractiveMap({
     const providersByCity = new Map<string, Provider>();
     providers.forEach((provider) => {
       const key = `${provider.city?.toLowerCase()},${provider.state?.toLowerCase()}`;
+
+      // Special case: use "Clean Market IV Drip Lounge" for Las Vegas
+      if (key === "las vegas,nevada" && provider.name === "Clean Market IV Drip Lounge") {
+        providersByCity.set(key, provider);
+        return;
+      }
+
       if (targetCities.includes(key)) {
         const existing = providersByCity.get(key);
+        // Skip if we already have the special Las Vegas provider
+        if (key === "las vegas,nevada" && existing?.name === "Clean Market IV Drip Lounge") {
+          return;
+        }
         // Keep the one with higher rating
         if (!existing || (provider.rating ?? 0) > (existing.rating ?? 0)) {
           providersByCity.set(key, provider);
