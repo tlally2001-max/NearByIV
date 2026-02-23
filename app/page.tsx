@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { InteractiveMap } from "./interactive-map";
 import { StateFilterDropdown } from "@/components/state-filter-dropdown";
-import { createClient } from "@/lib/supabase/server";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 
@@ -72,25 +71,23 @@ const jsonLd = {
 
 async function MapSection() {
   try {
-    const supabase = await createClient();
-    // Limit to top 50 providers for better performance
-    const { data: providers } = await Promise.race([
-      supabase
-        .from("providers")
-        .select("id, slug, name, city, state, rating, reviews")
-        .eq("is_confirmed_mobile", true)
-        .order("rating", { ascending: false })
-        .limit(50),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Map query timeout")), 8000)
-      ),
-    ]) as any;
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+
+    const res = await fetch(
+      `${supabaseUrl}/rest/v1/providers?is_confirmed_mobile=eq.true&select=id,slug,name,city,state,rating,reviews&order=rating.desc&limit=50`,
+      {
+        headers: { apikey: publishableKey ?? "" },
+        next: { revalidate: 3600 }, // Cache for 1 hour
+      }
+    );
+
+    const providers: any[] = res.ok ? await res.json() : [];
 
     // Create coordinates using predefined list
-    const coordinates = (providers ?? []).map((provider: any) => {
+    const coordinates = providers.map((provider: any) => {
       const key = `${provider.city?.toLowerCase()},${provider.state?.toLowerCase()}`;
       const coords = CITY_COORDINATES[key];
-
       return {
         providerId: provider.id,
         lat: coords?.lat ?? 39,
@@ -98,10 +95,9 @@ async function MapSection() {
       };
     });
 
-    return <InteractiveMap providers={providers ?? []} coordinates={coordinates} />;
+    return <InteractiveMap providers={providers} coordinates={coordinates} />;
   } catch (error) {
     console.error("MapSection error:", error);
-    // Return map with empty providers on error
     return <InteractiveMap providers={[]} coordinates={[]} />;
   }
 }
