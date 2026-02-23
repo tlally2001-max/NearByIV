@@ -2,16 +2,14 @@ import { updateSession } from "@/lib/supabase/proxy";
 import { type NextRequest, NextResponse } from "next/server";
 
 // In-memory rate limiter and blocked IPs
-const blockedIPs = new Set([
-  "172.249.170.177", // Known bot/crawler exhausting processes
-]);
+const blockedIPs = new Set<string>();
 
 const rateLimitStore = new Map<
   string,
   { count: number; resetTime: number }
 >();
 const RATE_LIMIT_WINDOW = 60000; // 1 minute
-const RATE_LIMIT_MAX = 100; // Max requests per minute per IP
+const RATE_LIMIT_MAX = 200; // Max requests per minute per IP (increased for legitimate traffic)
 
 function getClientIP(request: NextRequest): string {
   return (
