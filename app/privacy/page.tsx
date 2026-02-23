@@ -1,6 +1,35 @@
+import Link from "next/link";
+
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
+      {/* ── Navbar ── */}
+      <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-14">
+          <Link href="/" className="text-lg font-bold text-gray-900 tracking-tight">
+            Nearby<span style={{ color: "#0066FF" }}>IV</span>
+            <span className="text-gray-400 font-normal text-sm">.com</span>
+          </Link>
+          <div className="hidden md:flex items-center gap-8">
+            <Link href="/providers" className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors">
+              Search Providers
+            </Link>
+            <Link href="/how-it-works" className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors">
+              How It Works
+            </Link>
+            <Link
+              href="/providers"
+              className="text-sm font-semibold text-white px-4 py-2 rounded-lg transition-colors"
+              style={{ backgroundColor: "#0066FF" }}
+            >
+              Find a Provider
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* ── Content ── */}
+      <div className="flex-1 pt-20">
       <div className="max-w-4xl mx-auto px-6 py-12 sm:py-16">
         <h1 className="text-4xl font-bold mb-8">Privacy Policy</h1>
 
@@ -130,6 +159,23 @@ export default function PrivacyPage() {
           </section>
         </div>
       </div>
+      </div>
+
+      {/* ── Footer ── */}
+      <footer className="bg-gray-950 text-gray-500 py-10">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="text-sm">
+            <span className="text-white font-semibold">NearbyIV.com</span>
+            <span className="text-gray-600"> — Mobile IV & Metabolic Care Directory</span>
+          </div>
+          <div className="flex items-center gap-6 text-sm">
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
+            <a href="mailto:hello@nearbyiv.com" className="hover:text-white transition-colors">Contact</a>
+          </div>
+          <p className="text-xs text-gray-700">&copy; 2026 NearbyIV.com. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 }
