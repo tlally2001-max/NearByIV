@@ -209,7 +209,7 @@ export default function TermsPage() {
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-sm">
             <span className="text-white font-semibold">NearbyIV.com</span>
-            <span className="text-gray-600"> — Hangover Recovery</span>
+            <span className="text-gray-600"> — Hangover Recovery Directory</span>
           </div>
           <div className="flex items-center gap-6 text-sm">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
