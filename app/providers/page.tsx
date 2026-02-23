@@ -40,23 +40,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   weightloss: "Weight Loss (GLP-1) ⚖️",
 };
 
-// Map full state names to abbreviations
-const STATE_ABBREVIATIONS: Record<string, string> = {
-  "alabama": "AL", "alaska": "AK", "arizona": "AZ", "arkansas": "AR",
-  "california": "CA", "colorado": "CO", "connecticut": "CT", "delaware": "DE",
-  "florida": "FL", "georgia": "GA", "hawaii": "HI", "idaho": "ID",
-  "illinois": "IL", "indiana": "IN", "iowa": "IA", "kansas": "KS",
-  "kentucky": "KY", "louisiana": "LA", "maine": "ME", "maryland": "MD",
-  "massachusetts": "MA", "michigan": "MI", "minnesota": "MN", "mississippi": "MS",
-  "missouri": "MO", "montana": "MT", "nebraska": "NE", "nevada": "NV",
-  "new hampshire": "NH", "new jersey": "NJ", "new mexico": "NM", "new york": "NY",
-  "north carolina": "NC", "north dakota": "ND", "ohio": "OH", "oklahoma": "OK",
-  "oregon": "OR", "pennsylvania": "PA", "rhode island": "RI", "south carolina": "SC",
-  "south dakota": "SD", "tennessee": "TN", "texas": "TX", "utah": "UT",
-  "vermont": "VT", "virginia": "VA", "washington": "WA", "west virginia": "WV",
-  "wisconsin": "WI", "wyoming": "WY",
-};
-
 async function AllProviders({ query, category, state }: { query: string; category: string; state: string }) {
   const supabase = await createClient();
 
@@ -70,16 +53,11 @@ async function AllProviders({ query, category, state }: { query: string; categor
 
   let providers = allProviders ?? [];
 
-  // Filter by state (handle both full names and abbreviations)
+  // Filter by state
   if (state) {
-    const stateNormalized = state.toLowerCase();
-    const stateAbbrev = STATE_ABBREVIATIONS[stateNormalized];
-
-    providers = providers.filter((p) => {
-      const pState = p.state?.toLowerCase() || "";
-      // Match either full name or abbreviation
-      return pState === stateNormalized || pState === stateAbbrev?.toLowerCase();
-    });
+    providers = providers.filter((p) =>
+      p.state?.toLowerCase() === state.toLowerCase()
+    );
   }
 
   // Filter by category keywords (client-side since treatments is a text column)
