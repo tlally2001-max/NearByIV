@@ -3,6 +3,21 @@ import { NextResponse, type NextRequest } from "next/server";
 import { hasEnvVars } from "../utils";
 
 export async function updateSession(request: NextRequest) {
+  // Public routes that don't require authentication
+  const isPublicRoute =
+    request.nextUrl.pathname === "/" ||
+    request.nextUrl.pathname.startsWith("/providers") ||
+    request.nextUrl.pathname.startsWith("/login") ||
+    request.nextUrl.pathname.startsWith("/auth") ||
+    request.nextUrl.pathname.startsWith("/how-it-works") ||
+    request.nextUrl.pathname.startsWith("/privacy") ||
+    request.nextUrl.pathname.startsWith("/terms");
+
+  // Skip auth check for public routes - dramatically reduces process usage
+  if (isPublicRoute) {
+    return NextResponse.next({ request });
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -59,17 +74,7 @@ export async function updateSession(request: NextRequest) {
       user = null;
     }
 
-    // Public routes that don't require authentication
-    const isPublicRoute =
-      request.nextUrl.pathname === "/" ||
-      request.nextUrl.pathname.startsWith("/providers") ||
-      request.nextUrl.pathname.startsWith("/login") ||
-      request.nextUrl.pathname.startsWith("/auth") ||
-      request.nextUrl.pathname.startsWith("/how-it-works") ||
-      request.nextUrl.pathname.startsWith("/privacy") ||
-      request.nextUrl.pathname.startsWith("/terms");
-
-    if (!user && !isPublicRoute) {
+    if (!user) {
       const url = request.nextUrl.clone();
       url.pathname = "/auth/login";
       return NextResponse.redirect(url);
