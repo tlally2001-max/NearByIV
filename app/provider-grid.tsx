@@ -93,13 +93,24 @@ function normalizeService(service: string): string {
 }
 
 export function ProviderGrid({ providers }: { providers: Provider[] }) {
-  const cities = Array.from(
-    new Set(providers.map((p) => p.city).filter(Boolean))
-  ).sort() as string[];
-
   const states = Array.from(
     new Set(providers.map((p) => p.state).filter(Boolean))
   ).sort() as string[];
+
+  const [selectedState, setSelectedState] = useState("all");
+  const [selectedCity, setSelectedCity] = useState("all");
+  const [selectedServices, setSelectedServices] = useState<Set<string>>(new Set());
+
+  // Get cities - filter by selected state if one is chosen
+  const cities = useMemo(() => {
+    let cityProviders = providers;
+    if (selectedState !== "all") {
+      cityProviders = providers.filter((p) => p.state === selectedState);
+    }
+    return Array.from(
+      new Set(cityProviders.map((p) => p.city).filter(Boolean))
+    ).sort() as string[];
+  }, [providers, selectedState]);
 
   const services = useMemo(() => {
     const allServices = new Set<string>();
@@ -114,10 +125,6 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
     return Array.from(allServices).sort();
   }, [providers]);
 
-  const [selectedState, setSelectedState] = useState("all");
-  const [selectedCity, setSelectedCity] = useState("all");
-  const [selectedServices, setSelectedServices] = useState<Set<string>>(new Set());
-
   const toggleService = (service: string) => {
     const newSet = new Set(selectedServices);
     if (newSet.has(service)) {
@@ -126,6 +133,12 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
       newSet.add(service);
     }
     setSelectedServices(newSet);
+  };
+
+  // Reset city filter when state changes
+  const handleStateChange = (state: string) => {
+    setSelectedState(state);
+    setSelectedCity("all"); // Reset city filter when state changes
   };
 
   const filtered = useMemo(() => {
@@ -172,7 +185,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
           <div className="p-3">
             <select
               value={selectedState}
-              onChange={(e) => setSelectedState(e.target.value)}
+              onChange={(e) => handleStateChange(e.target.value)}
               className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0066FF]/30 transition-all"
             >
               <option value="all">All States ({providers.length})</option>
