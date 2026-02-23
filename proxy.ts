@@ -9,7 +9,7 @@ const rateLimitStore = new Map<
   { count: number; resetTime: number }
 >();
 const RATE_LIMIT_WINDOW = 60000; // 1 minute
-const RATE_LIMIT_MAX = 200; // Max requests per minute per IP (increased for legitimate traffic)
+const RATE_LIMIT_MAX = 1000; // Max requests per minute per IP (allows development/testing)
 
 function getClientIP(request: NextRequest): string {
   return (
