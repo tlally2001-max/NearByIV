@@ -1,8 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Disable cacheComponents due to Hostinger incompatibility
-  // Instead use aggressive static generation and caching headers
+  experimental: {
+    // Disable cacheComponents due to Hostinger incompatibility
+    cacheComponents: false,
+  },
+  // Use aggressive static generation and caching headers instead
   async headers() {
     return [
       {
