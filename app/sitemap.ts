@@ -16,13 +16,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         .select("slug, id, state, updated_at")
         .eq("is_confirmed_mobile", true),
       new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Supabase timeout")), 10000)
+        setTimeout(() => reject(new Error("Supabase timeout")), 15000)
       ),
     ]) as any;
 
     providers = data ?? [];
   } catch (error) {
-    console.error("Sitemap: Error fetching providers:", error);
+    console.error("Sitemap: Error fetching providers:", error instanceof Error ? error.message : String(error));
     // Continue with empty providers array on error
     providers = [];
   }
