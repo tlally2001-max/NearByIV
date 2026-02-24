@@ -162,9 +162,7 @@ export default function Home() {
           </h1>
 
           <p className="mt-5 text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
-            The most trusted directory of medical-grade IV therapy delivered to your door today—at home, work, or events.
-            <br />
-            Fast, professional, and hassle-free.
+            The most trusted directory of medical-grade IV therapy delivered to your door today—at home, work, or events. Fast, professional, and hassle-free.
           </p>
 
           {/* Category Buttons */}
