@@ -45,8 +45,8 @@ const FEATURED_PROVIDERS = [
   },
   {
     id: "tampa",
-    slug: "iv-concierge",
-    name: "IV Concierge",
+    slug: "oasis-iv-therapy-mobile-hydration-and-wellness",
+    name: "Oasis IV Therapy- Mobile Hydration and Wellness",
     city: "Tampa",
     state: "FL",
     rating: null,
