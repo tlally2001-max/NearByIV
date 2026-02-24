@@ -72,8 +72,8 @@ const FEATURED_PROVIDERS = [
   },
   {
     id: "chicago",
-    slug: "providers?state=Illinois",
-    name: "Top Rated IV Therapy",
+    slug: "refine-by-tulsi",
+    name: "Refine by Tulsi",
     city: "Chicago",
     state: "IL",
     rating: null,
