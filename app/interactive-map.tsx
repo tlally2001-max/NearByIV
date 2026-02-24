@@ -155,47 +155,8 @@ export function InteractiveMap({
       maxZoom: 19,
     }).addTo(map);
 
-    // Filter providers to top-rated from specific cities only
-    const targetCities = [
-      "new york,ny",
-      "new york,new york",
-      "los angeles,ca",
-      "los angeles,california",
-      "las vegas,nv",
-      "las vegas,nevada",
-      "miami,fl",
-      "miami,florida",
-      "chicago,il",
-      "chicago,illinois",
-      "seattle,wa",
-      "seattle,washington",
-    ];
-
-    const providersByCity = new Map<string, Provider>();
+    // Add provider markers for all passed providers
     providers.forEach((provider) => {
-      const key = `${provider.city?.toLowerCase()},${provider.state?.toLowerCase()}`;
-
-      // Special case: use "Clean Market IV Drip Lounge" for Las Vegas
-      if (key === "las vegas,nevada" && provider.name === "Clean Market IV Drip Lounge") {
-        providersByCity.set(key, provider);
-        return;
-      }
-
-      if (targetCities.includes(key)) {
-        const existing = providersByCity.get(key);
-        // Skip if we already have the special Las Vegas provider
-        if (key === "las vegas,nevada" && existing?.name === "Clean Market IV Drip Lounge") {
-          return;
-        }
-        // Keep the one with higher rating
-        if (!existing || (provider.rating ?? 0) > (existing.rating ?? 0)) {
-          providersByCity.set(key, provider);
-        }
-      }
-    });
-
-    // Add provider markers
-    providersByCity.forEach((provider) => {
       const coords = coordMap.current[provider.id];
 
       if (coords) {
