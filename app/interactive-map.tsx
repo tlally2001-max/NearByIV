@@ -199,15 +199,10 @@ export function InteractiveMap({
   return (
     <div className="w-full">
       {/* Interactive Map */}
-      <div className="text-center mb-3">
-        <span className="inline-block px-4 py-1 text-xs font-semibold uppercase tracking-widest text-blue-300 border border-white/20 rounded-full bg-[#0a1628]">
-          Featured Listings
-        </span>
-      </div>
       <div
         ref={mapContainer}
-        className="rounded-2xl overflow-hidden"
-        style={{ height: "500px", width: "100%", border: "3px solid black" }}
+        className="rounded-2xl border border-gray-200 shadow-sm overflow-hidden"
+        style={{ height: "500px", width: "100%" }}
       />
 
       {/* Address Search Bar */}
