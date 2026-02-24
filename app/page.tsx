@@ -36,8 +36,8 @@ const jsonLd = {
 const FEATURED_PROVIDERS = [
   {
     id: "new-york",
-    slug: "providers?state=New+York",
-    name: "Top Rated IV Therapy",
+    slug: "iv-concierge",
+    name: "IV Concierge",
     city: "New York",
     state: "NY",
     rating: null,
