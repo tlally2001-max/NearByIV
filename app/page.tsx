@@ -54,8 +54,8 @@ const FEATURED_PROVIDERS = [
   },
   {
     id: "los-angeles",
-    slug: "providers?state=California",
-    name: "Top Rated IV Therapy",
+    slug: "renewme-iv-therapy-medspa",
+    name: "RenewMe IV Therapy + Medspa",
     city: "Los Angeles",
     state: "CA",
     rating: null,
