@@ -338,7 +338,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
                 className="group bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
               >
                 {/* Hero image */}
-                <div className="relative h-44 bg-gray-50 overflow-hidden">
+                <Link href={`/providers/${p.slug}`} className="block relative h-44 bg-gray-50 overflow-hidden">
                   <img
                     src={p.hero_image || "/iv-bag-default.jpg"}
                     alt={p.name}
@@ -354,7 +354,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
                       Mobile
                     </span>
                   )}
-                </div>
+                </Link>
 
                 <div className="p-5 flex flex-col gap-3">
                   <h2 className="font-semibold text-base leading-snug text-gray-900">
