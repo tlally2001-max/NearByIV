@@ -63,8 +63,8 @@ const FEATURED_PROVIDERS = [
   },
   {
     id: "las-vegas",
-    slug: "providers?state=Nevada",
-    name: "Top Rated IV Therapy",
+    slug: "las-vegas-mobile-iv-therapy",
+    name: "Las Vegas Mobile IV Therapy",
     city: "Las Vegas",
     state: "NV",
     rating: null,
