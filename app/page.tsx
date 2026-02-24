@@ -44,10 +44,10 @@ const FEATURED_PROVIDERS = [
     reviews: null,
   },
   {
-    id: "miami",
-    slug: "providers?state=Florida",
-    name: "Top Rated IV Therapy",
-    city: "Miami",
+    id: "tampa",
+    slug: "iv-concierge",
+    name: "IV Concierge",
+    city: "Tampa",
     state: "FL",
     rating: null,
     reviews: null,
@@ -83,7 +83,7 @@ const FEATURED_PROVIDERS = [
 
 const FEATURED_COORDINATES = [
   { providerId: "new-york", lat: 40.7128, lng: -74.006 },
-  { providerId: "miami", lat: 25.7617, lng: -80.1918 },
+  { providerId: "tampa", lat: 27.9506, lng: -82.4572 },
   { providerId: "los-angeles", lat: 34.0522, lng: -118.2437 },
   { providerId: "las-vegas", lat: 36.1699, lng: -115.1398 },
   { providerId: "chicago", lat: 41.8781, lng: -87.6298 },
