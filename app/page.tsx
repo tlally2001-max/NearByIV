@@ -185,7 +185,12 @@ export default function Home() {
           {/* Interactive Map with Provider Markers */}
           <div className="w-full mt-12">
             <div className="max-w-7xl mx-auto px-6">
-              <MapSection />
+              <div className="relative border-2 border-white/30 rounded-2xl pt-6">
+                <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#0a1628] px-4 py-1 text-xs font-semibold uppercase tracking-widest text-blue-300 border border-white/20 rounded-full whitespace-nowrap">
+                  Featured Listings
+                </span>
+                <MapSection />
+              </div>
             </div>
           </div>
         </div>
