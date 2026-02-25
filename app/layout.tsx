@@ -17,7 +17,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: {
-    default: "NearbyIV — Find Mobile IV Therapy Providers Near You",
+    default: "Mobile IV Therapy Near Me | Hangover IV, NAD+, GLP-1 | NearbyIV",
     template: "%s | NearbyIV",
   },
   description:
