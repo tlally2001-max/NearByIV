@@ -2,10 +2,17 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Best Mobile IV Therapy By City | NearbyIV",
+  title: { absolute: "Best Mobile IV Therapy By City | NearbyIV" },
   description:
     "Find the best mobile IV therapy providers in your city. Browse verified RN-led IV hydration, NAD+, hangover relief, and wellness services near you.",
   alternates: { canonical: "/locations" },
+  openGraph: {
+    title: "Best Mobile IV Therapy By City | NearbyIV",
+    description:
+      "Find the best mobile IV therapy providers in your city. Browse verified RN-led IV hydration, NAD+, hangover relief, and wellness services near you.",
+    url: "https://nearbyiv.com/locations",
+    type: "website",
+  },
 };
 
 const LOCATIONS: Record<string, string[]> = {

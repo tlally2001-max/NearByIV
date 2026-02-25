@@ -5,7 +5,7 @@ import { MobileNav } from "@/components/mobile-nav";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Mobile IV Therapy Near Me | Hangover IV, NAD+, GLP-1 | NearbyIV",
+  title: { absolute: "Mobile IV Therapy Near Me | Hangover IV, NAD+, GLP-1 | NearbyIV" },
   description:
     "Search 134+ verified RN-led mobile IV therapy providers. Compare ratings, treatments, and pricing for concierge IV hydration, NAD+, GLP-1 weight loss, and more.",
   alternates: { canonical: "/" },
