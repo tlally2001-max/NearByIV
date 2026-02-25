@@ -113,8 +113,8 @@ export default function Home() {
             <Link href="/providers" className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors">
               Search Providers
             </Link>
-            <Link href="/providers" className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors">
-              All Listings
+            <Link href="/locations" className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors">
+              Best IV By City
             </Link>
             <Link href="/how-it-works" className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors">
               How It Works

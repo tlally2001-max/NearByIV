@@ -37,11 +37,11 @@ export function MobileNav() {
               Search Providers
             </Link>
             <Link
-              href="/providers"
+              href="/locations"
               onClick={() => setOpen(false)}
               className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors py-1"
             >
-              All Listings
+              Best IV By City
             </Link>
             <Link
               href="/how-it-works"
