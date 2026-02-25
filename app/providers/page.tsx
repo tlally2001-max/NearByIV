@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 
+export const revalidate = 3600; // cache pages for 1 hour
+
 export const metadata: Metadata = {
   title: "Mobile IV Therapy Providers — Browse All Listings",
   description:
@@ -43,22 +45,22 @@ const CATEGORY_LABELS: Record<string, string> = {
 async function AllProviders({ query, category, state }: { query: string; category: string; state: string }) {
   const supabase = await createClient();
 
-  const { data: allProviders, error } = await supabase
+  let query = supabase
     .from("providers")
-    .select("*")
+    .select("id, slug, name, city, state, website, rating, reviews, hero_image, treatments, is_confirmed_mobile")
     .eq("is_confirmed_mobile", true)
     .order("rating", { ascending: false });
+
+  // Push state filter to DB so we don't fetch all rows
+  if (state) {
+    query = query.ilike("state", state);
+  }
+
+  const { data: allProviders, error } = await query;
 
   if (error) console.error("Supabase query error:", error);
 
   let providers = allProviders ?? [];
-
-  // Filter by state
-  if (state) {
-    providers = providers.filter((p) =>
-      p.state?.toLowerCase() === state.toLowerCase()
-    );
-  }
 
   // Filter by category keywords (client-side since treatments is a text column)
   if (category && CATEGORY_KEYWORDS[category]) {
