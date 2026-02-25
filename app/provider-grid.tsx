@@ -114,7 +114,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
 
     const newUrl = params.toString() ? `/providers?${params.toString()}` : "/providers";
     router.push(newUrl);
-  }, [selectedState, selectedCity, isInitialized, router]);
+  }, [selectedState, selectedCity, isInitialized]);
 
   // Pre-select state and city from URL params (e.g. from locations page links or search)
   useEffect(() => {
