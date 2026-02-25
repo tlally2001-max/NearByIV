@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { ContactSidebar } from "./contact-sidebar";
 import { ServiceMenu } from "./service-menu";
+import { Header } from "@/components/header";
 
 type Provider = {
   id: string;
@@ -348,25 +349,10 @@ export default function ProviderPage({
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Nav */}
-      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
-        <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-16">
-          <Link href="/" className="text-xl font-bold tracking-tight text-gray-900">
-            Nearby<span className="text-blue-600">IV</span>
-            <span className="text-gray-400 font-normal">.com</span>
-          </Link>
-          <div className="flex items-center gap-6">
-            <Link
-              href="/providers"
-              className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
-            >
-              All Providers
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       {/* Back to search */}
-      <div className="max-w-6xl mx-auto px-6 py-4">
+      <div className="max-w-6xl mx-auto px-6 py-4 pt-14">
         <Link
           href="/providers"
           className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 transition-colors"
