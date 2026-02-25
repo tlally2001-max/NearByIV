@@ -227,7 +227,7 @@ export function InteractiveMap({
           </button>
         </form>
         <p className="mt-2 text-sm text-white font-medium">
-          Click on map markers to see provider details • {providers.length} providers shown
+          Click on map markers to see provider details
         </p>
       </div>
     </div>
