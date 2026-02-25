@@ -42,8 +42,8 @@ const FEATURED_PROVIDERS = [
     name: "IV Concierge",
     city: "New York",
     state: "NY",
-    rating: null,
-    reviews: null,
+    rating: 5.0,
+    reviews: 27,
   },
   {
     id: "tampa",
@@ -51,8 +51,8 @@ const FEATURED_PROVIDERS = [
     name: "Oasis IV Therapy- Mobile Hydration and Wellness",
     city: "Tampa",
     state: "FL",
-    rating: null,
-    reviews: null,
+    rating: 5.0,
+    reviews: 431,
   },
   {
     id: "los-angeles",
@@ -60,8 +60,8 @@ const FEATURED_PROVIDERS = [
     name: "RenewMe IV Therapy + Medspa",
     city: "Los Angeles",
     state: "CA",
-    rating: null,
-    reviews: null,
+    rating: 5.0,
+    reviews: 295,
   },
   {
     id: "las-vegas",
@@ -69,8 +69,8 @@ const FEATURED_PROVIDERS = [
     name: "Las Vegas Mobile IV Therapy",
     city: "Las Vegas",
     state: "NV",
-    rating: null,
-    reviews: null,
+    rating: 5.0,
+    reviews: 387,
   },
   {
     id: "chicago",
@@ -78,8 +78,8 @@ const FEATURED_PROVIDERS = [
     name: "Refine by Tulsi",
     city: "Chicago",
     state: "IL",
-    rating: null,
-    reviews: null,
+    rating: 5.0,
+    reviews: 259,
   },
 ];
 

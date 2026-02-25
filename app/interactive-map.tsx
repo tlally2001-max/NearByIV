@@ -162,18 +162,22 @@ export function InteractiveMap({
       if (coords) {
         const marker = L.marker([coords.lat, coords.lng]).addTo(map);
 
+        const stars = Array.from({ length: 5 })
+          .map((_, i) => i < Math.round(provider.rating || 0) ? '★' : '☆')
+          .join('');
+
         const popupContent = `
-          <div style="font-family: sans-serif; width: 200px;">
-            <h4 style="margin: 0 0 8px 0; color: #000;">${provider.name}</h4>
-            <p style="margin: 0 0 4px 0; color: #666; font-size: 14px;">
+          <div style="font-family: sans-serif; width: 220px;">
+            <h4 style="margin: 0 0 8px 0; color: #000; font-size: 14px; font-weight: bold;">${provider.name}</h4>
+            <p style="margin: 0 0 6px 0; color: #666; font-size: 13px;">
               ${provider.city}, ${provider.state}
             </p>
             ${
               provider.rating
-                ? `<p style="margin: 0; color: #666; font-size: 14px;">
-                ⭐ ${provider.rating.toFixed(1)} ${
-                    provider.reviews ? `(${provider.reviews} reviews)` : ""
-                  }
+                ? `<p style="margin: 0 0 8px 0; color: #333; font-size: 13px;">
+                <span style="color: #FFD700; font-size: 14px;">${stars}</span>
+                <span style="margin-left: 4px; font-weight: bold;">${provider.rating.toFixed(1)}</span>
+                <span style="color: #999; margin-left: 4px;">(${provider.reviews} reviews)</span>
               </p>`
                 : ""
             }
