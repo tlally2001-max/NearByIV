@@ -235,7 +235,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                title: "Active Teams On-Call",
+                title: "Open NOW / On-Call",
                 subtext: "Connect with verified clinicians currently available for mobile dispatch in your area.",
                 icon: (
                   <svg className="w-14 h-14 text-[#4d94ff]" fill="currentColor" viewBox="0 0 24 24">
