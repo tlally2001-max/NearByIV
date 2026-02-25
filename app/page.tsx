@@ -4,6 +4,8 @@ import { StateFilterDropdown } from "@/components/state-filter-dropdown";
 import { MobileNav } from "@/components/mobile-nav";
 import type { Metadata } from "next";
 
+export const dynamic = "force-static";
+
 export const metadata: Metadata = {
   title: { absolute: "Mobile IV Therapy Near Me | Hangover IV, NAD+, GLP-1 | NearbyIV" },
   description:

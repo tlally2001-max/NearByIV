@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Droplet, Shield, Zap, Brain, Sparkles } from "lucide-react";
 
+export const dynamic = "force-static";
+
 export const metadata: Metadata = {
   title: "How It Works — Your Path to Feeling Unstoppable",
   description:
