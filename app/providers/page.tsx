@@ -125,8 +125,8 @@ async function SearchResults({
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
               {selectedState
-                ? `Providers in ${selectedState}`
-                : catLabel ?? (query ? `Results for "${query}"` : "All Providers")}
+                ? `Mobile IV Therapy Providers in ${selectedState}`
+                : catLabel ?? (query ? `Results for "${query}"` : "Mobile IV Therapy Providers Near You")}
             </h1>
             <p className="mt-2 text-gray-500 text-sm">
               {selectedState

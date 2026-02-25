@@ -171,7 +171,7 @@ async function ProfileContent({ slug }: { slug: string }) {
             </span>
           )}
           <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight text-center">
-            {p.name}
+            {p.name}{p.city && p.state ? ` | Mobile IV Therapy in ${p.city}, ${p.state}` : ""}
           </h1>
           {p.rating != null && (
             <div className="flex flex-col items-center gap-4">
