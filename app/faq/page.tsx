@@ -19,66 +19,70 @@ export const metadata: Metadata = {
 
 const faqs = [
   {
-    category: "The Basics: What is it & How does it work?",
+    category: "Understanding Mobile IV Therapy for Hangovers",
     items: [
       {
-        q: "What is a 'hangover IV' and how does it help?",
-        a: "A hangover IV is a targeted therapy designed to combat the primary causes of a hangover: dehydration and nutrient depletion. Our nurses administer a saline solution containing a blend of essential fluids, electrolytes, vitamins (like B-complex), and optional medications directly into your bloodstream. This bypasses the digestive system for faster, more effective rehydration and symptom relief compared to drinking water alone.",
+        q: "What is a \"hangover IV\" and how does it assist with relief?",
+        a: "A hangover IV is a targeted therapy designed to combat primary causes of hangovers, such as dehydration and nutrient depletion. Licensed medical professionals administer a saline solution containing essential fluids, electrolytes, and vitamins directly into the bloodstream. This method bypasses the digestive system for potentially faster rehydration compared to drinking fluids alone.",
       },
       {
-        q: "Does it really work, and how fast will I feel better?",
-        a: "While everyone's body is different, most clients report feeling noticeable relief within 30 to 60 minutes of the treatment starting. The direct delivery of fluids and nutrients helps to quickly alleviate common symptoms like headaches, nausea, fatigue, and brain fog, helping you get back to your day faster.",
+        q: "How quickly are effects typically felt?",
+        a: "While individual responses vary, many recipients report feeling noticeable relief within 30 to 60 minutes of the infusion starting. The direct delivery of nutrients aims to quickly alleviate common symptoms like headaches, nausea, and fatigue.",
       },
       {
-        q: "What ingredients are typically in a hangover drip?",
-        a: "Our standard hangover package typically includes: IV Fluids & Electrolytes (for rapid rehydration), Vitamin B Complex (to boost energy and replenish depleted nutrients), Anti-Nausea Medication (optional, to settle your stomach), and Anti-Inflammatory/Pain Relief Medication (optional, to help with headaches and body aches). Specific ingredients can be tailored to your needs during your consultation.",
+        q: "What ingredients are typically included in a hangover IV drip?",
+        a: "Standard IV packages for hangovers generally include a combination of: IV Fluids & Electrolytes (for rapid rehydration), Vitamin B Complex (to help replenish depleted energy stores), and Optional Medications (depending on the provider's protocols and client assessment, anti-nausea or anti-inflammatory medications may be added).",
       },
     ],
   },
   {
-    category: "The Process: Mobile Service & Booking",
+    category: "How Mobile IV Services Work",
     items: [
       {
-        q: "How does the mobile service work? Do I have to go to a clinic?",
-        a: "No need to travel when you're not feeling well. We come to you! Our licensed medical professionals will deliver the treatment in the comfort of your home, hotel room, or office. We bring all necessary equipment to ensure a safe and sanitary experience.",
+        q: "What does \"mobile service\" mean?",
+        a: "Mobile IV therapy means that medical professionals travel to the client's location instead of requiring a clinic visit. Treatments are typically delivered in homes, hotel rooms, or offices. Providers bring the necessary equipment to ensure a sanitary experience.",
       },
       {
-        q: "How long does the entire appointment take?",
-        a: "The entire process typically takes about 45 to 60 minutes. This includes a brief medical consultation with our nurse to check your vitals and medical history, followed by the 30-45 minute IV infusion itself.",
+        q: "How long does an appointment typically take?",
+        a: "The entire appointment usually lasts between 45 and 60 minutes. This timeframe generally includes a brief medical consultation and checking of vitals, followed by the 30-45 minute IV infusion.",
       },
       {
-        q: "How soon can a nurse get to me?",
-        a: "We strive for the fastest response times possible. Depending on your location and nurse availability, we can often have someone to your door within 1-2 hours of booking. We recommend booking as early as possible, especially on busy weekends.",
+        q: "How soon can a provider typically arrive?",
+        a: "Response times depend entirely on the specific provider chosen and their current availability in that geographic area. Many mobile services aim for arrival times within 1-2 hours of booking, though booking in advance is often recommended for busy times like weekends or holidays.",
       },
     ],
   },
   {
-    category: "Safety & Medical Questions",
+    category: "Safety & Medical Considerations",
     items: [
       {
-        q: "Is IV therapy safe? Who administers the drip?",
-        a: "Yes, it is generally considered very safe for most healthy individuals. All treatments are administered by licensed and experienced Registered Nurses (RNs) or paramedics operating under strict medical protocols and the supervision of a Medical Director. Before any treatment, a brief health assessment is conducted to ensure it is safe for you.",
+        q: "Is IV therapy safe, and who administers the treatment?",
+        a: "When administered by professionals, IV therapy is generally considered safe for most healthy individuals. Mobile IV treatments should be administered by licensed Registered Nurses (RNs) or paramedics operating under strict medical protocols and the supervision of that provider's Medical Director.",
       },
       {
-        q: "Does getting an IV hurt?",
-        a: "Most people feel only a quick, small pinch when the needle is first inserted. Once the thin plastic catheter is in place, the needle is removed, and the infusion itself is painless. Our nurses are highly skilled at making the process as comfortable as possible.",
+        q: "Are medical consultations required before receiving an IV?",
+        a: "Yes. Reputable mobile IV services require a health assessment or brief consultation before administering treatment to ensure safety and appropriateness for the client's specific condition.",
       },
       {
-        q: "Are there anyone who shouldn't get an IV?",
-        a: "While safe for most, individuals with certain medical conditions like congestive heart failure or kidney disease may not be eligible for IV fluid therapy due to the risk of fluid overload. This is why we conduct a mandatory health screening before every appointment. Please be honest about your medical history with your nurse.",
+        q: "Are there conditions that prevent someone from receiving IV therapy?",
+        a: "Yes. Individuals with certain medical histories, particularly congestive heart failure or kidney disease, may not be eligible for IV fluid therapy due to the risk of fluid overload. Accurate disclosure of medical history to the provider before treatment is essential.",
       },
     ],
   },
   {
-    category: "Cost & Payment",
+    category: "Cost & Payment Information",
     items: [
       {
-        q: "How much does a mobile hangover IV cost?",
-        a: "Our packages start at roughly $200 for a basic rehydration drip, with our comprehensive hangover packages typically ranging from $250-$400. The final price depends on any add-ons or customizations you choose. We believe in transparent pricing with no hidden travel fees.",
+        q: "How much does a mobile hangover IV typically cost?",
+        a: "Pricing varies significantly based on the independent provider, geographic location, and the specific ingredients chosen. Basic rehydration drips have a lower starting point, while comprehensive packages that include medications and extra vitamins will range higher.",
       },
       {
-        q: "Do you accept insurance?",
-        a: "We do not accept private health insurance. We are a direct-pay service. However, we do accept payments via Health Savings Accounts (HSA) and Flexible Spending Accounts (FSA) cards, in addition to all major credit cards.",
+        q: "Do mobile IV providers usually accept insurance?",
+        a: "Generally, most mobile IV services operate as direct-pay businesses and do not accept private health insurance. However, many providers are able to accept payments via Health Savings Accounts (HSA) and Flexible Spending Accounts (FSA) cards. Clients should verify payment options directly with their chosen provider.",
+      },
+      {
+        q: "Is tipping customary for mobile IV services?",
+        a: "While policies vary by individual provider, gratuity for the nurse or paramedic administering the mobile treatment is common practice within the industry and is generally appreciated.",
       },
     ],
   },
