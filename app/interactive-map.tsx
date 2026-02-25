@@ -169,9 +169,6 @@ export function InteractiveMap({
         const popupContent = `
           <div style="font-family: sans-serif; width: 220px;">
             <h4 style="margin: 0 0 8px 0; color: #000; font-size: 14px; font-weight: bold;">${provider.name}</h4>
-            <p style="margin: 0 0 6px 0; color: #666; font-size: 13px;">
-              ${provider.city}, ${provider.state}
-            </p>
             ${
               provider.rating
                 ? `<p style="margin: 0 0 8px 0; color: #333; font-size: 13px;">
@@ -181,7 +178,10 @@ export function InteractiveMap({
               </p>`
                 : ""
             }
-            <a href="/providers/${provider.slug}" style="display: inline-block; margin-top: 8px; padding: 6px 12px; background: #0066FF; color: white; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer;">
+            <p style="margin: 0 0 8px 0; color: #666; font-size: 13px;">
+              ${provider.city}, ${provider.state}
+            </p>
+            <a href="/providers/${provider.slug}" style="display: inline-block; padding: 6px 12px; background: #0066FF; color: white; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer;">
               View Profile
             </a>
           </div>
