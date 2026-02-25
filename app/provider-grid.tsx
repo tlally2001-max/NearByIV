@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
 type Provider = {
@@ -99,8 +99,22 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
   ).sort() as string[];
 
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [selectedState, setSelectedState] = useState("all");
   const [selectedCity, setSelectedCity] = useState("all");
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Update URL when state or city changes
+  useEffect(() => {
+    if (!isInitialized) return; // Don't update URL during initial load
+
+    const params = new URLSearchParams();
+    if (selectedState !== "all") params.set("state", selectedState);
+    if (selectedCity !== "all") params.set("city", selectedCity);
+
+    const newUrl = params.toString() ? `/providers?${params.toString()}` : "/providers";
+    router.push(newUrl);
+  }, [selectedState, selectedCity, isInitialized, router]);
 
   // Pre-select state and city from URL params (e.g. from locations page links or search)
   useEffect(() => {
@@ -138,6 +152,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
         setSelectedCity(city);
       }
     }
+    setIsInitialized(true);
   }, [searchParams]);
   const [selectedServices, setSelectedServices] = useState<Set<string>>(new Set());
 
