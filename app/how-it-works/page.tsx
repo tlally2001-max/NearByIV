@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { Droplet, Shield, Zap, Brain, Sparkles } from "lucide-react";
 import { Header } from "@/components/header";
