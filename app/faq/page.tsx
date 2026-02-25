@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { Header } from "@/components/header";
 
 export const dynamic = "force-static";
 
@@ -112,25 +113,7 @@ export default function FAQPage() {
       />
 
       {/* Nav */}
-      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-16">
-          <Link href="/" className="text-xl font-bold tracking-tight text-gray-900">
-            Nearby<span className="text-[#0066FF]">IV</span>
-            <span className="text-gray-400 font-normal">.com</span>
-          </Link>
-          <div className="hidden md:flex items-center gap-8">
-            <Link href="/providers" className="text-sm font-medium text-gray-600 hover:text-[#0066FF] transition-colors">
-              Find Providers
-            </Link>
-            <Link href="/how-it-works" className="text-sm font-medium text-gray-600 hover:text-[#0066FF] transition-colors">
-              How It Works
-            </Link>
-            <Link href="/faq" className="text-sm font-medium text-[#0066FF]">
-              FAQ
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       {/* Header */}
       <header className="bg-white border-b border-gray-100">
