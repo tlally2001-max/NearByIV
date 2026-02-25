@@ -45,7 +45,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 async function AllProviders({ query, category, state }: { query: string; category: string; state: string }) {
   const supabase = await createClient();
 
-  let query = supabase
+  let dbQuery = supabase
     .from("providers")
     .select("id, slug, name, city, state, website, rating, reviews, hero_image, treatments, is_confirmed_mobile")
     .eq("is_confirmed_mobile", true)
@@ -53,10 +53,10 @@ async function AllProviders({ query, category, state }: { query: string; categor
 
   // Push state filter to DB so we don't fetch all rows
   if (state) {
-    query = query.ilike("state", state);
+    dbQuery = dbQuery.ilike("state", state);
   }
 
-  const { data: allProviders, error } = await query;
+  const { data: allProviders, error } = await dbQuery;
 
   if (error) console.error("Supabase query error:", error);
 
