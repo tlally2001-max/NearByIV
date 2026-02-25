@@ -22,6 +22,9 @@ type Provider = {
   is_confirmed_mobile: boolean;
 };
 
+// Never dynamically render unknown slugs — return 404 instead of hitting Supabase
+export const dynamicParams = false;
+
 /* ── Pre-generate all provider pages at build time ── */
 export async function generateStaticParams() {
   try {
@@ -76,7 +79,7 @@ async function ProfileContent({ slug }: { slug: string }) {
   const supabase = await createClient();
   const { data: provider } = await supabase
     .from("providers")
-    .select("*")
+    .select("id, slug, name, city, state, website, phone, rating, reviews, hero_image, treatments, service_areas, is_confirmed_mobile")
     .eq("slug", slug)
     .single();
 
