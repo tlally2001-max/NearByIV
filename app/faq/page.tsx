@@ -176,7 +176,7 @@ export default function FAQPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="mailto:hello@nearbyiv.com"
+              href="mailto:NearByIV@gmail.com"
               className="px-8 py-3 bg-white text-[#0066FF] font-semibold rounded-lg hover:bg-gray-100 transition-colors"
             >
               Contact Us

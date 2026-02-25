@@ -171,7 +171,7 @@ export default function PrivacyPage() {
           <div className="flex items-center justify-center gap-6 text-sm">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
-            <a href="mailto:hello@nearbyiv.com" className="hover:text-white transition-colors">Contact</a>
+            <a href="mailto:NearByIV@gmail.com" className="hover:text-white transition-colors">Contact</a>
           </div>
           <p className="text-xs text-gray-700">&copy; 2026 NearbyIV.com. All rights reserved.</p>
         </div>
