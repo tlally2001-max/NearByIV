@@ -66,7 +66,7 @@ export async function generateMetadata({
 
   const location = [data.city, data.state].filter(Boolean).join(", ");
   return {
-    title: `${data.name} — Mobile IV in ${location || "Your Area"} | NearbyIV`,
+    title: `${data.name} | IV Therapy ${location || "Near You"} | NearbyIV`,
     description: `Book mobile IV therapy with ${data.name} in ${location}. Treatments include ${data.treatments?.split(",").slice(0, 5).join(", ") || "hydration, wellness, and more"}.`,
   };
 }
