@@ -69,13 +69,13 @@ export default function LocationsPage() {
               className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow"
             >
               <h2 className="text-lg font-bold text-gray-900 mb-4 pb-3 border-b border-gray-100">
-                {state} IV Therapy
+                {state} Mobile IV Therapy / Hangover Relief
               </h2>
               <div className="grid grid-cols-2 gap-2">
                 {cities.map((city) => (
                   <Link
                     key={city}
-                    href={`/providers?state=${encodeURIComponent(state)}`}
+                    href={`/providers?state=${encodeURIComponent(state)}&city=${encodeURIComponent(city)}`}
                     className="text-sm text-[#0066FF] hover:text-[#0052cc] hover:underline transition-colors py-1"
                   >
                     {city}

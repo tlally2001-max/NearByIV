@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 type Provider = {
@@ -97,8 +98,17 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
     new Set(providers.map((p) => p.state).filter(Boolean))
   ).sort() as string[];
 
+  const searchParams = useSearchParams();
   const [selectedState, setSelectedState] = useState("all");
   const [selectedCity, setSelectedCity] = useState("all");
+
+  // Pre-select state and city from URL params (e.g. from locations page links)
+  useEffect(() => {
+    const stateParam = searchParams.get("state");
+    const cityParam = searchParams.get("city");
+    if (stateParam) setSelectedState(stateParam);
+    if (cityParam) setSelectedCity(cityParam);
+  }, [searchParams]);
   const [selectedServices, setSelectedServices] = useState<Set<string>>(new Set());
 
   // Get cities - filter by selected state if one is chosen

@@ -1,5 +1,6 @@
 import { ProviderGrid } from "../provider-grid";
 import Link from "next/link";
+import { Suspense } from "react";
 import type { Metadata } from "next";
 
 // Static generation - fetch providers once at build time, never at runtime
@@ -79,7 +80,15 @@ export default async function ProvidersPage() {
             No providers found. Try again later.
           </p>
         ) : (
-          <ProviderGrid providers={providers} />
+          <Suspense fallback={
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="bg-white rounded-2xl h-80 animate-pulse shadow-md" />
+              ))}
+            </div>
+          }>
+            <ProviderGrid providers={providers} />
+          </Suspense>
         )}
       </section>
 
