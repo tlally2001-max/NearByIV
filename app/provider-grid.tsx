@@ -132,24 +132,36 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
         const city = parts[0];
         const stateAbbr = parts[1].toLowerCase();
 
-        // Map full state names to abbreviations
+        // Map state abbreviations and names to full state names
         const stateMap: Record<string, string> = {
-          alabama: "AL", alaska: "AK", arizona: "AZ", arkansas: "AR", california: "CA",
-          colorado: "CO", connecticut: "CT", delaware: "DE", florida: "FL", georgia: "GA",
-          hawaii: "HI", idaho: "ID", illinois: "IL", indiana: "IN", iowa: "IA",
-          kansas: "KS", kentucky: "KY", louisiana: "LA", maine: "ME", maryland: "MD",
-          massachusetts: "MA", michigan: "MI", minnesota: "MN", mississippi: "MS",
-          missouri: "MO", montana: "MT", nebraska: "NE", nevada: "NV", "new hampshire": "NH",
-          "new jersey": "NJ", "new mexico": "NM", "new york": "NY", "north carolina": "NC",
-          "north dakota": "ND", ohio: "OH", oklahoma: "OK", oregon: "OR", pennsylvania: "PA",
-          "rhode island": "RI", "south carolina": "SC", "south dakota": "SD", tennessee: "TN",
-          texas: "TX", utah: "UT", vermont: "VT", virginia: "VA", washington: "WA",
-          "west virginia": "WV", wisconsin: "WI", wyoming: "WY",
+          al: "Alabama", alabama: "Alabama", ak: "Alaska", alaska: "Alaska", az: "Arizona", arizona: "Arizona",
+          ar: "Arkansas", arkansas: "Arkansas", ca: "California", california: "California", co: "Colorado",
+          colorado: "Colorado", ct: "Connecticut", connecticut: "Connecticut", de: "Delaware", delaware: "Delaware",
+          fl: "Florida", florida: "Florida", ga: "Georgia", georgia: "Georgia", hi: "Hawaii", hawaii: "Hawaii",
+          id: "Idaho", idaho: "Idaho", il: "Illinois", illinois: "Illinois", in: "Indiana", indiana: "Indiana",
+          ia: "Iowa", iowa: "Iowa", ks: "Kansas", kansas: "Kansas", ky: "Kentucky", kentucky: "Kentucky",
+          la: "Louisiana", louisiana: "Louisiana", me: "Maine", maine: "Maine", md: "Maryland", maryland: "Maryland",
+          ma: "Massachusetts", massachusetts: "Massachusetts", mi: "Michigan", michigan: "Michigan",
+          mn: "Minnesota", minnesota: "Minnesota", ms: "Mississippi", mississippi: "Mississippi",
+          mo: "Missouri", missouri: "Missouri", mt: "Montana", montana: "Montana", ne: "Nebraska",
+          nebraska: "Nebraska", nv: "Nevada", nevada: "Nevada", nh: "New Hampshire", "new hampshire": "New Hampshire",
+          nj: "New Jersey", "new jersey": "New Jersey", nm: "New Mexico", "new mexico": "New Mexico",
+          ny: "New York", "new york": "New York", nc: "North Carolina", "north carolina": "North Carolina",
+          nd: "North Dakota", "north dakota": "North Dakota", oh: "Ohio", ohio: "Ohio", ok: "Oklahoma",
+          oklahoma: "Oklahoma", or: "Oregon", oregon: "Oregon", pa: "Pennsylvania", pennsylvania: "Pennsylvania",
+          ri: "Rhode Island", "rhode island": "Rhode Island", sc: "South Carolina", "south carolina": "South Carolina",
+          sd: "South Dakota", "south dakota": "South Dakota", tn: "Tennessee", tennessee: "Tennessee",
+          tx: "Texas", texas: "Texas", ut: "Utah", utah: "Utah", vt: "Vermont", vermont: "Vermont",
+          va: "Virginia", virginia: "Virginia", wa: "Washington", washington: "Washington",
+          wv: "West Virginia", "west virginia": "West Virginia", wi: "Wisconsin", wisconsin: "Wisconsin",
+          wy: "Wyoming", wyoming: "Wyoming",
         };
 
-        const normalizedState = stateMap[stateAbbr] || stateAbbr.toUpperCase();
-        setSelectedState(normalizedState);
-        setSelectedCity(city);
+        const normalizedState = stateMap[stateAbbr];
+        if (normalizedState) {
+          setSelectedState(normalizedState);
+          setSelectedCity(city);
+        }
       }
     }
     setIsInitialized(true);
