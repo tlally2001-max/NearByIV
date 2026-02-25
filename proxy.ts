@@ -55,7 +55,9 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
+     * - /api/send-sms (SMS API - public)
+     * - /api/test-sms (SMS test - public)
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/send-sms|api/test-sms|api/webhooks/sms|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
