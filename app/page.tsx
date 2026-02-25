@@ -207,7 +207,7 @@ export default function Home() {
               Why Choose NearbyIV for <span style={{ color: "#FFD700" }}>Mobile IV Therapy</span>
             </h2>
             <p className="mt-8 text-gray-300 text-lg max-w-2xl mx-auto">
-              <strong>NearbyIV</strong> is your fastest route to finding trusted <strong>mobile IV therapy</strong> near you. We instantly connect you with <strong>licensed local providers</strong> for convenient, on-demand relief from <strong>hangovers</strong>, <strong>dehydration</strong>, and for general <strong>wellness</strong> boosts—delivered right to your door.
+              <span className="font-bold" style={{ color: "#FFD700" }}>NearbyIV</span> is your fastest route to finding trusted <span className="font-bold" style={{ color: "#FFD700" }}>mobile IV therapy</span> near you. We instantly connect you with <span className="font-bold" style={{ color: "#FFD700" }}>licensed local providers</span> for convenient, on-demand relief from <span className="font-bold" style={{ color: "#FFD700" }}>hangovers</span>, <span className="font-bold" style={{ color: "#FFD700" }}>dehydration</span>, and for general <span className="font-bold" style={{ color: "#FFD700" }}>wellness</span> boosts—delivered right to your door.
             </p>
           </div>
 
