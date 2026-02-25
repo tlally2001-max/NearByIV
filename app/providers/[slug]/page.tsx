@@ -227,7 +227,7 @@ async function ProfileContent({ slug }: { slug: string }) {
           {/* Left: About Section */}
           <div className="flex-1 min-w-0">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">About</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">About {p.name}{p.city ? ` — IV Therapy in ${p.city}` : ""}</h2>
 
               {/* Contact Details */}
               <div className="space-y-4 mb-8">

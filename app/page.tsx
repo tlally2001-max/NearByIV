@@ -199,7 +199,7 @@ export default function Home() {
               Platinum Quality Standard
             </span>
             <h2 className="mt-4 text-4xl md:text-5xl font-bold text-white">
-              The NearByIV <span style={{ color: "#FFD700" }}>Gold</span> Standard
+              Why Choose NearbyIV for <span style={{ color: "#FFD700" }}>Mobile IV Therapy</span>
             </h2>
             <p className="mt-4 text-gray-300 text-lg max-w-2xl mx-auto">
               Every provider is rigorously vetted across three pillars of excellence
