@@ -121,6 +121,9 @@ export default function Home() {
             <Link href="/how-it-works" className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors">
               How It Works
             </Link>
+            <Link href="/faq" className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors">
+              FAQ
+            </Link>
             <Link
               href="/providers"
               className="text-sm font-semibold text-white px-4 py-2 rounded-lg transition-colors"
