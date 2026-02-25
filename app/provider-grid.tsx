@@ -189,9 +189,9 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
       result = result.filter((p) => p.state === selectedState);
     }
 
-    // Filter by city
+    // Filter by city (case-insensitive)
     if (selectedCity !== "all") {
-      result = result.filter((p) => p.city === selectedCity);
+      result = result.filter((p) => p.city?.toLowerCase() === selectedCity.toLowerCase());
     }
 
     // Filter by services
