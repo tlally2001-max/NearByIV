@@ -116,7 +116,7 @@ export default function FAQPage() {
       <Header />
 
       {/* Header */}
-      <header className="bg-white border-b border-gray-100">
+      <header className="bg-white border-b border-gray-100 pt-14">
         <div className="max-w-4xl mx-auto px-6 py-16 text-center">
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
             Frequently Asked Questions

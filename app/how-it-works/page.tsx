@@ -67,7 +67,7 @@ export default function HowItWorks() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-slate-50 to-blue-50 py-12 md:py-16 px-6">
+      <section className="relative bg-gradient-to-br from-slate-50 to-blue-50 py-12 md:py-16 px-6 pt-14">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight tracking-tight mb-2">
             Your Answer to Feeling{" "}
