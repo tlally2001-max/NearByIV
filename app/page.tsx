@@ -206,7 +206,7 @@ export default function Home() {
             <h2 className="mt-4 text-4xl md:text-5xl font-bold text-white">
               Why Choose NearbyIV for <span style={{ color: "#FFD700" }}>Mobile IV Therapy</span>
             </h2>
-            <p className="mt-4 text-gray-300 text-lg max-w-2xl mx-auto">
+            <p className="mt-8 text-gray-300 text-lg max-w-2xl mx-auto">
               NearbyIV is your fastest route to finding trusted mobile IV therapy near you. We instantly connect you with licensed local providers for convenient, on-demand relief from hangovers, dehydration, and for general wellness boosts—delivered right to your door.
             </p>
           </div>
