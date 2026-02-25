@@ -210,15 +210,54 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
 
   const filtered = useMemo(() => {
     let result = providers;
+    let filterState = selectedState;
+    let filterCity = selectedCity;
+
+    // Handle query parameter if no state/city params set
+    const queryParam = searchParams.get("q");
+    if (queryParam && selectedState === "all" && selectedCity === "all") {
+      const parts = queryParam.split(",").map((p) => p.trim());
+      if (parts.length === 2) {
+        const stateAbbr = parts[1].toLowerCase();
+        const stateMap: Record<string, string> = {
+          al: "Alabama", alabama: "Alabama", ak: "Alaska", alaska: "Alaska", az: "Arizona", arizona: "Arizona",
+          ar: "Arkansas", arkansas: "Arkansas", ca: "California", california: "California", co: "Colorado",
+          colorado: "Colorado", ct: "Connecticut", connecticut: "Connecticut", de: "Delaware", delaware: "Delaware",
+          fl: "Florida", florida: "Florida", ga: "Georgia", georgia: "Georgia", hi: "Hawaii", hawaii: "Hawaii",
+          id: "Idaho", idaho: "Idaho", il: "Illinois", illinois: "Illinois", in: "Indiana", indiana: "Indiana",
+          ia: "Iowa", iowa: "Iowa", ks: "Kansas", kansas: "Kansas", ky: "Kentucky", kentucky: "Kentucky",
+          la: "Louisiana", louisiana: "Louisiana", me: "Maine", maine: "Maine", md: "Maryland", maryland: "Maryland",
+          ma: "Massachusetts", massachusetts: "Massachusetts", mi: "Michigan", michigan: "Michigan",
+          mn: "Minnesota", minnesota: "Minnesota", ms: "Mississippi", mississippi: "Mississippi",
+          mo: "Missouri", missouri: "Missouri", mt: "Montana", montana: "Montana", ne: "Nebraska",
+          nebraska: "Nebraska", nv: "Nevada", nevada: "Nevada", nh: "New Hampshire", "new hampshire": "New Hampshire",
+          nj: "New Jersey", "new jersey": "New Jersey", nm: "New Mexico", "new mexico": "New Mexico",
+          ny: "New York", "new york": "New York", nc: "North Carolina", "north carolina": "North Carolina",
+          nd: "North Dakota", "north dakota": "North Dakota", oh: "Ohio", ohio: "Ohio", ok: "Oklahoma",
+          oklahoma: "Oklahoma", or: "Oregon", oregon: "Oregon", pa: "Pennsylvania", pennsylvania: "Pennsylvania",
+          ri: "Rhode Island", "rhode island": "Rhode Island", sc: "South Carolina", "south carolina": "South Carolina",
+          sd: "South Dakota", "south dakota": "South Dakota", tn: "Tennessee", tennessee: "Tennessee",
+          tx: "Texas", texas: "Texas", ut: "Utah", utah: "Utah", vt: "Vermont", vermont: "Vermont",
+          va: "Virginia", virginia: "Virginia", wa: "Washington", washington: "Washington",
+          wv: "West Virginia", "west virginia": "West Virginia", wi: "Wisconsin", wisconsin: "Wisconsin",
+          wy: "Wyoming", wyoming: "Wyoming",
+        };
+        const normalizedState = stateMap[stateAbbr];
+        if (normalizedState) {
+          filterState = normalizedState;
+          filterCity = parts[0];
+        }
+      }
+    }
 
     // Filter by state
-    if (selectedState !== "all") {
-      result = result.filter((p) => p.state === selectedState);
+    if (filterState !== "all") {
+      result = result.filter((p) => p.state === filterState);
     }
 
     // Filter by city (case-insensitive)
-    if (selectedCity !== "all") {
-      result = result.filter((p) => p.city?.toLowerCase() === selectedCity.toLowerCase());
+    if (filterCity !== "all") {
+      result = result.filter((p) => p.city?.toLowerCase() === filterCity.toLowerCase());
     }
 
     // Filter by services
@@ -235,7 +274,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
     }
 
     return result;
-  }, [providers, selectedState, selectedCity, selectedServices]);
+  }, [providers, selectedState, selectedCity, selectedServices, searchParams]);
 
   return (
     <div className="flex gap-8 items-start">
