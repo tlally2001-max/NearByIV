@@ -51,6 +51,13 @@ export function MobileNav() {
               How It Works
             </Link>
             <Link
+              href="/faq"
+              onClick={() => setOpen(false)}
+              className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors py-1"
+            >
+              FAQ
+            </Link>
+            <Link
               href="/providers"
               onClick={() => setOpen(false)}
               className="text-sm font-semibold text-white px-4 py-2 rounded-lg text-center transition-colors"
