@@ -207,7 +207,7 @@ export default function Home() {
               Why Choose NearbyIV for <span style={{ color: "#FFD700" }}>Mobile IV Therapy</span>
             </h2>
             <p className="mt-8 text-gray-300 text-lg max-w-2xl mx-auto">
-              NearbyIV is your fastest route to finding trusted mobile IV therapy near you. We instantly connect you with licensed local providers for convenient, on-demand relief from hangovers, dehydration, and for general wellness boosts—delivered right to your door.
+              <strong>NearbyIV</strong> is your fastest route to finding trusted <strong>mobile IV therapy</strong> near you. We instantly connect you with <strong>licensed local providers</strong> for convenient, on-demand relief from <strong>hangovers</strong>, <strong>dehydration</strong>, and for general <strong>wellness</strong> boosts—delivered right to your door.
             </p>
           </div>
 
