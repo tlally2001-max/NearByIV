@@ -1,3 +1,4 @@
+export const dynamic = "force-static";
 import { ForgotPasswordForm } from "@/components/forgot-password-form";
 
 export default function Page() {

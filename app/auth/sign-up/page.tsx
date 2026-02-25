@@ -1,3 +1,4 @@
+export const dynamic = "force-static";
 import { SignUpForm } from "@/components/sign-up-form";
 
 export default function Page() {
