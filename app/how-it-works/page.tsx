@@ -83,9 +83,22 @@ export default function HowItWorks() {
             Get that instant boost to keep up with life's demands. Your body
             needs it.
           </p>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
             IV Therapy can transform how you feel and help you:
           </p>
+
+          {/* Embedded YouTube Video */}
+          <div className="max-w-2xl mx-auto w-full">
+            <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+              <iframe
+                className="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
+                src="https://www.youtube.com/embed/O56ZQZjg8yY"
+                title="IV Therapy Benefits"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
         </div>
       </section>
 
