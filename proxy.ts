@@ -57,7 +57,9 @@ export const config = {
      * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
      * - /api/send-sms (SMS API - public)
      * - /api/test-sms (SMS test - public)
+     * - /api/retell/webhook (Retell webhook - public)
+     * - /api/retell/call (Retell call API - public)
      */
-    "/((?!_next/static|_next/image|favicon.ico|api/send-sms|api/test-sms|api/webhooks/sms|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/send-sms|api/test-sms|api/webhooks/sms|api/retell|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

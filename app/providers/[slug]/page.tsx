@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { ContactSidebar } from "./contact-sidebar";
 import { ServiceMenu } from "./service-menu";
 import { Header } from "@/components/header";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 type Provider = {
   id: string;
@@ -113,11 +114,17 @@ async function ProfileContent({ slug }: { slug: string }) {
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": ["LocalBusiness", "MedicalBusiness"],
     "@id": `https://nearbyiv.com/providers/${p.slug}`,
     name: p.name,
     url: p.website ?? undefined,
     telephone: p.phone ?? undefined,
+    priceRange: "$$",
+    serviceType: "Mobile IV Therapy",
+    areaServed: {
+      "@type": "GeoShape",
+      addressCountry: "US",
+    },
     address: p.city
       ? {
           "@type": "PostalAddress",
@@ -138,6 +145,8 @@ async function ProfileContent({ slug }: { slug: string }) {
         : undefined,
     image: p.hero_image ?? undefined,
     description: `${p.name} provides mobile IV therapy in ${location || "your area"}. Treatments include ${treatments.slice(0, 5).join(", ")}.`,
+    medicalSpecialty: "IV Therapy",
+    knowsAbout: treatments.slice(0, 10),
     hasOfferCatalog:
       treatments.length > 0
         ? {
@@ -146,9 +155,37 @@ async function ProfileContent({ slug }: { slug: string }) {
             itemListElement: treatments.map((t) => ({
               "@type": "Offer",
               itemOffered: { "@type": "Service", name: t },
+              price: "Call for pricing",
+              priceCurrency: "USD",
+              availability: "https://schema.org/InStock",
             })),
           }
         : undefined,
+  };
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://nearbyiv.com"
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Providers",
+        item: "https://nearbyiv.com/providers"
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: p.name,
+        item: `https://nearbyiv.com/providers/${p.slug}`
+      }
+    ]
   };
 
   return (
@@ -157,6 +194,20 @@ async function ProfileContent({ slug }: { slug: string }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+
+      {/* ── Breadcrumb Navigation ── */}
+      <Breadcrumbs
+        items={[
+          { name: "Home", href: "/" },
+          { name: "Providers", href: "/providers" },
+          { name: p.name },
+        ]}
+      />
+
       {/* ── Hero Banner ── */}
       <div className="relative h-56 md:h-72 bg-gray-900">
         <img

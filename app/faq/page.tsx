@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Header } from "@/components/header";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export const dynamic = "force-static";
 
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
   title: { absolute: "FAQ | Mobile IV Therapy | NearbyIV" },
   description:
     "Frequently asked questions about mobile IV therapy, hangover IVs, pricing, safety, and our booking process.",
-  alternates: { canonical: "/faq" },
+  alternates: { canonical: "https://nearbyiv.com/faq" },
   openGraph: {
     title: "FAQ | Mobile IV Therapy | NearbyIV",
     description:
@@ -114,6 +115,9 @@ export default function FAQPage() {
 
       {/* Nav */}
       <Header />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "FAQ" }]} />
 
       {/* Header */}
       <header className="bg-white border-b border-gray-100 pt-14">

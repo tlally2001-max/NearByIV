@@ -2,6 +2,7 @@ import { ProviderGrid } from "../provider-grid";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Header } from "@/components/header";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 // Static generation - fetch providers once at build time, never at runtime
 export const dynamic = "force-static";
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   title: "Mobile IV Therapy Providers — Browse All Listings",
   description:
     "Browse all verified mobile IV therapy providers. Filter by city, treatment type, or rating. Find RN-led concierge IV hydration, NAD+, GLP-1, and wellness services near you.",
-  alternates: { canonical: "/providers" },
+  alternates: { canonical: "https://nearbyiv.com/providers" },
   openGraph: {
     title: "Mobile IV Therapy Providers — Browse All Listings | NearbyIV",
     description:
@@ -42,6 +43,9 @@ export default async function ProvidersPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Nav */}
       <Header />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Providers" }]} />
 
       {/* Header */}
       <header className="bg-white border-b border-gray-100 pt-14">

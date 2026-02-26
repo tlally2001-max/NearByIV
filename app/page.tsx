@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: { absolute: "Mobile IV Therapy Near Me | Hangover IV, NAD+, GLP-1 | NearbyIV" },
   description:
     "Search 134+ verified RN-led mobile IV therapy providers. Compare ratings, treatments, and pricing for concierge IV hydration, NAD+, GLP-1 weight loss, and more.",
-  alternates: { canonical: "/" },
+  alternates: { canonical: "https://nearbyiv.com/" },
   openGraph: {
     title: "NearbyIV — Find Mobile IV Therapy Providers Near You",
     description:
@@ -20,19 +20,43 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "NearbyIV",
-  url: "https://nearbyiv.com",
-  description:
-    "The most trusted directory of RN-led mobile IV therapy and metabolic care providers.",
-  potentialAction: {
-    "@type": "SearchAction",
-    target: "https://nearbyiv.com/providers?q={search_term_string}",
-    "query-input": "required name=search_term_string",
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "NearbyIV",
+    url: "https://nearbyiv.com",
+    description:
+      "The most trusted directory of RN-led mobile IV therapy and metabolic care providers.",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://nearbyiv.com/providers?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
   },
-};
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "NearbyIV",
+    url: "https://nearbyiv.com",
+    logo: "https://nearbyiv.com/logo.png",
+    description: "The most trusted directory of RN-led mobile IV therapy and metabolic care providers.",
+    sameAs: [
+      "https://www.facebook.com/nearbyiv",
+      "https://www.instagram.com/nearbyiv"
+    ],
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "Customer Support",
+      email: "NearByIV@gmail.com"
+    },
+    foundingDate: "2024",
+    areaServed: {
+      "@type": "Country",
+      name: "US"
+    }
+  }
+];
 
 // Hardcoded featured providers - 1 per city (update slugs when you select featured listings)
 const FEATURED_PROVIDERS = [
@@ -98,10 +122,13 @@ function MapSection() {
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      {jsonLd.map((schema, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
 
       {/* ── Navbar ── */}
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
@@ -204,7 +231,7 @@ export default function Home() {
               Platinum Quality Standard
             </span>
             <h2 className="mt-4 text-4xl md:text-5xl font-bold text-white">
-              Why Choose NearbyIV for <span style={{ color: "#FFD700" }}>Mobile IV Therapy</span>
+              Why Choose NearbyIV for <span style={{ color: "#FFD700" }}>Hangover IV Therapy</span>
             </h2>
             <p className="mt-8 text-gray-300 text-lg max-w-2xl mx-auto">
               <span className="font-bold" style={{ color: "#FFD700" }}>NearbyIV</span> is your fastest route to finding trusted <span className="font-bold" style={{ color: "#FFD700" }}>mobile IV therapy</span> near you. We instantly connect you with <span className="font-bold" style={{ color: "#FFD700" }}>licensed local providers</span> for convenient, on-demand relief from <span className="font-bold" style={{ color: "#FFD700" }}>hangovers</span>, <span className="font-bold" style={{ color: "#FFD700" }}>dehydration</span>, and for general <span className="font-bold" style={{ color: "#FFD700" }}>wellness</span> boosts—delivered right to your door.
@@ -212,7 +239,7 @@ export default function Home() {
           </div>
 
           {/* Animated Verified Shield */}
-          <div className="flex justify-center mb-12">
+          <div className="flex justify-end mb-12 pr-12">
             <div
               className="relative animate-pulse"
               style={{
@@ -235,7 +262,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                title: "Open NOW / On-Call",
+                title: "Available NOW / On-Call",
                 subtext: "Connect with verified clinicians currently available for mobile dispatch in your area.",
                 icon: (
                   <svg className="w-14 h-14 text-[#4d94ff]" fill="currentColor" viewBox="0 0 24 24">

@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Droplet, Shield, Zap, Brain, Sparkles } from "lucide-react";
 import { Header } from "@/components/header";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export const dynamic = "force-static";
 
@@ -65,6 +66,9 @@ export default function HowItWorks() {
     <div className="min-h-screen bg-white flex flex-col">
       {/* Nav */}
       <Header />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "How It Works" }]} />
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-slate-50 to-blue-50 py-12 md:py-16 px-6 pt-14">

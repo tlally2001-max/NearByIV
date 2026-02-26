@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Header } from "@/components/header";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export const dynamic = "force-static";
 
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
   title: { absolute: "Best Mobile IV Therapy By City | NearbyIV" },
   description:
     "Find the best mobile IV therapy providers in your city. Browse verified RN-led IV hydration, NAD+, hangover relief, and wellness services near you.",
-  alternates: { canonical: "/locations" },
+  alternates: { canonical: "https://nearbyiv.com/locations" },
   openGraph: {
     title: "Best Mobile IV Therapy By City | NearbyIV",
     description:
@@ -39,6 +40,9 @@ export default function LocationsPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Nav */}
       <Header />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Locations" }]} />
 
       {/* Header */}
       <header className="bg-white border-b border-gray-100 pt-14">
