@@ -127,7 +127,7 @@ export default function PrivacyPage() {
             </p>
             <div className="mt-4 p-4 bg-gray-50 rounded-lg">
               <p className="font-semibold mb-2">NearbyIV</p>
-              <p>Email: privacy@nearbyiv.com</p>
+              <p>Email: nearbyiv@gmail.com</p>
               <p>Website: https://nearbyiv.com</p>
             </div>
           </section>

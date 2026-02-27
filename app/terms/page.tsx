@@ -169,14 +169,14 @@ export default function TermsPage() {
             </p>
             <div className="mt-4 p-4 bg-gray-50 rounded-lg">
               <p className="font-semibold mb-2">NearbyIV</p>
-              <p>Email: support@nearbyiv.com</p>
+              <p>Email: nearbyiv@gmail.com</p>
               <p>Website: https://nearbyiv.com</p>
             </div>
           </section>
 
           <section className="border-t pt-8 mt-8">
             <p className="text-sm text-gray-500">
-              <strong>Last Updated:</strong> February 22, 2026
+              <strong>Last Updated:</strong> February 26, 2026
             </p>
           </section>
         </div>
