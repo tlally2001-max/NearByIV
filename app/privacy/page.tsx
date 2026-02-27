@@ -55,6 +55,7 @@ export default function PrivacyPage() {
               <li><strong>Legal Requirements:</strong> When required by law or to protect our legal rights.</li>
               <li><strong>Business Transfers:</strong> In the event of a merger, acquisition, or sale of assets.</li>
               <li><strong>Consent:</strong> With your explicit consent for other purposes.</li>
+              <li><strong>Data Protection:</strong> No mobile information will be shared with third parties/affiliates for marketing/promotional purposes.</li>
             </ul>
           </section>
 
@@ -133,7 +134,7 @@ export default function PrivacyPage() {
 
           <section className="border-t pt-8 mt-8">
             <p className="text-sm text-gray-500">
-              <strong>Last Updated:</strong> February 22, 2026
+              <strong>Last Updated:</strong> February 26, 2026
             </p>
           </section>
         </div>
