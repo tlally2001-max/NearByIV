@@ -24,14 +24,14 @@ interface Provider {
 }
 
 interface LocationPageClientProps {
-  slug: string;
+  state: string;
   display: string;
   providers: Provider[];
   isCity: boolean;
 }
 
 export function LocationPageClient({
-  slug,
+  state,
   display,
   providers,
   isCity,
@@ -281,7 +281,7 @@ export function LocationPageClient({
                 {filteredProviders.map((provider) => (
                   <Link
                     key={provider.provider_slug}
-                    href={`/${provider.city_slug}/${provider.provider_slug}`}
+                    href={`/${state}/${provider.city_slug}/${provider.provider_slug}`}
                   >
                     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full flex flex-col">
                       {/* Hero Image */}

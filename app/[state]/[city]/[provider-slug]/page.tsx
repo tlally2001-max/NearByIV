@@ -7,7 +7,7 @@ import { Header } from "@/components/header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 
 interface ProviderPageProps {
-  params: Promise<{ slug: string; "provider-slug": string }>;
+  params: Promise<{ state: string; city: string; "provider-slug": string }>;
 }
 
 type Provider = {
@@ -34,7 +34,7 @@ export const dynamicParams = false;
 export async function generateStaticParams() {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=city_slug,provider_slug&order=city_slug.asc`,
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=state,city_slug,provider_slug&order=city_slug.asc`,
       {
         headers: {
           apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "",
@@ -44,9 +44,10 @@ export async function generateStaticParams() {
 
     if (!response.ok) return [];
 
-    const providers: Array<{ city_slug: string; provider_slug: string }> = await response.json();
+    const providers: Array<{ state: string; city_slug: string; provider_slug: string }> = await response.json();
     return providers.map((provider) => ({
-      slug: provider.city_slug,
+      state: provider.state.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+      city: provider.city_slug,
       "provider-slug": provider.provider_slug,
     }));
   } catch (error) {
@@ -58,14 +59,14 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string; "provider-slug": string }>;
+  params: Promise<{ state: string; city: string; "provider-slug": string }>;
 }): Promise<Metadata> {
-  const { slug, "provider-slug": providerSlug } = await params;
+  const { city, "provider-slug": providerSlug } = await params;
   const supabase = await createClient();
   const { data } = await supabase
     .from("providers")
     .select("name, city, state, treatments, is_confirmed_mobile")
-    .eq("city_slug", slug)
+    .eq("city_slug", city)
     .eq("provider_slug", providerSlug)
     .single();
 
@@ -83,12 +84,12 @@ export async function generateMetadata({
   };
 }
 
-async function ProfileContent({ slug, providerSlug }: { slug: string; providerSlug: string }) {
+async function ProfileContent({ city, providerSlug }: { city: string; providerSlug: string }) {
   const supabase = await createClient();
   const { data: provider } = await supabase
     .from("providers")
     .select("*")
-    .eq("city_slug", slug)
+    .eq("city_slug", city)
     .eq("provider_slug", providerSlug)
     .single();
 
@@ -114,6 +115,11 @@ async function ProfileContent({ slug, providerSlug }: { slug: string; providerSl
   const location = [p.city, p.state].filter(Boolean).join(", ");
   const fullAddress = [p.city, p.state].filter(Boolean).join(", ");
   const mapQuery = encodeURIComponent(p.name + (fullAddress ? `, ${fullAddress}` : ""));
+
+  // Convert state name to slug
+  const stateSlug = p.state?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "";
+  const cityDisplay = p.city_slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  const stateDisplay = p.state || "";
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -165,19 +171,23 @@ async function ProfileContent({ slug, providerSlug }: { slug: string; providerSl
       {
         "@type": "ListItem",
         position: 2,
-        name: slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-        item: `https://nearbyiv.com/${slug}`
+        name: stateDisplay,
+        item: `https://nearbyiv.com/${stateSlug}`
       },
       {
         "@type": "ListItem",
         position: 3,
+        name: cityDisplay,
+        item: `https://nearbyiv.com/${stateSlug}/${p.city_slug}`
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
         name: p.name,
         item: `https://nearbyiv.com${p.seo_url_path}`
       }
     ]
   };
-
-  const cityDisplay = slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
   return (
     <>
@@ -193,7 +203,8 @@ async function ProfileContent({ slug, providerSlug }: { slug: string; providerSl
       <Breadcrumbs
         items={[
           { name: "Home", href: "/" },
-          { name: cityDisplay, href: `/${slug}` },
+          { name: stateDisplay, href: `/${stateSlug}` },
+          { name: cityDisplay, href: `/${stateSlug}/${p.city_slug}` },
           { name: p.name },
         ]}
       />
@@ -417,6 +428,6 @@ export default function ProviderPage({
 async function ProfileContentWrapper({
   params,
 }: ProviderPageProps) {
-  const { slug, "provider-slug": providerSlug } = await params;
-  return <ProfileContent slug={slug} providerSlug={providerSlug} />;
+  const { city, "provider-slug": providerSlug } = await params;
+  return <ProfileContent city={city} providerSlug={providerSlug} />;
 }
