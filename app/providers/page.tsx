@@ -4,8 +4,8 @@ import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 
-// Static generation - fetch providers once at build time, never at runtime
-export const dynamic = "force-static";
+// Allow query parameters to work with revalidation
+export const revalidate = 3600; // Revalidate every hour
 
 export const metadata: Metadata = {
   title: "Mobile IV Therapy Providers — Browse All Listings",
