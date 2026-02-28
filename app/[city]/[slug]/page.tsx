@@ -27,8 +27,33 @@ type Provider = {
   is_confirmed_mobile: boolean;
 };
 
-// Use dynamic rendering to avoid build-time issues
-export const dynamic = "force-dynamic";
+// Never dynamically render unknown slugs — return 404 instead of hitting Supabase
+export const dynamicParams = false;
+
+/* ── Pre-generate all provider pages at build time ── */
+export async function generateStaticParams() {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=city_slug,provider_slug&order=city_slug.asc`,
+      {
+        headers: {
+          apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "",
+        },
+      }
+    );
+
+    if (!response.ok) return [];
+
+    const providers: Array<{ city_slug: string; provider_slug: string }> = await response.json();
+    return providers.map((provider) => ({
+      city: provider.city_slug,
+      slug: provider.provider_slug,
+    }));
+  } catch (error) {
+    console.error("Failed to generate static params:", error);
+    return [];
+  }
+}
 
 /* ── SEO Metadata ── */
 export async function generateMetadata({
