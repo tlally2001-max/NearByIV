@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -68,7 +68,27 @@ export default async function StatePage({
   const { state } = await params;
   const fullStateName = STATE_MAP[state];
 
+  // If not a valid state, check if it's a city slug and redirect
   if (!fullStateName) {
+    const supabase = await createClient();
+    const { data: cityData } = await supabase
+      .from("providers")
+      .select("state")
+      .eq("city_slug", state)
+      .limit(1)
+      .single();
+
+    if (cityData && cityData.state) {
+      // Convert state name to slug
+      const stateSlug = cityData.state
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+
+      // Redirect to proper URL with state and city
+      redirect(`/${stateSlug}/${state}`);
+    }
+
     notFound();
   }
 
