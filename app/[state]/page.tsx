@@ -108,12 +108,29 @@ export default async function StatePage({
     notFound();
   }
 
+  // Get counts for all states for the filter dropdown
+  const allProvidersResult = await supabase
+    .from("providers")
+    .select("state");
+
+  const stateCounts = new Map<string, number>();
+  (allProvidersResult.data || []).forEach((p) => {
+    if (p.state) {
+      const stateSlug = p.state
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+      stateCounts.set(stateSlug, (stateCounts.get(stateSlug) || 0) + 1);
+    }
+  });
+
   return (
     <LocationPageClient
       state={state}
       display={display}
       providers={providers}
       isCity={false}
+      stateCounts={Object.fromEntries(stateCounts)}
     />
   );
 }

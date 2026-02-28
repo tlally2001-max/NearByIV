@@ -29,6 +29,7 @@ interface LocationPageClientProps {
   display: string;
   providers: Provider[];
   isCity: boolean;
+  stateCounts?: Record<string, number>;
 }
 
 // State slug to full name mapping
@@ -55,6 +56,7 @@ export function LocationPageClient({
   display,
   providers,
   isCity,
+  stateCounts: initialStateCounts = {},
 }: LocationPageClientProps) {
   const router = useRouter();
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
@@ -74,8 +76,11 @@ export function LocationPageClient({
       .sort((a, b) => a.city.localeCompare(b.city));
   }, [providers, isCity]);
 
-  // Get state counts
-  const stateCounts = useMemo(() => {
+  // Use provided state counts or calculate from providers
+  const stateCountsMap = useMemo(() => {
+    if (Object.keys(initialStateCounts).length > 0) {
+      return new Map(Object.entries(initialStateCounts).map(([k, v]) => [k, v as number]));
+    }
     const counts = new Map<string, number>();
     providers.forEach((p) => {
       const stateSlug = p.state
@@ -87,7 +92,7 @@ export function LocationPageClient({
       }
     });
     return counts;
-  }, [providers]);
+  }, [providers, initialStateCounts]);
 
   // Fixed list of IV therapy treatments
   const TREATMENT_OPTIONS = [
@@ -207,7 +212,7 @@ export function LocationPageClient({
                   className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   {AVAILABLE_STATES.map((s) => {
-                    const count = stateCounts.get(s.slug) || 0;
+                    const count = stateCountsMap.get(s.slug) || 0;
                     return (
                       <option key={s.slug} value={s.slug}>
                         {s.name} ({count})
