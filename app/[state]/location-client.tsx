@@ -62,12 +62,32 @@ export function LocationPageClient({
   const [minRating, setMinRating] = useState<number | null>(null);
   const [mobileOnly, setMobileOnly] = useState(false);
 
-  // Get unique cities for state pages
+  // Get unique cities with counts for state pages
   const cities = useMemo(() => {
     if (isCity) return [];
-    const uniqueCities = [...new Set(providers.map((p) => p.city))].sort();
-    return uniqueCities;
+    const cityCounts = new Map<string, number>();
+    providers.forEach((p) => {
+      cityCounts.set(p.city, (cityCounts.get(p.city) || 0) + 1);
+    });
+    return Array.from(cityCounts.entries())
+      .map(([city, count]) => ({ city, count }))
+      .sort((a, b) => a.city.localeCompare(b.city));
   }, [providers, isCity]);
+
+  // Get state counts
+  const stateCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    providers.forEach((p) => {
+      const stateSlug = p.state
+        ?.toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+      if (stateSlug) {
+        counts.set(stateSlug, (counts.get(stateSlug) || 0) + 1);
+      }
+    });
+    return counts;
+  }, [providers]);
 
   // Fixed list of IV therapy treatments
   const TREATMENT_OPTIONS = [
@@ -186,11 +206,14 @@ export function LocationPageClient({
                   onChange={(e) => router.push(`/${e.target.value}`)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  {AVAILABLE_STATES.map((s) => (
-                    <option key={s.slug} value={s.slug}>
-                      {s.name}
-                    </option>
-                  ))}
+                  {AVAILABLE_STATES.map((s) => {
+                    const count = stateCounts.get(s.slug) || 0;
+                    return (
+                      <option key={s.slug} value={s.slug}>
+                        {s.name} ({count})
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
 
@@ -205,10 +228,10 @@ export function LocationPageClient({
                     onChange={(e) => setSelectedCity(e.target.value || null)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">All Cities</option>
-                    {cities.map((city) => (
+                    <option value="">All Cities ({providers.length})</option>
+                    {cities.map(({ city, count }) => (
                       <option key={city} value={city}>
-                        {city}
+                        {city} ({count})
                       </option>
                     ))}
                   </select>
