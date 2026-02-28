@@ -4,11 +4,13 @@ import { hasEnvVars } from "../utils";
 
 export async function updateSession(request: NextRequest) {
   // Public routes that don't require authentication
-  // Check if it's a state/city/provider route: /:state or /:state/:city or /:state/:city/:provider
+  // Check if it's a state/city/provider route: /:state or /:state/:city or /:state/:city/:provider or /:city-slug (redirect)
   const isSlugRoute = /^\/[^/]+(\/[^/]+(\/[^/]+)?)?$/.test(request.nextUrl.pathname) &&
     !request.nextUrl.pathname.startsWith("/auth") &&
     !request.nextUrl.pathname.startsWith("/protected") &&
-    !request.nextUrl.pathname.startsWith("/api");
+    !request.nextUrl.pathname.startsWith("/api") &&
+    !request.nextUrl.pathname.startsWith("/admin") &&
+    !request.nextUrl.pathname.startsWith("/dashboard");
 
   const isPublicRoute =
     request.nextUrl.pathname === "/" ||
