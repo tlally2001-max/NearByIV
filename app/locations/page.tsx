@@ -35,6 +35,10 @@ const LOCATIONS: Record<string, string[]> = {
   Virginia: ["Herndon"],
 };
 
+function toSlug(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
 export default function LocationsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
@@ -71,7 +75,7 @@ export default function LocationsPage() {
                 {cities.map((city) => (
                   <Link
                     key={city}
-                    href={`/providers?state=${encodeURIComponent(state)}&city=${encodeURIComponent(city)}`}
+                    href={`/${toSlug(city)}`}
                     className="text-sm text-[#0066FF] hover:text-[#0052cc] hover:underline transition-colors py-1"
                   >
                     {city}
