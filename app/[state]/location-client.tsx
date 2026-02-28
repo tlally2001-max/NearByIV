@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Header } from "@/components/header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Star } from "lucide-react";
@@ -30,12 +31,32 @@ interface LocationPageClientProps {
   isCity: boolean;
 }
 
+// State slug to full name mapping
+const STATE_MAP: Record<string, string> = {
+  alabama: "Alabama", alaska: "Alaska", arizona: "Arizona", arkansas: "Arkansas",
+  california: "California", colorado: "Colorado", connecticut: "Connecticut", delaware: "Delaware",
+  florida: "Florida", georgia: "Georgia", hawaii: "Hawaii", idaho: "Idaho",
+  illinois: "Illinois", indiana: "Indiana", iowa: "Iowa", kansas: "Kansas",
+  kentucky: "Kentucky", louisiana: "Louisiana", maine: "Maine", maryland: "Maryland",
+  massachusetts: "Massachusetts", michigan: "Michigan", minnesota: "Minnesota", mississippi: "Mississippi",
+  missouri: "Missouri", montana: "Montana", nebraska: "Nebraska", nevada: "Nevada",
+  "new-hampshire": "New Hampshire", "new-jersey": "New Jersey", "new-mexico": "New Mexico", "new-york": "New York",
+  "north-carolina": "North Carolina", "north-dakota": "North Dakota", ohio: "Ohio", oklahoma: "Oklahoma",
+  oregon: "Oregon", pennsylvania: "Pennsylvania", "rhode-island": "Rhode Island", "south-carolina": "South Carolina",
+  "south-dakota": "South Dakota", tennessee: "Tennessee", texas: "Texas", utah: "Utah",
+  vermont: "Vermont", virginia: "Virginia", washington: "Washington", "west-virginia": "West Virginia",
+  wisconsin: "Wisconsin", wyoming: "Wyoming",
+};
+
+const AVAILABLE_STATES = Object.entries(STATE_MAP).map(([slug, name]) => ({ slug, name })).sort((a, b) => a.name.localeCompare(b.name));
+
 export function LocationPageClient({
   state,
   display,
   providers,
   isCity,
 }: LocationPageClientProps) {
+  const router = useRouter();
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [selectedTreatments, setSelectedTreatments] = useState<Set<string>>(new Set());
   const [minRating, setMinRating] = useState<number | null>(null);
@@ -155,10 +176,22 @@ export function LocationPageClient({
             <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-24 max-h-[calc(100vh-150px)] overflow-y-auto">
               <h2 className="font-semibold text-gray-900 mb-4">Filters</h2>
 
-              {/* State Display */}
+              {/* State Filter */}
               <div className="mb-6 pb-6 border-b border-gray-200">
-                <p className="text-xs text-gray-500 uppercase tracking-wide">State</p>
-                <p className="text-sm font-semibold text-gray-900">{display}</p>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  State
+                </label>
+                <select
+                  value={state}
+                  onChange={(e) => router.push(`/${e.target.value}`)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {AVAILABLE_STATES.map((s) => (
+                    <option key={s.slug} value={s.slug}>
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* City Filter - Show for state pages */}
