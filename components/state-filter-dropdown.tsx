@@ -16,11 +16,16 @@ const US_STATES = [
   "West Virginia", "Wisconsin", "Wyoming",
 ];
 
+function toSlug(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
 export function StateFilterDropdown({ currentState }: { currentState?: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleStateSelect = (state: string) => {
-    window.location.href = `/providers?state=${encodeURIComponent(state)}`;
+    const stateSlug = toSlug(state);
+    window.location.href = `/${stateSlug}`;
     setIsOpen(false);
   };
 

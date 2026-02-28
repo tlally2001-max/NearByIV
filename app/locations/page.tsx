@@ -75,7 +75,7 @@ export default function LocationsPage() {
                 {cities.map((city) => (
                   <Link
                     key={city}
-                    href={`/${toSlug(city)}`}
+                    href={`/${toSlug(state)}/${toSlug(city)}`}
                     className="text-sm text-[#0066FF] hover:text-[#0052cc] hover:underline transition-colors py-1"
                   >
                     {city}
