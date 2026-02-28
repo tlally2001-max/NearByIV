@@ -4,8 +4,8 @@ import { hasEnvVars } from "../utils";
 
 export async function updateSession(request: NextRequest) {
   // Public routes that don't require authentication
-  // Check if it's a city/provider slug route: /:city/:slug
-  const isCityProviderRoute = /^\/[^/]+\/[^/]+$/.test(request.nextUrl.pathname) &&
+  // Check if it's a city or city/provider slug route: /:city or /:city/:slug
+  const isCityProviderRoute = /^\/[^/]+(\/[^/]+)?$/.test(request.nextUrl.pathname) &&
     !request.nextUrl.pathname.startsWith("/auth") &&
     !request.nextUrl.pathname.startsWith("/protected");
 
