@@ -96,7 +96,6 @@ export default async function CityPage({
                 <img
                   src={p.hero_image || "/iv-bag-default.jpg"}
                   alt={p.name}
-                  onError={(e) => { (e.target as HTMLImageElement).src = "/iv-bag-default.jpg"; }}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 {p.is_confirmed_mobile && (
