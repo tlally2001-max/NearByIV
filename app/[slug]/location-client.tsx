@@ -37,6 +37,9 @@ export function LocationPageClient({
   isCity,
 }: LocationPageClientProps) {
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedTreatments, setSelectedTreatments] = useState<Set<string>>(new Set());
+  const [minRating, setMinRating] = useState<number | null>(null);
+  const [mobileOnly, setMobileOnly] = useState(false);
 
   // Get unique cities for state pages
   const cities = useMemo(() => {
@@ -45,11 +48,47 @@ export function LocationPageClient({
     return uniqueCities;
   }, [providers, isCity]);
 
-  // Filter providers based on selected city
+  // Get unique treatments from all providers
+  const allTreatments = useMemo(() => {
+    const treatments = new Set<string>();
+    providers.forEach((p) => {
+      const arr = Array.isArray(p.treatments) ? p.treatments : [p.treatments];
+      arr.forEach((t) => {
+        if (t) treatments.add(t);
+      });
+    });
+    return Array.from(treatments).sort();
+  }, [providers]);
+
+  // Filter providers based on all selected filters
   const filteredProviders = useMemo(() => {
-    if (isCity || !selectedCity) return providers;
-    return providers.filter((p) => p.city === selectedCity);
-  }, [providers, isCity, selectedCity]);
+    let result = providers;
+
+    // City filter
+    if (!isCity && selectedCity) {
+      result = result.filter((p) => p.city === selectedCity);
+    }
+
+    // Treatment filter
+    if (selectedTreatments.size > 0) {
+      result = result.filter((p) => {
+        const arr = Array.isArray(p.treatments) ? p.treatments : [p.treatments];
+        return arr.some((t) => selectedTreatments.has(t));
+      });
+    }
+
+    // Rating filter
+    if (minRating !== null) {
+      result = result.filter((p) => p.rating !== null && p.rating >= minRating);
+    }
+
+    // Mobile only filter
+    if (mobileOnly) {
+      result = result.filter((p) => p.is_confirmed_mobile);
+    }
+
+    return result;
+  }, [providers, isCity, selectedCity, selectedTreatments, minRating, mobileOnly]);
 
   // Build breadcrumbs
   const breadcrumbItems: Array<{ name: string; href?: string }> = [
@@ -102,13 +141,19 @@ export function LocationPageClient({
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           {/* Sidebar Filters */}
           <aside className="lg:col-span-1">
-            <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-24">
+            <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-24 max-h-[calc(100vh-150px)] overflow-y-auto">
               <h2 className="font-semibold text-gray-900 mb-4">Filters</h2>
+
+              {/* State Display */}
+              <div className="mb-6 pb-6 border-b border-gray-200">
+                <p className="text-xs text-gray-500 uppercase tracking-wide">State</p>
+                <p className="text-sm font-semibold text-gray-900">{display}</p>
+              </div>
 
               {/* City Filter - Show for state pages */}
               {!isCity && (
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="mb-6 pb-6 border-b border-gray-200">
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
                     City
                   </label>
                   <select
@@ -126,8 +171,72 @@ export function LocationPageClient({
                 </div>
               )}
 
+              {/* Services/Treatments Filter */}
+              <div className="mb-6 pb-6 border-b border-gray-200">
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Services
+                </label>
+                <div className="space-y-2">
+                  {allTreatments.slice(0, 8).map((treatment) => (
+                    <label key={treatment} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedTreatments.has(treatment)}
+                        onChange={(e) => {
+                          const newTreatments = new Set(selectedTreatments);
+                          if (e.target.checked) {
+                            newTreatments.add(treatment);
+                          } else {
+                            newTreatments.delete(treatment);
+                          }
+                          setSelectedTreatments(newTreatments);
+                        }}
+                        className="w-4 h-4 border-gray-300 rounded cursor-pointer"
+                      />
+                      <span className="text-sm text-gray-700">{treatment}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Minimum Rating Filter */}
+              <div className="mb-6 pb-6 border-b border-gray-200">
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Minimum Rating
+                </label>
+                <div className="space-y-2">
+                  {[null, 4, 3, 2].map((rating) => (
+                    <label key={rating || "all"} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="rating"
+                        checked={minRating === rating}
+                        onChange={() => setMinRating(rating)}
+                        className="w-4 h-4 cursor-pointer"
+                      />
+                      <span className="text-sm text-gray-700">
+                        {rating === null ? "All Ratings" : `${rating}+ Stars`}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mobile Confirmed Filter */}
+              <div className="mb-6 pb-6 border-b border-gray-200">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={mobileOnly}
+                    onChange={(e) => setMobileOnly(e.target.checked)}
+                    className="w-4 h-4 border-gray-300 rounded cursor-pointer"
+                  />
+                  <span className="text-sm font-medium text-gray-700">Mobile Confirmed Only</span>
+                </label>
+              </div>
+
               {/* Provider Count */}
-              <div className="pt-6 border-t border-gray-200">
+              <div className="pt-2">
                 <p className="text-sm text-gray-600">
                   Showing <span className="font-semibold">{filteredProviders.length}</span> of{" "}
                   <span className="font-semibold">{providers.length}</span> providers
