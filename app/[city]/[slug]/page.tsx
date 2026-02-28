@@ -176,7 +176,7 @@ async function ProfileContent({ city, slug }: { city: string; slug: string }) {
       {
         "@type": "ListItem",
         position: 3,
-        name: p.business_name,
+        name: p.name,
         item: `https://nearbyiv.com${p.seo_url_path}`
       }
     ]
