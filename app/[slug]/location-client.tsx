@@ -48,23 +48,30 @@ export function LocationPageClient({
     return uniqueCities;
   }, [providers, isCity]);
 
-  // Get unique treatments from providers (for checkbox options)
-  const availableTreatments = useMemo(() => {
-    const treatments = new Set<string>();
-    providers.forEach((p) => {
-      if (p.treatments) {
-        const arr = Array.isArray(p.treatments) ? p.treatments : [p.treatments];
-        arr.forEach((t) => {
-          if (t) {
-            // Normalize for display
-            const normalized = String(t).trim();
-            if (normalized) treatments.add(normalized);
-          }
-        });
-      }
-    });
-    return Array.from(treatments).sort();
-  }, [providers]);
+  // Fixed list of IV therapy treatments
+  const TREATMENT_OPTIONS = [
+    "Anti-Aging",
+    "Athletic",
+    "B12",
+    "Beauty",
+    "Biotin",
+    "Build Your Own",
+    "Detox",
+    "Energy",
+    "Fitness",
+    "Glow",
+    "Glutathione",
+    "Hangover",
+    "Headache",
+    "Hydration",
+    "Immunity",
+    "Jet Lag",
+    "Myers",
+    "Nad+",
+    "Performance",
+    "Vitamin B",
+    "Vitamin C",
+  ];
 
   // Filter providers based on all selected filters
   const filteredProviders = useMemo(() => {
@@ -75,15 +82,20 @@ export function LocationPageClient({
       result = result.filter((p) => p.city === selectedCity);
     }
 
-    // Treatment filter - case insensitive matching
+    // Treatment filter - flexible matching (case insensitive, includes substring)
     if (selectedTreatments.size > 0) {
       result = result.filter((p) => {
         if (!p.treatments) return false;
         const arr = Array.isArray(p.treatments) ? p.treatments : [p.treatments];
-        const normalizedSelected = Array.from(selectedTreatments).map(t => t.toLowerCase().trim());
-        return arr.some((t) => {
-          if (!t) return false;
-          return normalizedSelected.includes(t.toLowerCase().trim());
+        const providerTreatments = arr
+          .map((t) => String(t || "").toLowerCase().trim())
+          .filter((t) => t.length > 0);
+
+        return Array.from(selectedTreatments).some((selected) => {
+          const selectedLower = selected.toLowerCase().trim();
+          return providerTreatments.some((pt) =>
+            pt.includes(selectedLower) || selectedLower.includes(pt)
+          );
         });
       });
     }
@@ -188,7 +200,7 @@ export function LocationPageClient({
                   Services
                 </label>
                 <div className="space-y-2">
-                  {availableTreatments.map((treatment) => (
+                  {TREATMENT_OPTIONS.map((treatment) => (
                     <label key={treatment} className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
