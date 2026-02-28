@@ -99,15 +99,15 @@ export function LocationPageClient({
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           {/* Sidebar Filters */}
-          {!isCity && (
-            <aside className="lg:col-span-1">
-              <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-24">
-                <h2 className="font-semibold text-gray-900 mb-4">Filters</h2>
+          <aside className="lg:col-span-1">
+            <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-24">
+              <h2 className="font-semibold text-gray-900 mb-4">Filters</h2>
 
-                {/* City Filter */}
-                <div>
+              {/* City Filter - Show for state pages */}
+              {!isCity && (
+                <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     City
                   </label>
@@ -124,20 +124,20 @@ export function LocationPageClient({
                     ))}
                   </select>
                 </div>
+              )}
 
-                {/* Provider Count */}
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <p className="text-sm text-gray-600">
-                    Showing <span className="font-semibold">{filteredProviders.length}</span> of{" "}
-                    <span className="font-semibold">{providers.length}</span> providers
-                  </p>
-                </div>
+              {/* Provider Count */}
+              <div className="pt-6 border-t border-gray-200">
+                <p className="text-sm text-gray-600">
+                  Showing <span className="font-semibold">{filteredProviders.length}</span> of{" "}
+                  <span className="font-semibold">{providers.length}</span> providers
+                </p>
               </div>
-            </aside>
-          )}
+            </div>
+          </aside>
 
           {/* Provider Grid */}
-          <main className={isCity ? "col-span-1" : "lg:col-span-3"}>
+          <main className="lg:col-span-4">
             {filteredProviders.length === 0 ? (
               <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
                 <p className="text-gray-500">
@@ -145,7 +145,7 @@ export function LocationPageClient({
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredProviders.map((provider) => (
                   <Link
                     key={provider.provider_slug}
