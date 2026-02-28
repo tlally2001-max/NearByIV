@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { InteractiveMap } from "./interactive-map";
 import { StateFilterDropdown } from "@/components/state-filter-dropdown";
+import { ProvidersDropdown } from "@/components/providers-dropdown";
 import { MobileNav } from "@/components/mobile-nav";
 import type { Metadata } from "next";
 
@@ -139,9 +140,7 @@ export default function Home() {
           </Link>
           <MobileNav />
           <div className="hidden md:flex items-center gap-8">
-            <Link href="/providers" className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors">
-              Search Providers
-            </Link>
+            <ProvidersDropdown />
             <Link href="/locations" className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors">
               Best IV By City
             </Link>
