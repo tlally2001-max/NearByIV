@@ -3,8 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { ContactSidebar } from "../contact-sidebar";
-import { ServiceMenu } from "../service-menu";
+import { ContactSidebar } from "./contact-sidebar";
+import { ServiceMenu } from "./service-menu";
 import { Header } from "@/components/header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 
