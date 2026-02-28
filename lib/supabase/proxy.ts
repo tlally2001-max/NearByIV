@@ -4,6 +4,11 @@ import { hasEnvVars } from "../utils";
 
 export async function updateSession(request: NextRequest) {
   // Public routes that don't require authentication
+  // Check if it's a city/provider slug route: /:city/:slug
+  const isCityProviderRoute = /^\/[^/]+\/[^/]+$/.test(request.nextUrl.pathname) &&
+    !request.nextUrl.pathname.startsWith("/auth") &&
+    !request.nextUrl.pathname.startsWith("/protected");
+
   const isPublicRoute =
     request.nextUrl.pathname === "/" ||
     request.nextUrl.pathname.startsWith("/providers") ||
@@ -18,7 +23,9 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname === "/sitemap.xml" ||
     request.nextUrl.pathname === "/robots.txt" ||
     request.nextUrl.pathname === "/manifest.json" ||
-    request.nextUrl.pathname.startsWith("/.well-known/");
+    request.nextUrl.pathname.startsWith("/.well-known/") ||
+    // City/provider slug routes are public
+    isCityProviderRoute;
 
   // Skip auth check for public routes - dramatically reduces process usage
   if (isPublicRoute) {
