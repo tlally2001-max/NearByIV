@@ -66,6 +66,7 @@ export default async function CityPage({
         items={[
           { name: "Home", href: "/" },
           { name: "Locations", href: "/locations" },
+          { name: providers[0]?.state || "State" },
           { name: cityDisplay },
         ]}
       />
