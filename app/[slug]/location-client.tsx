@@ -48,17 +48,34 @@ export function LocationPageClient({
     return uniqueCities;
   }, [providers, isCity]);
 
-  // Get unique treatments from all providers
-  const allTreatments = useMemo(() => {
-    const treatments = new Set<string>();
-    providers.forEach((p) => {
-      const arr = Array.isArray(p.treatments) ? p.treatments : [p.treatments];
-      arr.forEach((t) => {
-        if (t) treatments.add(t);
-      });
-    });
-    return Array.from(treatments).sort();
-  }, [providers]);
+  // Fixed list of available treatments
+  const AVAILABLE_TREATMENTS = [
+    "Anti-Aging",
+    "Athletic",
+    "B12",
+    "Beauty",
+    "Biotin",
+    "Detox",
+    "Energy",
+    "Glutathione",
+    "Hangover",
+    "Headache",
+    "Hydration",
+    "Immunity",
+    "Jet Lag",
+    "Ketamine",
+    "Migraine",
+    "Morning Sickness",
+    "Myers",
+    "Myers Cocktail",
+    "Nad Iv",
+    "Nad+",
+    "Performance",
+    "Rehydration",
+    "Vitamin B",
+    "Vitamin C",
+    "Vitamin D",
+  ];
 
   // Filter providers based on all selected filters
   const filteredProviders = useMemo(() => {
@@ -177,7 +194,7 @@ export function LocationPageClient({
                   Services
                 </label>
                 <div className="space-y-2">
-                  {allTreatments.slice(0, 8).map((treatment) => (
+                  {AVAILABLE_TREATMENTS.map((treatment) => (
                     <label key={treatment} className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
