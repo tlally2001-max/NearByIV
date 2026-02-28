@@ -126,18 +126,6 @@ export function LocationPageClient({
     }
   }
 
-  const formatTreatments = (treatments: string[] | string | null) => {
-    if (!treatments) return [];
-    const arr = Array.isArray(treatments) ? treatments : [treatments];
-    return arr.slice(0, 3);
-  };
-
-  const getTreatmentCount = (treatments: string[] | string | null) => {
-    if (!treatments) return 0;
-    const arr = Array.isArray(treatments) ? treatments : [treatments];
-    return Math.max(0, arr.length - 3);
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Nav */}
@@ -312,30 +300,9 @@ export function LocationPageClient({
                         </h3>
 
                         {/* Location */}
-                        <p className="text-sm text-gray-600 mb-3">
+                        <p className="text-sm text-gray-600 mb-4">
                           {provider.city}, {provider.state}
                         </p>
-
-                        {/* Service Tags */}
-                        <div className="mb-3">
-                          <div className="flex flex-wrap gap-2">
-                            {formatTreatments(provider.treatments).map(
-                              (treatment, idx) => (
-                                <span
-                                  key={idx}
-                                  className="inline-block bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded-full"
-                                >
-                                  {treatment}
-                                </span>
-                              )
-                            )}
-                            {getTreatmentCount(provider.treatments) > 0 && (
-                              <span className="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">
-                                +{getTreatmentCount(provider.treatments)} more
-                              </span>
-                            )}
-                          </div>
-                        </div>
 
                         {/* Rating */}
                         <div className="flex items-center gap-1 mb-4">
