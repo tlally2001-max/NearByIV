@@ -48,34 +48,23 @@ export function LocationPageClient({
     return uniqueCities;
   }, [providers, isCity]);
 
-  // Fixed list of available treatments
-  const AVAILABLE_TREATMENTS = [
-    "Anti-Aging",
-    "Athletic",
-    "B12",
-    "Beauty",
-    "Biotin",
-    "Detox",
-    "Energy",
-    "Glutathione",
-    "Hangover",
-    "Headache",
-    "Hydration",
-    "Immunity",
-    "Jet Lag",
-    "Ketamine",
-    "Migraine",
-    "Morning Sickness",
-    "Myers",
-    "Myers Cocktail",
-    "Nad Iv",
-    "Nad+",
-    "Performance",
-    "Rehydration",
-    "Vitamin B",
-    "Vitamin C",
-    "Vitamin D",
-  ];
+  // Get unique treatments from providers (for checkbox options)
+  const availableTreatments = useMemo(() => {
+    const treatments = new Set<string>();
+    providers.forEach((p) => {
+      if (p.treatments) {
+        const arr = Array.isArray(p.treatments) ? p.treatments : [p.treatments];
+        arr.forEach((t) => {
+          if (t) {
+            // Normalize for display
+            const normalized = String(t).trim();
+            if (normalized) treatments.add(normalized);
+          }
+        });
+      }
+    });
+    return Array.from(treatments).sort();
+  }, [providers]);
 
   // Filter providers based on all selected filters
   const filteredProviders = useMemo(() => {
@@ -86,11 +75,16 @@ export function LocationPageClient({
       result = result.filter((p) => p.city === selectedCity);
     }
 
-    // Treatment filter
+    // Treatment filter - case insensitive matching
     if (selectedTreatments.size > 0) {
       result = result.filter((p) => {
+        if (!p.treatments) return false;
         const arr = Array.isArray(p.treatments) ? p.treatments : [p.treatments];
-        return arr.some((t) => selectedTreatments.has(t));
+        const normalizedSelected = Array.from(selectedTreatments).map(t => t.toLowerCase().trim());
+        return arr.some((t) => {
+          if (!t) return false;
+          return normalizedSelected.includes(t.toLowerCase().trim());
+        });
       });
     }
 
@@ -194,7 +188,7 @@ export function LocationPageClient({
                   Services
                 </label>
                 <div className="space-y-2">
-                  {AVAILABLE_TREATMENTS.map((treatment) => (
+                  {availableTreatments.map((treatment) => (
                     <label key={treatment} className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
