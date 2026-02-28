@@ -238,7 +238,7 @@ export default function Home() {
           </div>
 
           {/* Animated Verified Shield */}
-          <div className="flex justify-end mb-12 pr-12">
+          <div className="flex justify-center mb-12">
             <div
               className="relative animate-pulse"
               style={{
