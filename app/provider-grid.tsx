@@ -108,9 +108,15 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
   useEffect(() => {
     if (!isInitialized) return; // Don't update URL during initial load
 
+    // If a specific city is selected, navigate to the new SEO city page
+    if (selectedCity !== "all") {
+      const citySlug = selectedCity.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      router.push(`/${citySlug}`);
+      return;
+    }
+
     const params = new URLSearchParams();
     if (selectedState !== "all") params.set("state", selectedState);
-    if (selectedCity !== "all") params.set("city", selectedCity);
 
     const newUrl = params.toString() ? `/providers?${params.toString()}` : "/providers";
     router.push(newUrl);
