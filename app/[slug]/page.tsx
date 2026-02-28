@@ -9,7 +9,20 @@ export const dynamicParams = false;
 
 export async function generateStaticParams() {
   try {
-    const response = await fetch(
+    // Get all unique city slugs
+    const citiesRes = await fetch(
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=city_slug&order=city_slug.asc`,
+      {
+        headers: {
+          apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "",
+        },
+      }
+    );
+    const citiesData: Array<{ city_slug: string }> = citiesRes.ok ? await citiesRes.json() : [];
+    const cities = [...new Set(citiesData.map((p) => p.city_slug))];
+
+    // Get all unique states
+    const statesRes = await fetch(
       `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=state&order=state.asc`,
       {
         headers: {
@@ -17,12 +30,16 @@ export async function generateStaticParams() {
         },
       }
     );
-    if (!response.ok) return [];
-    const providers: Array<{ state: string }> = await response.json();
-    const unique = [...new Set(providers.map((p) => p.state).filter(Boolean))];
-    return unique.map((state) => ({
-      state: state.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
-    }));
+    const statesData: Array<{ state: string }> = statesRes.ok ? await statesRes.json() : [];
+    const states = [...new Set(statesData.map((p) => p.state).filter(Boolean))].map((s) =>
+      s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
+    );
+
+    // Return all as valid params
+    return [
+      ...cities.map((slug) => ({ slug })),
+      ...states.map((slug) => ({ slug })),
+    ];
   } catch {
     return [];
   }
@@ -31,49 +48,68 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ state: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { state } = await params;
-  const stateDisplay = state.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+  const { slug } = await params;
+  const display = slug.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
   return {
-    title: { absolute: `Mobile IV Therapy in ${stateDisplay} | NearbyIV` },
-    description: `Find verified mobile IV therapy providers across ${stateDisplay}. Book hangover relief, hydration, NAD+, and wellness IV drips delivered to your home or hotel.`,
+    title: { absolute: `Mobile IV Therapy in ${display} | NearbyIV` },
+    description: `Find verified mobile IV therapy providers in ${display}. Book hangover relief, hydration, NAD+, and wellness IV drips.`,
   };
 }
 
-export default async function StatePage({
+export default async function LocationPage({
   params,
 }: {
-  params: Promise<{ state: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { state } = await params;
-  const stateDisplay = state.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
-
-  // Map slug back to full state name
-  const stateMap: Record<string, string> = {
-    alabama: "Alabama", alaska: "Alaska", arizona: "Arizona", arkansas: "Arkansas",
-    california: "California", colorado: "Colorado", connecticut: "Connecticut", delaware: "Delaware",
-    florida: "Florida", georgia: "Georgia", hawaii: "Hawaii", idaho: "Idaho",
-    illinois: "Illinois", indiana: "Indiana", iowa: "Iowa", kansas: "Kansas",
-    kentucky: "Kentucky", louisiana: "Louisiana", maine: "Maine", maryland: "Maryland",
-    massachusetts: "Massachusetts", michigan: "Michigan", minnesota: "Minnesota", mississippi: "Mississippi",
-    missouri: "Missouri", montana: "Montana", nebraska: "Nebraska", nevada: "Nevada",
-    "new-hampshire": "New Hampshire", "new-jersey": "New Jersey", "new-mexico": "New Mexico", "new-york": "New York",
-    "north-carolina": "North Carolina", "north-dakota": "North Dakota", ohio: "Ohio", oklahoma: "Oklahoma",
-    oregon: "Oregon", pennsylvania: "Pennsylvania", "rhode-island": "Rhode Island", "south-carolina": "South Carolina",
-    "south-dakota": "South Dakota", tennessee: "Tennessee", texas: "Texas", utah: "Utah",
-    vermont: "Vermont", virginia: "Virginia", washington: "Washington", "west-virginia": "West Virginia",
-    wisconsin: "Wisconsin", wyoming: "Wyoming",
-  };
-
-  const fullStateName = stateMap[state] || stateDisplay;
+  const { slug } = await params;
+  const display = slug.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 
   const supabase = await createClient();
-  const { data: providers } = await supabase
+
+  // First try to find by city_slug
+  let providers = await supabase
     .from("providers")
     .select("name, city, state, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, is_confirmed_mobile, treatments, hero_image")
-    .ilike("state", fullStateName)
-    .order("rating", { ascending: false });
+    .eq("city_slug", slug)
+    .order("rating", { ascending: false })
+    .then((r) => r.data);
+
+  let isCity = true;
+  let breadcrumbState = null;
+
+  // If not found as city, try as state
+  if (!providers || providers.length === 0) {
+    isCity = false;
+    // Map slug back to full state name
+    const stateMap: Record<string, string> = {
+      alabama: "Alabama", alaska: "Alaska", arizona: "Arizona", arkansas: "Arkansas",
+      california: "California", colorado: "Colorado", connecticut: "Connecticut", delaware: "Delaware",
+      florida: "Florida", georgia: "Georgia", hawaii: "Hawaii", idaho: "Idaho",
+      illinois: "Illinois", indiana: "Indiana", iowa: "Iowa", kansas: "Kansas",
+      kentucky: "Kentucky", louisiana: "Louisiana", maine: "Maine", maryland: "Maryland",
+      massachusetts: "Massachusetts", michigan: "Michigan", minnesota: "Minnesota", mississippi: "Mississippi",
+      missouri: "Missouri", montana: "Montana", nebraska: "Nebraska", nevada: "Nevada",
+      "new-hampshire": "New Hampshire", "new-jersey": "New Jersey", "new-mexico": "New Mexico", "new-york": "New York",
+      "north-carolina": "North Carolina", "north-dakota": "North Dakota", ohio: "Ohio", oklahoma: "Oklahoma",
+      oregon: "Oregon", pennsylvania: "Pennsylvania", "rhode-island": "Rhode Island", "south-carolina": "South Carolina",
+      "south-dakota": "South Dakota", tennessee: "Tennessee", texas: "Texas", utah: "Utah",
+      vermont: "Vermont", virginia: "Virginia", washington: "Washington", "west-virginia": "West Virginia",
+      wisconsin: "Wisconsin", wyoming: "Wyoming",
+    };
+
+    const fullStateName = stateMap[slug];
+    if (!fullStateName) notFound();
+
+    breadcrumbState = fullStateName;
+    const result = await supabase
+      .from("providers")
+      .select("name, city, state, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, is_confirmed_mobile, treatments, hero_image")
+      .ilike("state", fullStateName)
+      .order("rating", { ascending: false });
+    providers = result.data;
+  }
 
   if (!providers || providers.length === 0) {
     notFound();
@@ -87,7 +123,8 @@ export default async function StatePage({
         items={[
           { name: "Home", href: "/" },
           { name: "Locations", href: "/locations" },
-          { name: fullStateName },
+          ...(breadcrumbState ? [{ name: breadcrumbState }] : []),
+          ...(isCity ? [{ name: display }] : [{ name: display }]),
         ]}
       />
 
@@ -95,10 +132,10 @@ export default async function StatePage({
       <header className="bg-white border-b border-gray-100 pt-14">
         <div className="max-w-5xl mx-auto px-6 py-12 text-center">
           <h1 className="text-4xl font-bold text-gray-900">
-            Mobile IV Therapy in {fullStateName}
+            Mobile IV Therapy in {display}
           </h1>
           <p className="mt-3 text-gray-500 text-lg max-w-2xl mx-auto">
-            {providers.length} verified provider{providers.length !== 1 ? "s" : ""} offering mobile IV therapy, hangover relief, NAD+, and wellness services across {fullStateName}.
+            {providers.length} verified provider{providers.length !== 1 ? "s" : ""} offering mobile IV therapy, hangover relief, NAD+, and wellness services {isCity ? "in" : "across"} {display}.
           </p>
         </div>
       </header>
