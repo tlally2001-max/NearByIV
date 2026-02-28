@@ -50,7 +50,7 @@ export default async function CityPage({
   const supabase = await createClient();
   const { data: providers } = await supabase
     .from("providers")
-    .select("name, city, state, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, is_confirmed_mobile, treatments")
+    .select("name, city, state, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, is_confirmed_mobile, treatments, hero_image")
     .eq("city_slug", city)
     .order("rating", { ascending: false });
 
@@ -89,39 +89,49 @@ export default async function CityPage({
             <Link
               key={p.provider_slug}
               href={p.seo_url_path}
-              className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col gap-3"
+              className="group bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col"
             >
-              <div className="flex items-start justify-between gap-2">
-                <h2 className="text-lg font-bold text-gray-900">{p.name}</h2>
+              {/* Hero Image */}
+              <div className="relative h-44 bg-gray-100 overflow-hidden">
+                <img
+                  src={p.hero_image || "/iv-bag-default.jpg"}
+                  alt={p.name}
+                  onError={(e) => { (e.target as HTMLImageElement).src = "/iv-bag-default.jpg"; }}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
                 {p.is_confirmed_mobile && (
-                  <span className="shrink-0 inline-flex items-center gap-1 bg-green-100 text-green-700 text-xs font-semibold px-2 py-1 rounded-full">
+                  <span className="absolute top-3 left-3 inline-flex items-center gap-1 bg-green-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
-                    Verified Mobile
+                    Mobile
                   </span>
                 )}
               </div>
 
-              <p className="text-sm text-gray-500">{p.city}, {p.state}</p>
+              {/* Card Content */}
+              <div className="p-5 flex flex-col gap-2 flex-1">
+                <h2 className="text-base font-bold text-gray-900">{p.name}</h2>
+                <p className="text-sm text-gray-500">{p.city}, {p.state}</p>
 
-              {p.rating != null && (
-                <div className="flex items-center gap-1.5 text-sm">
-                  <div className="flex items-center gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <svg key={i} className={`w-4 h-4 ${i < Math.round(p.rating!) ? "text-yellow-400" : "text-gray-300"} fill-current`} viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
+                {p.rating != null && (
+                  <div className="flex items-center gap-1.5 text-sm">
+                    <div className="flex items-center gap-0.5">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <svg key={i} className={`w-4 h-4 ${i < Math.round(p.rating!) ? "text-yellow-400" : "text-gray-300"} fill-current`} viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <span className="text-gray-600">{p.rating.toFixed(1)}</span>
+                    {p.reviews && <span className="text-gray-400">({p.reviews} reviews)</span>}
                   </div>
-                  <span className="text-gray-600">{p.rating.toFixed(1)}</span>
-                  {p.reviews && <span className="text-gray-400">({p.reviews} reviews)</span>}
-                </div>
-              )}
+                )}
 
-              <span className="mt-auto text-sm font-semibold text-blue-600 hover:underline">
-                View Profile →
-              </span>
+                <span className="mt-auto pt-2 text-sm font-semibold text-blue-600">
+                  View Profile →
+                </span>
+              </div>
             </Link>
           ))}
         </div>
