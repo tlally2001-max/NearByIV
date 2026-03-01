@@ -41,7 +41,8 @@ export async function generateStaticParams() {
 
     return states.map((state) => ({ state }));
   } catch {
-    return [];
+    // Fallback: generate all 50 states from STATE_MAP if fetch fails
+    return Object.keys(STATE_MAP).map((state) => ({ state }));
   }
 }
 

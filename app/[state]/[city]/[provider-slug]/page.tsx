@@ -29,7 +29,7 @@ type Provider = {
   is_confirmed_mobile: boolean;
 };
 
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
   try {

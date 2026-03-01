@@ -5,7 +5,7 @@ import { Header } from "@/components/header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { LocationPageClient } from "../location-client";
 
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 // State slug to full name mapping
 const STATE_MAP: Record<string, string> = {
