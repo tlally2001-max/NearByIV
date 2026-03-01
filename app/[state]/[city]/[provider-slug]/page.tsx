@@ -34,7 +34,7 @@ export const dynamicParams = true;
 export async function generateStaticParams() {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=state,city_slug,provider_slug&order=city_slug.asc`,
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=state:State,city_slug,provider_slug&order=city_slug.asc`,
       {
         headers: {
           apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "",
@@ -65,7 +65,7 @@ export async function generateMetadata({
   const supabase = await createClient();
   const { data } = await supabase
     .from("providers")
-    .select("name, city, state, treatments, is_confirmed_mobile")
+    .select("name:business_name, city:City, state:State, treatments, is_confirmed_mobile")
     .eq("city_slug", city)
     .eq("provider_slug", providerSlug)
     .single();
@@ -88,7 +88,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
   const supabase = await createClient();
   const { data: provider } = await supabase
     .from("providers")
-    .select("*")
+    .select("name:business_name, city:City, state:State, id, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, hero_image, treatments, service_areas, is_confirmed_mobile")
     .eq("city_slug", city)
     .eq("provider_slug", providerSlug)
     .single();

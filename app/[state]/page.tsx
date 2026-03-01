@@ -27,7 +27,7 @@ const STATE_MAP: Record<string, string> = {
 export async function generateStaticParams() {
   try {
     const statesRes = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=state&order=state.asc`,
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=state:State&order=State.asc`,
       {
         headers: {
           apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "",
@@ -74,7 +74,7 @@ export default async function StatePage({
     const supabase = await createClient();
     const { data: cityData } = await supabase
       .from("providers")
-      .select("state")
+      .select("state:State")
       .eq("city_slug", state)
       .limit(1)
       .single();
@@ -99,8 +99,8 @@ export default async function StatePage({
   // Get all providers for this state
   const result = await supabase
     .from("providers")
-    .select("name, city, state, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, is_confirmed_mobile, treatments, hero_image")
-    .ilike("state", fullStateName)
+    .select("name:business_name, city:City, state:State, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, is_confirmed_mobile, treatments, hero_image")
+    .ilike("State", fullStateName)
     .order("rating", { ascending: false });
 
   const providers = result.data;
@@ -112,7 +112,7 @@ export default async function StatePage({
   // Get counts for all states for the filter dropdown
   const allProvidersResult = await supabase
     .from("providers")
-    .select("state");
+    .select("state:State");
 
   const stateCounts = new Map<string, number>();
   (allProvidersResult.data || []).forEach((p) => {
