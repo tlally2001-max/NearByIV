@@ -102,7 +102,7 @@ export default async function StatePage({
     .select("name:business_name, city:City, state:State, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, is_confirmed_mobile, treatments, hero_image")
     .ilike("State", fullStateName)
     .order("rating", { ascending: false })
-    .limit(2000);
+    .limit(5000);
 
   const providers = result.data;
 
@@ -110,20 +110,17 @@ export default async function StatePage({
     notFound();
   }
 
-  // Get counts for all states for the filter dropdown
-  const allProvidersResult = await supabase
-    .from("providers")
-    .select("state:State")
-    .limit(10000);
+  // Get counts for all states using database function (avoids row limit issues)
+  const { data: stateCountsData } = await supabase.rpc("get_state_counts");
 
   const stateCounts = new Map<string, number>();
-  (allProvidersResult.data || []).forEach((p) => {
-    if (p.state) {
-      const stateSlug = p.state
+  (stateCountsData || []).forEach((row: { state: string; count: number }) => {
+    if (row.state) {
+      const stateSlug = row.state
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-|-$/g, "");
-      stateCounts.set(stateSlug, (stateCounts.get(stateSlug) || 0) + 1);
+      stateCounts.set(stateSlug, Number(row.count));
     }
   });
 
