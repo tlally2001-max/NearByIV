@@ -101,7 +101,8 @@ export default async function StatePage({
     .from("providers")
     .select("name:business_name, city:City, state:State, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, is_confirmed_mobile, treatments, hero_image")
     .ilike("State", fullStateName)
-    .order("rating", { ascending: false });
+    .order("rating", { ascending: false })
+    .limit(2000);
 
   const providers = result.data;
 
@@ -112,7 +113,8 @@ export default async function StatePage({
   // Get counts for all states for the filter dropdown
   const allProvidersResult = await supabase
     .from("providers")
-    .select("state:State");
+    .select("state:State")
+    .limit(10000);
 
   const stateCounts = new Map<string, number>();
   (allProvidersResult.data || []).forEach((p) => {
