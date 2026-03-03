@@ -335,17 +335,12 @@ export function LocationPageClient({
                     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full flex flex-col">
                       {/* Hero Image */}
                       <div className="relative h-48 bg-gray-200 overflow-hidden">
-                        {provider.hero_image ? (
-                          <img
-                            src={provider.hero_image}
-                            alt={provider.name}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
-                            <div className="text-blue-200">No image</div>
-                          </div>
-                        )}
+                        <img
+                          src={provider.hero_image || "/iv-bag-default.jpg"}
+                          alt={provider.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => { (e.target as HTMLImageElement).src = "/iv-bag-default.jpg"; }}
+                        />
                         {provider.is_confirmed_mobile && (
                           <div className="absolute top-3 right-3 bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
                             Mobile
