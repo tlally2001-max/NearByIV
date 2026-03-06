@@ -214,7 +214,7 @@ export default function Home() {
           </div>
 
           {/* USA Provider Density Map */}
-          <div className="w-full mt-12">
+          <div className="w-full mt-12 hidden md:block">
             <div className="max-w-7xl mx-auto px-6">
               <MapSection />
             </div>
