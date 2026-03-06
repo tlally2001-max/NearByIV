@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { Header } from "@/components/header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { LocationsMapClient } from "./locations-map-client";
+import { USAMapComponent } from "./usa-map-component";
 
 export const dynamic = "force-dynamic";
 
@@ -111,10 +111,10 @@ export default async function LocationsPage() {
         </div>
       </header>
 
-      {/* Interactive Leaflet Map */}
+      {/* Interactive USA Map */}
       <section className="max-w-7xl mx-auto px-6 py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Provider Density Map</h2>
-        <LocationsMapClient cityCounts={Array.from(cityCounts.values())} />
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Find Providers by State</h2>
+        <USAMapComponent stateCounts={stateCounts} />
       </section>
 
       {/* Top Cities */}
