@@ -128,7 +128,7 @@ export default async function LocationsPage() {
       </header>
 
       {/* Interactive USA Map */}
-      <section className="max-w-7xl mx-auto px-6 py-12">
+      <section className="max-w-7xl mx-auto px-6 py-12 hidden md:block">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Find Providers by State</h2>
         <USAMapComponent stateCounts={stateCounts} />
       </section>
