@@ -75,35 +75,6 @@ export function USAMapComponent({ stateCounts }: { stateCounts: Map<string, numb
         </div>
       </div>
 
-      {/* Color Legend */}
-      <div className="mt-8 bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-        <h3 className="text-sm font-semibold text-gray-900 mb-4">Provider Density Legend</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
-          <div className="flex flex-col items-center gap-2">
-            <div className="w-8 h-8 rounded border border-gray-300" style={{ backgroundColor: "#f3f4f6" }}></div>
-            <span className="text-xs text-gray-600 text-center">No providers</span>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <div className="w-8 h-8 rounded border border-gray-300" style={{ backgroundColor: "#dbeafe" }}></div>
-            <span className="text-xs text-gray-600 text-center">1-5</span>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <div className="w-8 h-8 rounded border border-gray-300" style={{ backgroundColor: "#93c5fd" }}></div>
-            <span className="text-xs text-gray-600 text-center">6-20</span>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <div className="w-8 h-8 rounded border border-gray-300" style={{ backgroundColor: "#3b82f6" }}></div>
-            <span className="text-xs text-gray-600 text-center">21-50</span>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <div className="w-8 h-8 rounded border border-gray-300" style={{ backgroundColor: "#1d4ed8" }}></div>
-            <span className="text-xs text-gray-600 text-center">51+</span>
-          </div>
-        </div>
-        <p className="mt-4 text-xs text-gray-600">
-          Click any state to view providers. Hover for provider counts.
-        </p>
-      </div>
     </div>
   );
 }
