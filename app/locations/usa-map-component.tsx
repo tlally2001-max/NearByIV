@@ -61,20 +61,28 @@ export function USAMapComponent({ stateCounts }: { stateCounts: Map<string, numb
   return (
     <div className="w-full">
       {/* Map Container */}
-      <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
-        <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
-          <USAMap
-            customStates={customStates}
-            mapSettings={{
-              width: "100%",
-              height: "auto",
-              title: "USA Provider Density Map",
-            }}
-            className="cursor-pointer"
-          />
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 sm:p-6 md:p-8">
+        <div
+          className="overflow-x-auto -mx-4 sm:-mx-6 md:-mx-8"
+          style={{
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
+          <div style={{ minWidth: "600px", maxWidth: "100%" }}>
+            <div style={{ padding: "0 1rem" }}>
+              <USAMap
+                customStates={customStates}
+                mapSettings={{
+                  width: "100%",
+                  height: "auto",
+                  title: "USA Provider Density Map",
+                }}
+                className="cursor-pointer"
+              />
+            </div>
+          </div>
         </div>
       </div>
-
     </div>
   );
 }
