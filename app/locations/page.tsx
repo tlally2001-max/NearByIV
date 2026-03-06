@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { Header } from "@/components/header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { LocationsMapClient } from "./locations-map-client";
 
 export const dynamic = "force-dynamic";
 
@@ -20,96 +21,8 @@ export const metadata: Metadata = {
   },
 };
 
-// State slug to full name mapping
-const STATE_MAP: Record<string, string> = {
-  alabama: "Alabama", alaska: "Alaska", arizona: "Arizona", arkansas: "Arkansas",
-  california: "California", colorado: "Colorado", connecticut: "Connecticut", delaware: "Delaware",
-  "district-of-columbia": "District of Columbia",
-  florida: "Florida", georgia: "Georgia", hawaii: "Hawaii", idaho: "Idaho",
-  illinois: "Illinois", indiana: "Indiana", iowa: "Iowa", kansas: "Kansas",
-  kentucky: "Kentucky", louisiana: "Louisiana", maine: "Maine", maryland: "Maryland",
-  massachusetts: "Massachusetts", michigan: "Michigan", minnesota: "Minnesota", mississippi: "Mississippi",
-  missouri: "Missouri", montana: "Montana", nebraska: "Nebraska", nevada: "Nevada",
-  "new-hampshire": "New Hampshire", "new-jersey": "New Jersey", "new-mexico": "New Mexico", "new-york": "New York",
-  "north-carolina": "North Carolina", "north-dakota": "North Dakota", ohio: "Ohio", oklahoma: "Oklahoma",
-  oregon: "Oregon", pennsylvania: "Pennsylvania", "rhode-island": "Rhode Island", "south-carolina": "South Carolina",
-  "south-dakota": "South Dakota", tennessee: "Tennessee", texas: "Texas", utah: "Utah",
-  vermont: "Vermont", virginia: "Virginia", washington: "Washington", "west-virginia": "West Virginia",
-  wisconsin: "Wisconsin", wyoming: "Wyoming",
-};
-
-// USA statebins grid layout (geographic arrangement)
-// Each state has [row, col, name, slug]
-const STATE_GRID: Array<[number, number, string, string]> = [
-  // Row 0
-  [0, 8, "Hawaii", "hawaii"],
-  [0, 9, "Alaska", "alaska"],
-  // Row 1
-  // Row 2
-  [2, 0, "Washington", "washington"],
-  [2, 1, "Montana", "montana"],
-  [2, 2, "North Dakota", "north-dakota"],
-  [2, 3, "Minnesota", "minnesota"],
-  [2, 4, "Wisconsin", "wisconsin"],
-  [2, 5, "Michigan", "michigan"],
-  [2, 9, "Vermont", "vermont"],
-  [2, 10, "New Hampshire", "new-hampshire"],
-  // Row 3
-  [3, 0, "Oregon", "oregon"],
-  [3, 1, "Idaho", "idaho"],
-  [3, 2, "Wyoming", "wyoming"],
-  [3, 3, "South Dakota", "south-dakota"],
-  [3, 4, "Iowa", "iowa"],
-  [3, 5, "Illinois", "illinois"],
-  [3, 6, "Indiana", "indiana"],
-  [3, 7, "Ohio", "ohio"],
-  [3, 8, "Pennsylvania", "pennsylvania"],
-  [3, 9, "New York", "new-york"],
-  [3, 10, "Massachusetts", "massachusetts"],
-  // Row 4
-  [4, 0, "California", "california"],
-  [4, 1, "Nevada", "nevada"],
-  [4, 2, "Utah", "utah"],
-  [4, 3, "Colorado", "colorado"],
-  [4, 4, "Nebraska", "nebraska"],
-  [4, 5, "Missouri", "missouri"],
-  [4, 6, "Kentucky", "kentucky"],
-  [4, 7, "West Virginia", "west-virginia"],
-  [4, 8, "Virginia", "virginia"],
-  [4, 9, "Maryland", "maryland"],
-  [4, 10, "Connecticut", "connecticut"],
-  // Row 5
-  [5, 0, "Arizona", "arizona"],
-  [5, 1, "New Mexico", "new-mexico"],
-  [5, 2, "Oklahoma", "oklahoma"],
-  [5, 3, "Kansas", "kansas"],
-  [5, 4, "Arkansas", "arkansas"],
-  [5, 5, "Tennessee", "tennessee"],
-  [5, 6, "North Carolina", "north-carolina"],
-  [5, 7, "South Carolina", "south-carolina"],
-  [5, 8, "Georgia", "georgia"],
-  [5, 9, "Delaware", "delaware"],
-  [5, 10, "New Jersey", "new-jersey"],
-  // Row 6
-  [6, 2, "Texas", "texas"],
-  [6, 4, "Louisiana", "louisiana"],
-  [6, 5, "Mississippi", "mississippi"],
-  [6, 6, "Alabama", "alabama"],
-  [6, 7, "Florida", "florida"],
-  // Row 7
-  [7, 5, "District of Columbia", "district-of-columbia"],
-];
-
 function toSlug(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-}
-
-function getColorForCount(count: number): string {
-  if (count === 0) return "#e5e7eb"; // gray
-  if (count <= 5) return "#dbeafe"; // light blue
-  if (count <= 20) return "#93c5fd"; // medium blue
-  if (count <= 50) return "#3b82f6"; // blue
-  return "#1d4ed8"; // dark blue
 }
 
 export default async function LocationsPage() {
@@ -198,105 +111,10 @@ export default async function LocationsPage() {
         </div>
       </header>
 
-      {/* USA Tile Grid Map */}
+      {/* Interactive Leaflet Map */}
       <section className="max-w-7xl mx-auto px-6 py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Provider Coverage by State</h2>
-        <div className="bg-white border border-gray-200 rounded-lg p-8 overflow-x-auto">
-          <svg
-            viewBox="0 0 1100 760"
-            className="w-full h-auto max-w-4xl mx-auto"
-            style={{ minWidth: "100%" }}
-          >
-            {STATE_GRID.map(([row, col, name, slug]) => {
-              const x = col * 100 + 50;
-              const y = row * 100 + 50;
-              const count = stateCounts.get(slug) || 0;
-              const color = getColorForCount(count);
-
-              return (
-                <g key={slug}>
-                  {/* State square */}
-                  <a href={`/${slug}`} style={{ cursor: "pointer" }}>
-                    <rect
-                      x={x - 40}
-                      y={y - 40}
-                      width="80"
-                      height="80"
-                      fill={color}
-                      stroke="#d1d5db"
-                      strokeWidth="2"
-                      rx="4"
-                      className="hover:opacity-80 transition-opacity"
-                    />
-                    {/* State abbreviation text */}
-                    <text
-                      x={x}
-                      y={y - 10}
-                      textAnchor="middle"
-                      fontSize="12"
-                      fontWeight="bold"
-                      fill="#1f2937"
-                      className="pointer-events-none"
-                    >
-                      {name
-                        .split(" ")
-                        .map((w) => w[0])
-                        .join("")
-                        .toUpperCase()}
-                    </text>
-                    {/* Provider count */}
-                    <text
-                      x={x}
-                      y={y + 12}
-                      textAnchor="middle"
-                      fontSize="16"
-                      fontWeight="bold"
-                      fill="#1f2937"
-                      className="pointer-events-none"
-                    >
-                      {count}
-                    </text>
-                  </a>
-
-                  {/* Tooltip background on hover */}
-                  <rect
-                    x={x - 40}
-                    y={y - 40}
-                    width="80"
-                    height="80"
-                    fill="none"
-                    stroke="none"
-                    className="hover:fill-blue-50/30"
-                  />
-                </g>
-              );
-            })}
-          </svg>
-
-          {/* Color legend */}
-          <div className="mt-8 flex flex-wrap gap-6 justify-center">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded" style={{ backgroundColor: "#e5e7eb" }}></div>
-              <span className="text-sm text-gray-600">No providers</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded" style={{ backgroundColor: "#dbeafe" }}></div>
-              <span className="text-sm text-gray-600">1-5 providers</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded" style={{ backgroundColor: "#93c5fd" }}></div>
-              <span className="text-sm text-gray-600">6-20 providers</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded" style={{ backgroundColor: "#3b82f6" }}></div>
-              <span className="text-sm text-gray-600">21-50 providers</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded" style={{ backgroundColor: "#1d4ed8" }}></div>
-              <span className="text-sm text-gray-600">51+ providers</span>
-            </div>
-          </div>
-        </div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Provider Density Map</h2>
+        <LocationsMapClient cityCounts={Array.from(cityCounts.values())} />
       </section>
 
       {/* Top Cities */}
