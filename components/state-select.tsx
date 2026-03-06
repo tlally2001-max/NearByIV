@@ -32,6 +32,7 @@ export function StateSelect() {
         <option value="Colorado">Colorado</option>
         <option value="Connecticut">Connecticut</option>
         <option value="Delaware">Delaware</option>
+        <option value="District of Columbia">District of Columbia</option>
         <option value="Florida">Florida</option>
         <option value="Georgia">Georgia</option>
         <option value="Hawaii">Hawaii</option>

@@ -12,6 +12,7 @@ const US_STATES = [
   "Colorado",
   "Connecticut",
   "Delaware",
+  "District of Columbia",
   "Florida",
   "Georgia",
   "Hawaii",
