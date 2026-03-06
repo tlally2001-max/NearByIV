@@ -101,17 +101,29 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
   const p = provider as Provider;
   const treatments = p.treatments?.split(",").map((t) => t.trim()).filter(Boolean) ?? [];
 
-  const serviceAreas = (p.service_areas ?? "")
-    .split(/[,;]/)
-    .map((s) => {
-      s = s.trim();
-      const match = s.match(/\[([^\]]+)\]/);
-      s = match ? match[1] : s;
-      s = s.replace(/\(.*?\)/g, "").trim();
-      return s;
-    })
-    .filter((s) => s && s.length > 1 && !s.includes("http") && !s.includes("://") && !/^[^\w\s-]/.test(s))
-    .filter(Boolean);
+  let serviceAreas: string[] = [];
+  try {
+    // Try parsing as JSON first
+    if (p.service_areas) {
+      const parsed = JSON.parse(p.service_areas);
+      if (Array.isArray(parsed)) {
+        serviceAreas = parsed.filter((s) => s && typeof s === "string" && s.length > 1);
+      }
+    }
+  } catch {
+    // Fallback to split parsing
+    serviceAreas = (p.service_areas ?? "")
+      .split(/[,;]/)
+      .map((s) => {
+        s = s.trim();
+        const match = s.match(/\[([^\]]+)\]/);
+        s = match ? match[1] : s;
+        s = s.replace(/\(.*?\)/g, "").trim();
+        return s;
+      })
+      .filter((s) => s && s.length > 1 && !s.includes("http") && !s.includes("://") && !/^[^\w\s-]/.test(s))
+      .filter(Boolean);
+  }
 
   const location = [p.city, p.state].filter(Boolean).join(", ");
   const fullAddress = [p.city, p.state].filter(Boolean).join(", ");
