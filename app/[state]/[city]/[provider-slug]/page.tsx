@@ -29,6 +29,7 @@ type Provider = {
   is_confirmed_mobile: boolean;
   personalized_bio: string | null;
   menu_highlights: Array<{ service: string; price: string }> | null;
+  working_hours: string | null;
 };
 
 export const dynamicParams = true;
@@ -90,7 +91,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
   const supabase = await createClient();
   const { data: provider } = await supabase
     .from("providers")
-    .select("name:business_name, city:City, state:State, id, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, hero_image, treatments, service_areas, is_confirmed_mobile, personalized_bio, menu_highlights")
+    .select("name:business_name, city:City, state:State, id, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, hero_image, treatments, service_areas, is_confirmed_mobile, personalized_bio, menu_highlights, working_hours")
     .eq("city_slug", city)
     .eq("provider_slug", providerSlug)
     .single();
@@ -347,6 +348,16 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
                       <a href={p.website} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
                         Website
                       </a>
+                    </div>
+                  )}
+                  {p.working_hours && (
+                    <div className="flex items-start gap-3">
+                      <svg className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 2m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <div className="text-sm text-gray-700">
+                        {p.working_hours}
+                      </div>
                     </div>
                   )}
                 </div>
