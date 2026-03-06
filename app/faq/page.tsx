@@ -169,10 +169,10 @@ export default function FAQPage() {
               Contact Us
             </a>
             <Link
-              href="/providers"
+              href="/pricing"
               className="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
             >
-              Find a Provider
+              List Your Business
             </Link>
           </div>
         </section>
