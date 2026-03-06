@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { USAMapComponent } from "./locations/usa-map-component";
+import { LocationSearch } from "./locations/location-search";
 import { StateFilterDropdown } from "@/components/state-filter-dropdown";
 import { ProvidersDropdown } from "@/components/providers-dropdown";
 import { MobileNav } from "@/components/mobile-nav";
@@ -76,7 +77,49 @@ async function MapSection() {
     }
   });
 
-  return <USAMapComponent stateCounts={stateCounts} />;
+  // Fetch providers for city list
+  const { data: allProviders } = await supabase
+    .from("providers")
+    .select("City, State, postal_code")
+    .limit(10000);
+
+  const cityCounts = new Map<string, { city: string; state: string; count: number; zips: Set<string> }>();
+  (allProviders || []).forEach((provider: { City: string; State: string; postal_code?: string }) => {
+    if (provider.City && provider.State) {
+      const key = `${provider.City}, ${provider.State}`;
+      if (cityCounts.has(key)) {
+        const existing = cityCounts.get(key)!;
+        if (provider.postal_code) {
+          existing.zips.add(provider.postal_code);
+        }
+        cityCounts.set(key, { ...existing, count: existing.count + 1 });
+      } else {
+        const zips = new Set<string>();
+        if (provider.postal_code) {
+          zips.add(provider.postal_code);
+        }
+        cityCounts.set(key, {
+          city: provider.City,
+          state: provider.State,
+          count: 1,
+          zips,
+        });
+      }
+    }
+  });
+
+  const cityList = Array.from(cityCounts.values()).map(({ city, state, zips }) => ({
+    city,
+    state,
+    zips: Array.from(zips),
+  }));
+
+  return (
+    <>
+      <USAMapComponent stateCounts={stateCounts} />
+      <LocationSearch cities={cityList} />
+    </>
+  );
 }
 
 export default function Home() {
