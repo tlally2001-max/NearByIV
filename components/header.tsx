@@ -39,7 +39,7 @@ export function Header() {
             FAQ
           </Link>
           <Link
-            href="/providers"
+            href="/pricing"
             className="text-sm font-semibold text-white px-4 py-2 rounded-lg transition-colors whitespace-nowrap"
             style={{ backgroundColor: "#0066FF" }}
           >
