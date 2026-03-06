@@ -77,6 +77,12 @@ async function MapSection() {
     }
   });
 
+  return <USAMapComponent stateCounts={stateCounts} />;
+}
+
+async function SearchSection() {
+  const supabase = await createClient();
+
   // Fetch providers for city list
   const { data: allProviders } = await supabase
     .from("providers")
@@ -114,12 +120,7 @@ async function MapSection() {
     zips: Array.from(zips),
   }));
 
-  return (
-    <>
-      <USAMapComponent stateCounts={stateCounts} />
-      <LocationSearch cities={cityList} />
-    </>
-  );
+  return <LocationSearch cities={cityList} />;
 }
 
 export default function Home() {
@@ -211,6 +212,13 @@ export default function Home() {
                 {cat.label}
               </Link>
             ))}
+          </div>
+
+          {/* Location Search Bar */}
+          <div className="w-full mt-12">
+            <div className="max-w-7xl mx-auto px-6">
+              <SearchSection />
+            </div>
           </div>
 
           {/* USA Provider Density Map */}
