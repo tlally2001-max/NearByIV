@@ -104,13 +104,29 @@ export default async function StatePage({
     .select("name:business_name, city:City, state:State, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, is_confirmed_mobile, treatments, hero_image")
     .ilike("State", fullStateName)
     .order("rating", { ascending: false, nullsFirst: false })
+    .order("business_name", { ascending: true })
     .limit(5000);
 
-  const providers = result.data;
+  let providers = result.data;
 
   if (!providers || providers.length === 0) {
     notFound();
   }
+
+  // Sort by rating (highest first), then by name for consistency
+  // Providers with no rating go to the bottom
+  providers = providers.sort((a, b) => {
+    // Both have ratings - sort by rating descending
+    if (a.rating && b.rating) {
+      return (b.rating as number) - (a.rating as number);
+    }
+    // a has rating, b doesn't - a comes first
+    if (a.rating && !b.rating) return -1;
+    // b has rating, a doesn't - b comes first
+    if (b.rating && !a.rating) return 1;
+    // Neither has rating - sort by name
+    return (a.name as string).localeCompare(b.name as string);
+  });
 
   // Get counts for all states using database function (avoids row limit issues)
   const { data: stateCountsData } = await supabase.rpc("get_state_counts");
