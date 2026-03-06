@@ -12,6 +12,7 @@ export const dynamicParams = true;
 const STATE_MAP: Record<string, string> = {
   alabama: "Alabama", alaska: "Alaska", arizona: "Arizona", arkansas: "Arkansas",
   california: "California", colorado: "Colorado", connecticut: "Connecticut", delaware: "Delaware",
+  "district-of-columbia": "District of Columbia",
   florida: "Florida", georgia: "Georgia", hawaii: "Hawaii", idaho: "Idaho",
   illinois: "Illinois", indiana: "Indiana", iowa: "Iowa", kansas: "Kansas",
   kentucky: "Kentucky", louisiana: "Louisiana", maine: "Maine", maryland: "Maryland",
