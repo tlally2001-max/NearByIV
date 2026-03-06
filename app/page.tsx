@@ -146,7 +146,7 @@ export default function Home() {
           </span>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight">
-            Find Mobile IV, <span style={{ color: "#FFD700" }}>Hangover Relief</span>, Peptides &amp; <span style={{ color: "#FFD700" }}>GLP-1</span> to Your Door
+            <span style={{ color: "#FFD700" }}>Find</span> Mobile IV, <span style={{ color: "#FFD700" }}>Hangover Relief</span>, Peptides &amp; <span style={{ color: "#FFD700" }}>GLP-1</span> to Your Door
           </h1>
 
           <p className="mt-5 text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
