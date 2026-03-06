@@ -43,7 +43,7 @@ export function Header() {
             className="text-sm font-semibold text-white px-4 py-2 rounded-lg transition-colors whitespace-nowrap"
             style={{ backgroundColor: "#0066FF" }}
           >
-            Find a Provider
+            List Your Business
           </Link>
         </div>
       </div>

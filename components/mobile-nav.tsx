@@ -63,7 +63,7 @@ export function MobileNav() {
               className="text-sm font-semibold text-white px-4 py-2 rounded-lg text-center transition-colors"
               style={{ backgroundColor: "#0066FF" }}
             >
-              Find a Provider
+              List Your Business
             </Link>
           </div>
         </div>
