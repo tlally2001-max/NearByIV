@@ -252,7 +252,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
 
               <div className="mb-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">About {p.name}</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">About {p.name}</h3>
                 {p.personalized_bio ? (
                   <p className="text-gray-600 leading-relaxed whitespace-pre-wrap">
                     {p.personalized_bio}
