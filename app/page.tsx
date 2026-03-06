@@ -197,23 +197,6 @@ export default function Home() {
             The most trusted directory of medical-grade IV therapy delivered to your door today—at home, work, or events. Fast, professional, and hassle-free.
           </p>
 
-          {/* Category Buttons */}
-          <div className="flex flex-wrap justify-center gap-4 mt-10">
-            {[
-              { id: "hydration", label: "Hangover and Hydration 🧊" },
-              { id: "longevity", label: "Longevity & NAD+ 🧬" },
-              { id: "weightloss", label: "Weight Loss (GLP-1) ⚖️" },
-            ].map((cat) => (
-              <Link
-                key={cat.id}
-                href={`/providers?category=${cat.id}`}
-                className="px-6 py-3 rounded-2xl text-sm font-semibold border transition-all duration-200 cursor-pointer backdrop-blur-md bg-white/20 text-white border-white/40 hover:bg-[#0066FF] hover:border-[#0066FF] hover:shadow-lg hover:shadow-blue-500/30"
-              >
-                {cat.label}
-              </Link>
-            ))}
-          </div>
-
           {/* USA Provider Density Map */}
           <div className="w-full mt-12 hidden md:block">
             <div className="max-w-7xl mx-auto px-6">
