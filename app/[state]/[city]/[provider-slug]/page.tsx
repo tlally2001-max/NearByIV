@@ -287,7 +287,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
                   <p className="text-gray-700 leading-relaxed">
                     {p.menu_highlights.map((item, index) => (
                       <span key={index}>
-                        {item.service}
+                        <span className="font-semibold">{item.service}</span>
                         {index < p.menu_highlights!.length - 1 && " • "}
                       </span>
                     ))}
