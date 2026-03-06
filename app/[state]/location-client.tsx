@@ -51,6 +51,168 @@ const STATE_MAP: Record<string, string> = {
 
 const AVAILABLE_STATES = Object.entries(STATE_MAP).map(([slug, name]) => ({ slug, name })).sort((a, b) => a.name.localeCompare(b.name));
 
+interface FilterContentProps {
+  state: string;
+  isCity: boolean;
+  cities: Array<{ city: string; count: number }>;
+  providers: Provider[];
+  selectedTreatments: Set<string>;
+  setSelectedTreatments: (treatments: Set<string>) => void;
+  minRating: number | null;
+  setMinRating: (rating: number | null) => void;
+  mobileOnly: boolean;
+  setMobileOnly: (mobile: boolean) => void;
+  AVAILABLE_STATES: Array<{ slug: string; name: string }>;
+  TREATMENT_OPTIONS: string[];
+  stateCountsMap: Map<string, number>;
+  filteredProviders: Provider[];
+  router: any;
+  onCitySelect?: () => void;
+}
+
+function FilterContent({
+  state,
+  isCity,
+  cities,
+  providers,
+  selectedTreatments,
+  setSelectedTreatments,
+  minRating,
+  setMinRating,
+  mobileOnly,
+  setMobileOnly,
+  AVAILABLE_STATES,
+  TREATMENT_OPTIONS,
+  stateCountsMap,
+  filteredProviders,
+  router,
+  onCitySelect,
+}: FilterContentProps) {
+  return (
+    <>
+      {/* State Filter */}
+      <div className="pb-6 border-b border-gray-200">
+        <label className="block text-sm font-medium text-gray-700 mb-3">
+          State
+        </label>
+        <select
+          value={state}
+          onChange={(e) => router.push(`/${e.target.value}`)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          {AVAILABLE_STATES.map((s) => {
+            const count = stateCountsMap.get(s.slug) || 0;
+            return (
+              <option key={s.slug} value={s.slug}>
+                {s.name} ({count})
+              </option>
+            );
+          })}
+        </select>
+      </div>
+
+      {/* City Filter - Show for state pages */}
+      {!isCity && (
+        <div className="pb-6 border-b border-gray-200">
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            City
+          </label>
+          <select
+            defaultValue=""
+            onChange={(e) => {
+              if (e.target.value) {
+                const citySlug = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+                router.push(`/${state}/${citySlug}`);
+                onCitySelect?.();
+              }
+            }}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">All Cities ({providers.length})</option>
+            {cities.map(({ city, count }) => (
+              <option key={city} value={city}>
+                {city} ({count})
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      {/* Services/Treatments Filter */}
+      <div className="pb-6 border-b border-gray-200">
+        <label className="block text-sm font-medium text-gray-700 mb-3">
+          Services
+        </label>
+        <div className="space-y-2">
+          {TREATMENT_OPTIONS.map((treatment) => (
+            <label key={treatment} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={selectedTreatments.has(treatment)}
+                onChange={(e) => {
+                  const newTreatments = new Set(selectedTreatments);
+                  if (e.target.checked) {
+                    newTreatments.add(treatment);
+                  } else {
+                    newTreatments.delete(treatment);
+                  }
+                  setSelectedTreatments(newTreatments);
+                }}
+                className="w-4 h-4 border-gray-300 rounded cursor-pointer"
+              />
+              <span className="text-sm text-gray-700">{treatment}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Minimum Rating Filter */}
+      <div className="pb-6 border-b border-gray-200">
+        <label className="block text-sm font-medium text-gray-700 mb-3">
+          Minimum Rating
+        </label>
+        <div className="space-y-2">
+          {[null, 4, 3, 2].map((rating) => (
+            <label key={rating || "all"} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="rating"
+                checked={minRating === rating}
+                onChange={() => setMinRating(rating)}
+                className="w-4 h-4 cursor-pointer"
+              />
+              <span className="text-sm text-gray-700">
+                {rating === null ? "All Ratings" : `${rating}+ Stars`}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Mobile Confirmed Filter */}
+      <div className="pb-6 border-b border-gray-200">
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={mobileOnly}
+            onChange={(e) => setMobileOnly(e.target.checked)}
+            className="w-4 h-4 border-gray-300 rounded cursor-pointer"
+          />
+          <span className="text-sm font-medium text-gray-700">Mobile Confirmed Only</span>
+        </label>
+      </div>
+
+      {/* Provider Count */}
+      <div className="pt-2">
+        <p className="text-sm text-gray-600">
+          Showing <span className="font-semibold">{filteredProviders.length}</span> of{" "}
+          <span className="font-semibold">{providers.length}</span> providers
+        </p>
+      </div>
+    </>
+  );
+}
+
 export function LocationPageClient({
   state,
   display,
@@ -59,10 +221,10 @@ export function LocationPageClient({
   stateCounts: initialStateCounts = {},
 }: LocationPageClientProps) {
   const router = useRouter();
-  const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [selectedTreatments, setSelectedTreatments] = useState<Set<string>>(new Set());
   const [minRating, setMinRating] = useState<number | null>(null);
   const [mobileOnly, setMobileOnly] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   // Get unique cities with counts for state pages
   const cities = useMemo(() => {
@@ -123,11 +285,6 @@ export function LocationPageClient({
   const filteredProviders = useMemo(() => {
     let result = providers;
 
-    // City filter
-    if (!isCity && selectedCity) {
-      result = result.filter((p) => p.city === selectedCity);
-    }
-
     // Treatment filter - flexible matching (case insensitive, includes substring)
     if (selectedTreatments.size > 0) {
       result = result.filter((p) => {
@@ -157,20 +314,13 @@ export function LocationPageClient({
     }
 
     return result;
-  }, [providers, isCity, selectedCity, selectedTreatments, minRating, mobileOnly]);
+  }, [providers, isCity, selectedTreatments, minRating, mobileOnly]);
 
   // Build breadcrumbs
   const breadcrumbItems: Array<{ name: string; href?: string }> = [
     { name: "Home", href: "/" },
   ];
-  if (isCity) {
-    breadcrumbItems.push({ name: display });
-  } else {
-    breadcrumbItems.push({ name: display });
-    if (selectedCity) {
-      breadcrumbItems.push({ name: selectedCity });
-    }
-  }
+  breadcrumbItems.push({ name: display });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -195,132 +345,70 @@ export function LocationPageClient({
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-10">
+        {/* Mobile Filter Button */}
+        <div className="lg:hidden mb-6">
+          <button
+            onClick={() => setFiltersOpen(!filtersOpen)}
+            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-left font-medium text-gray-900 hover:bg-gray-50 transition-colors flex items-center justify-between"
+          >
+            <span>Filters</span>
+            <svg
+              className={`w-5 h-5 transition-transform ${filtersOpen ? 'rotate-180' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobile Filter Drawer */}
+        {filtersOpen && (
+          <div className="lg:hidden mb-6 bg-white rounded-lg border border-gray-200 p-6 space-y-6">
+            <FilterContent
+              state={state}
+              isCity={isCity}
+              cities={cities}
+              providers={providers}
+              selectedTreatments={selectedTreatments}
+              setSelectedTreatments={setSelectedTreatments}
+              minRating={minRating}
+              setMinRating={setMinRating}
+              mobileOnly={mobileOnly}
+              setMobileOnly={setMobileOnly}
+              AVAILABLE_STATES={AVAILABLE_STATES}
+              TREATMENT_OPTIONS={TREATMENT_OPTIONS}
+              stateCountsMap={stateCountsMap}
+              filteredProviders={filteredProviders}
+              router={router}
+              onCitySelect={() => setFiltersOpen(false)}
+            />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          {/* Sidebar Filters */}
-          <aside className="lg:col-span-1">
+          {/* Desktop Sidebar Filters */}
+          <aside className="hidden lg:block lg:col-span-1">
             <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-24 max-h-[calc(100vh-150px)] overflow-y-auto">
               <h2 className="font-semibold text-gray-900 mb-4">Filters</h2>
-
-              {/* State Filter */}
-              <div className="mb-6 pb-6 border-b border-gray-200">
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  State
-                </label>
-                <select
-                  value={state}
-                  onChange={(e) => router.push(`/${e.target.value}`)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {AVAILABLE_STATES.map((s) => {
-                    const count = stateCountsMap.get(s.slug) || 0;
-                    return (
-                      <option key={s.slug} value={s.slug}>
-                        {s.name} ({count})
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-
-              {/* City Filter - Show for state pages */}
-              {!isCity && (
-                <div className="mb-6 pb-6 border-b border-gray-200">
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    City
-                  </label>
-                  <select
-                    value={selectedCity || ""}
-                    onChange={(e) => {
-                      if (e.target.value) {
-                        const citySlug = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-                        router.push(`/${state}/${citySlug}`);
-                      } else {
-                        setSelectedCity(null);
-                      }
-                    }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">All Cities ({providers.length})</option>
-                    {cities.map(({ city, count }) => (
-                      <option key={city} value={city}>
-                        {city} ({count})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
-              {/* Services/Treatments Filter */}
-              <div className="mb-6 pb-6 border-b border-gray-200">
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Services
-                </label>
-                <div className="space-y-2">
-                  {TREATMENT_OPTIONS.map((treatment) => (
-                    <label key={treatment} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectedTreatments.has(treatment)}
-                        onChange={(e) => {
-                          const newTreatments = new Set(selectedTreatments);
-                          if (e.target.checked) {
-                            newTreatments.add(treatment);
-                          } else {
-                            newTreatments.delete(treatment);
-                          }
-                          setSelectedTreatments(newTreatments);
-                        }}
-                        className="w-4 h-4 border-gray-300 rounded cursor-pointer"
-                      />
-                      <span className="text-sm text-gray-700">{treatment}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Minimum Rating Filter */}
-              <div className="mb-6 pb-6 border-b border-gray-200">
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Minimum Rating
-                </label>
-                <div className="space-y-2">
-                  {[null, 4, 3, 2].map((rating) => (
-                    <label key={rating || "all"} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="rating"
-                        checked={minRating === rating}
-                        onChange={() => setMinRating(rating)}
-                        className="w-4 h-4 cursor-pointer"
-                      />
-                      <span className="text-sm text-gray-700">
-                        {rating === null ? "All Ratings" : `${rating}+ Stars`}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Mobile Confirmed Filter */}
-              <div className="mb-6 pb-6 border-b border-gray-200">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={mobileOnly}
-                    onChange={(e) => setMobileOnly(e.target.checked)}
-                    className="w-4 h-4 border-gray-300 rounded cursor-pointer"
-                  />
-                  <span className="text-sm font-medium text-gray-700">Mobile Confirmed Only</span>
-                </label>
-              </div>
-
-              {/* Provider Count */}
-              <div className="pt-2">
-                <p className="text-sm text-gray-600">
-                  Showing <span className="font-semibold">{filteredProviders.length}</span> of{" "}
-                  <span className="font-semibold">{providers.length}</span> providers
-                </p>
-              </div>
+              <FilterContent
+                state={state}
+                isCity={isCity}
+                cities={cities}
+                providers={providers}
+                selectedTreatments={selectedTreatments}
+                setSelectedTreatments={setSelectedTreatments}
+                minRating={minRating}
+                setMinRating={setMinRating}
+                mobileOnly={mobileOnly}
+                setMobileOnly={setMobileOnly}
+                AVAILABLE_STATES={AVAILABLE_STATES}
+                TREATMENT_OPTIONS={TREATMENT_OPTIONS}
+                stateCountsMap={stateCountsMap}
+                filteredProviders={filteredProviders}
+                router={router}
+              />
             </div>
           </aside>
 
