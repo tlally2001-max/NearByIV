@@ -30,7 +30,7 @@ export function MobileNav() {
         <div className="fixed top-14 left-0 right-0 bg-white border-b border-gray-100 shadow-lg z-[100]">
           <div className="flex flex-col px-6 py-4 gap-4">
             <Link
-              href="/providers"
+              href="/locations"
               onClick={() => setOpen(false)}
               className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors py-1"
             >
