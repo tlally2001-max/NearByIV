@@ -27,6 +27,7 @@ type Provider = {
   treatments: string | null;
   service_areas: string | null;
   is_confirmed_mobile: boolean;
+  personalized_bio: string | null;
 };
 
 export const dynamicParams = true;
@@ -88,7 +89,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
   const supabase = await createClient();
   const { data: provider } = await supabase
     .from("providers")
-    .select("name:business_name, city:City, state:State, id, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, hero_image, treatments, service_areas, is_confirmed_mobile")
+    .select("name:business_name, city:City, state:State, id, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, hero_image, treatments, service_areas, is_confirmed_mobile, personalized_bio")
     .eq("city_slug", city)
     .eq("provider_slug", providerSlug)
     .single();
@@ -279,10 +280,16 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
 
               <div className="mb-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Mobile IV Therapy Services</h3>
-                <p className="text-gray-600 mb-6 leading-relaxed">
-                  {p.name} provides professional mobile IV therapy services in {location || "your area"}.
-                  They bring IV treatments directly to your home, office, or hotel for maximum convenience.
-                </p>
+                {p.personalized_bio ? (
+                  <p className="text-gray-600 leading-relaxed whitespace-pre-wrap">
+                    {p.personalized_bio}
+                  </p>
+                ) : (
+                  <p className="text-gray-600 mb-6 leading-relaxed">
+                    {p.name} provides professional mobile IV therapy services in {location || "your area"}.
+                    They bring IV treatments directly to your home, office, or hotel for maximum convenience.
+                  </p>
+                )}
               </div>
 
               {serviceAreas.length > 0 && (
