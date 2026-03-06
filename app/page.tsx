@@ -214,17 +214,17 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Location Search Bar */}
-          <div className="w-full mt-12">
-            <div className="max-w-7xl mx-auto px-6">
-              <SearchSection />
-            </div>
-          </div>
-
           {/* USA Provider Density Map */}
           <div className="w-full mt-12 hidden md:block">
             <div className="max-w-7xl mx-auto px-6">
               <MapSection />
+            </div>
+          </div>
+
+          {/* Location Search Bar */}
+          <div className="w-full mt-12">
+            <div className="max-w-7xl mx-auto px-6">
+              <SearchSection />
             </div>
           </div>
         </div>
