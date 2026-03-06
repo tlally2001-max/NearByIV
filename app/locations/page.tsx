@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Header } from "@/components/header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { USAMapComponent } from "./usa-map-component";
+import { LocationSearch } from "./location-search";
 
 export const dynamic = "force-dynamic";
 
@@ -44,21 +45,29 @@ export default async function LocationsPage() {
   // Fetch top 20 cities by provider count
   const { data: allProviders } = await supabase
     .from("providers")
-    .select("City, State")
+    .select("City, State, postal_code")
     .limit(10000);
 
-  const cityCounts = new Map<string, { city: string; state: string; count: number }>();
-  (allProviders || []).forEach((provider: { City: string; State: string }) => {
+  const cityCounts = new Map<string, { city: string; state: string; count: number; zips: Set<string> }>();
+  (allProviders || []).forEach((provider: { City: string; State: string; postal_code?: string }) => {
     if (provider.City && provider.State) {
       const key = `${provider.City}, ${provider.State}`;
       if (cityCounts.has(key)) {
         const existing = cityCounts.get(key)!;
+        if (provider.postal_code) {
+          existing.zips.add(provider.postal_code);
+        }
         cityCounts.set(key, { ...existing, count: existing.count + 1 });
       } else {
+        const zips = new Set<string>();
+        if (provider.postal_code) {
+          zips.add(provider.postal_code);
+        }
         cityCounts.set(key, {
           city: provider.City,
           state: provider.State,
           count: 1,
+          zips,
         });
       }
     }
@@ -67,6 +76,13 @@ export default async function LocationsPage() {
   const topCities = Array.from(cityCounts.values())
     .sort((a, b) => b.count - a.count)
     .slice(0, 20);
+
+  // Build city list for search component
+  const cityList = Array.from(cityCounts.values()).map(({ city, state, zips }) => ({
+    city,
+    state,
+    zips: Array.from(zips),
+  }));
 
   // Get unique states with providers for Browse section
   const uniqueStates = new Set<string>();
@@ -116,6 +132,9 @@ export default async function LocationsPage() {
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Find Providers by State</h2>
         <USAMapComponent stateCounts={stateCounts} />
       </section>
+
+      {/* Location Search Bar */}
+      <LocationSearch cities={cityList} />
 
       {/* Top Cities */}
       {topCities.length > 0 && (
