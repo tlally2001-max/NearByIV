@@ -49,15 +49,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Fetch provider slugs directly via REST API (no cookies, fully static)
-  let providerPages: MetadataRoute.Sitemap = [];
+  // Fetch all providers for dynamic route generation
+  let dynamicPages: MetadataRoute.Sitemap = [];
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
     if (supabaseUrl && supabaseKey) {
       const res = await fetch(
-        `${supabaseUrl}/rest/v1/providers?select=slug&is_confirmed_mobile=eq.true`,
+        `${supabaseUrl}/rest/v1/providers?select=State,city_slug,seo_url_path&is_confirmed_mobile=eq.true`,
         {
           headers: {
             apikey: supabaseKey,
@@ -68,20 +68,65 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       );
 
       if (res.ok) {
-        const providers: { slug: string }[] = await res.json();
-        providerPages = providers
-          .filter((p) => p.slug)
-          .map((p) => ({
-            url: `${BASE_URL}/providers/${p.slug}`,
+        const providers: Array<{ State: string; city_slug: string; seo_url_path: string }> = await res.json();
+
+        // Track unique states and state+city combos
+        const uniqueStates = new Set<string>();
+        const uniqueStateCities = new Set<string>();
+        const urlPaths = new Set<string>();
+
+        providers.forEach((p) => {
+          if (p.State) {
+            const stateSlug = p.State.toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/^-|-$/g, "");
+            uniqueStates.add(stateSlug);
+
+            if (p.city_slug) {
+              uniqueStateCities.add(`${stateSlug}|${p.city_slug}`);
+            }
+          }
+
+          if (p.seo_url_path) {
+            urlPaths.add(p.seo_url_path);
+          }
+        });
+
+        // Add state pages
+        uniqueStates.forEach((state) => {
+          dynamicPages.push({
+            url: `${BASE_URL}/${state}`,
+            lastModified: new Date(),
+            changeFrequency: "monthly" as const,
+            priority: 0.7,
+          });
+        });
+
+        // Add state+city pages
+        uniqueStateCities.forEach((combo) => {
+          const [state, city] = combo.split("|");
+          dynamicPages.push({
+            url: `${BASE_URL}/${state}/${city}`,
+            lastModified: new Date(),
+            changeFrequency: "weekly" as const,
+            priority: 0.75,
+          });
+        });
+
+        // Add provider profile pages
+        urlPaths.forEach((path) => {
+          dynamicPages.push({
+            url: `${BASE_URL}${path}`,
             lastModified: new Date(),
             changeFrequency: "weekly" as const,
             priority: 0.8,
-          }));
+          });
+        });
       }
     }
   } catch (e) {
     // Fall back to static pages only
   }
 
-  return [...staticPages, ...providerPages];
+  return [...staticPages, ...dynamicPages];
 }

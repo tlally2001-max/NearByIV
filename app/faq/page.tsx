@@ -157,23 +157,23 @@ export default function FAQPage() {
 
         {/* CTA Section */}
         <section className="mt-16 bg-gradient-to-r from-[#0066FF] to-blue-600 rounded-2xl p-12 text-center text-white">
-          <h2 className="text-3xl font-bold mb-4">Still have questions?</h2>
+          <h2 className="text-3xl font-bold mb-4">Ready to Find IV Therapy?</h2>
           <p className="text-lg mb-8 text-blue-100">
-            Reach out to our team or find a provider near you to learn more.
+            Browse verified providers near you or reach out to our team to learn more.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/locations"
+              className="px-8 py-3 bg-white text-[#0066FF] font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              Find Providers Near You
+            </Link>
             <a
               href="mailto:NearByIV@gmail.com"
-              className="px-8 py-3 bg-white text-[#0066FF] font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+              className="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
             >
               Contact Us
             </a>
-            <Link
-              href="/pricing"
-              className="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
-            >
-              List Your Business
-            </Link>
           </div>
         </section>
       </main>

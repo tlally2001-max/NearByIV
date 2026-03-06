@@ -144,7 +144,7 @@ export default function HowItWorks() {
             in your area today. Premium care delivered to your door.
           </p>
           <Link
-            href="/"
+            href="/locations"
             className="inline-flex items-center justify-center px-8 py-4 bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-lg rounded-lg transition-colors shadow-lg"
           >
             Find Your IV Provider

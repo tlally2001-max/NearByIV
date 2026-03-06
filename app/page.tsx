@@ -414,7 +414,11 @@ export default function Home() {
             <span className="text-white font-semibold">NearbyIV.com</span>
             <span className="text-gray-600"> — Mobile IV and Hangover Recovery Directory</span>
           </div>
-          <div className="flex items-center justify-center gap-6 text-sm">
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm">
+            <Link href="/locations" className="hover:text-white transition-colors">Find Providers</Link>
+            <Link href="/providers" className="hover:text-white transition-colors">Browse All</Link>
+            <Link href="/how-it-works" className="hover:text-white transition-colors">How It Works</Link>
+            <Link href="/faq" className="hover:text-white transition-colors">FAQ</Link>
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
             <a href="mailto:NearByIV@gmail.com" className="hover:text-white transition-colors">Contact</a>

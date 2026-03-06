@@ -142,13 +142,67 @@ export default async function StatePage({
     }
   });
 
+  // ItemList schema for providers on this state page (top 10)
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: providers.slice(0, 10).map((provider, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "LocalBusiness",
+        name: provider.name,
+        url: `https://nearbyiv.com${provider.seo_url_path}`,
+        ...(provider.rating && {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: provider.rating,
+            reviewCount: provider.reviews || 1,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        }),
+      },
+    })),
+  };
+
+  // BreadcrumbList schema
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://nearbyiv.com",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: display,
+        item: `https://nearbyiv.com/${state}`,
+      },
+    ],
+  };
+
   return (
-    <LocationPageClient
-      state={state}
-      display={display}
-      providers={providers}
-      isCity={false}
-      stateCounts={Object.fromEntries(stateCounts)}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <LocationPageClient
+        state={state}
+        display={display}
+        providers={providers}
+        isCity={false}
+        stateCounts={Object.fromEntries(stateCounts)}
+      />
+    </>
   );
 }

@@ -432,15 +432,7 @@ export default function ProviderPage({
       <Header />
 
       <div className="max-w-6xl mx-auto px-6 py-4 pt-14">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 transition-colors"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Back to Search
-        </Link>
+        <ProfileContentBackButton params={params} />
       </div>
 
       <Suspense
@@ -470,4 +462,21 @@ async function ProfileContentWrapper({
 }: ProviderPageProps) {
   const { city, "provider-slug": providerSlug } = await params;
   return <ProfileContent city={city} providerSlug={providerSlug} />;
+}
+
+async function ProfileContentBackButton({
+  params,
+}: ProviderPageProps) {
+  const { state, city } = await params;
+  return (
+    <Link
+      href={`/${state}/${city}`}
+      className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 transition-colors"
+    >
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+      </svg>
+      Back to City
+    </Link>
+  );
 }
