@@ -350,16 +350,51 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
                       </a>
                     </div>
                   )}
-                  {p.working_hours && (
-                    <div className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 2m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <div className="text-sm text-gray-700">
-                        {p.working_hours}
+                  {p.working_hours && (() => {
+                    let hours: Record<string, string[]> = {};
+                    try {
+                      hours = JSON.parse(p.working_hours);
+                    } catch {
+                      // If not valid JSON, display as is
+                      return (
+                        <div className="flex items-start gap-3">
+                          <svg className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 2m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <div className="text-sm text-gray-700">{p.working_hours}</div>
+                        </div>
+                      );
+                    }
+
+                    const dayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+                    const sortedDays = dayOrder.filter(day => hours[day]);
+
+                    return (
+                      <div className="flex items-start gap-3">
+                        <svg className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 2m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div className="text-sm w-full">
+                          <table className="w-full">
+                            <tbody>
+                              {sortedDays.map((day) => (
+                                <tr key={day} className="border-b border-gray-200 last:border-b-0">
+                                  <td className="py-2 pr-4 font-medium text-gray-700">{day}</td>
+                                  <td className="py-2 text-gray-700 text-right">
+                                    {hours[day]?.[0] === "Closed" ? (
+                                      <span className="text-red-600 font-medium">Closed</span>
+                                    ) : (
+                                      <span>{hours[day]?.[0]}</span>
+                                    )}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    );
+                  })()}
                 </div>
 
                 <div className="mt-6 space-y-3">
