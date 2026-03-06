@@ -27,7 +27,7 @@ export function Header() {
         <MobileNav />
         <div className="hidden md:flex items-center gap-8 ml-auto">
           <Link href="/providers" className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors whitespace-nowrap">
-            Search Providers
+            All Providers
           </Link>
           <Link href="/locations" className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors whitespace-nowrap">
             Best IV By City
