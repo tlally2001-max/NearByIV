@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { InteractiveMap } from "./interactive-map";
+import { createClient } from "@/lib/supabase/server";
+import { USAMapComponent } from "./locations/usa-map-component";
 import { StateFilterDropdown } from "@/components/state-filter-dropdown";
 import { ProvidersDropdown } from "@/components/providers-dropdown";
 import { MobileNav } from "@/components/mobile-nav";
 import type { Metadata } from "next";
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: { absolute: "Mobile IV Therapy Near Me | Hangover IV, NAD+, GLP-1 | NearbyIV" },
@@ -59,65 +60,23 @@ const jsonLd = [
   }
 ];
 
-// Hardcoded featured providers - 1 per city (update slugs when you select featured listings)
-const FEATURED_PROVIDERS = [
-  {
-    id: "new-york",
-    slug: "iv-concierge",
-    name: "IV Concierge",
-    city: "New York",
-    state: "NY",
-    rating: 5.0,
-    reviews: 27,
-  },
-  {
-    id: "tampa",
-    slug: "oasis-iv-therapy-mobile-hydration-and-wellness",
-    name: "Oasis IV Therapy- Mobile Hydration and Wellness",
-    city: "Tampa",
-    state: "FL",
-    rating: 5.0,
-    reviews: 431,
-  },
-  {
-    id: "los-angeles",
-    slug: "renewme-iv-therapy-medspa",
-    name: "RenewMe IV Therapy + Medspa",
-    city: "Los Angeles",
-    state: "CA",
-    rating: 5.0,
-    reviews: 295,
-  },
-  {
-    id: "las-vegas",
-    slug: "las-vegas-mobile-iv-therapy",
-    name: "Las Vegas Mobile IV Therapy",
-    city: "Las Vegas",
-    state: "NV",
-    rating: 5.0,
-    reviews: 387,
-  },
-  {
-    id: "chicago",
-    slug: "refine-by-tulsi",
-    name: "Refine by Tulsi",
-    city: "Chicago",
-    state: "IL",
-    rating: 5.0,
-    reviews: 259,
-  },
-];
+async function MapSection() {
+  const supabase = await createClient();
 
-const FEATURED_COORDINATES = [
-  { providerId: "new-york", lat: 40.7128, lng: -74.006 },
-  { providerId: "tampa", lat: 27.9506, lng: -82.4572 },
-  { providerId: "los-angeles", lat: 34.0522, lng: -118.2437 },
-  { providerId: "las-vegas", lat: 36.1699, lng: -115.1398 },
-  { providerId: "chicago", lat: 41.8781, lng: -87.6298 },
-];
+  // Fetch state counts
+  const { data: stateCountsData } = await supabase.rpc("get_state_counts");
+  const stateCounts = new Map<string, number>();
+  (stateCountsData || []).forEach((row: { state: string; count: number }) => {
+    if (row.state) {
+      const stateSlug = row.state
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+      stateCounts.set(stateSlug, Number(row.count));
+    }
+  });
 
-function MapSection() {
-  return <InteractiveMap providers={FEATURED_PROVIDERS} coordinates={FEATURED_COORDINATES} />;
+  return <USAMapComponent stateCounts={stateCounts} />;
 }
 
 export default function Home() {
@@ -211,7 +170,7 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Interactive Map with Provider Markers */}
+          {/* USA Provider Density Map */}
           <div className="w-full mt-12">
             <div className="max-w-7xl mx-auto px-6">
               <MapSection />
