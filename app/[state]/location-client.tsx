@@ -230,7 +230,14 @@ export function LocationPageClient({
                   </label>
                   <select
                     value={selectedCity || ""}
-                    onChange={(e) => setSelectedCity(e.target.value || null)}
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        const citySlug = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+                        router.push(`/${state}/${citySlug}`);
+                      } else {
+                        setSelectedCity(null);
+                      }
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">All Cities ({providers.length})</option>
