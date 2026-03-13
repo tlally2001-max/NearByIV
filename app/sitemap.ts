@@ -57,7 +57,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     if (supabaseUrl && supabaseKey) {
       const res = await fetch(
-        `${supabaseUrl}/rest/v1/providers?select=State,city_slug,seo_url_path&is_confirmed_mobile=eq.true`,
+        `${supabaseUrl}/rest/v1/providers?select=State,city_slug,seo_url_path&seo_url_path=not.is.null&city_slug=not.is.null`,
         {
           headers: {
             apikey: supabaseKey,

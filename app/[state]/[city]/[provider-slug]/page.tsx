@@ -37,7 +37,7 @@ export const dynamicParams = true;
 export async function generateStaticParams() {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=state:State,city_slug,provider_slug&order=city_slug.asc`,
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=state:State,city_slug,provider_slug&city_slug=not.is.null&provider_slug=not.is.null&order=city_slug.asc`,
       {
         headers: {
           apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "",

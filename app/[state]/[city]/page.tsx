@@ -27,7 +27,7 @@ const STATE_MAP: Record<string, string> = {
 export async function generateStaticParams() {
   try {
     const citiesRes = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=city_slug,state:State&order=city_slug.asc`,
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=city_slug,state:State&city_slug=not.is.null&order=city_slug.asc`,
       {
         headers: {
           apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "",
