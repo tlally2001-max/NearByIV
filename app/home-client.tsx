@@ -294,7 +294,7 @@ export function HomeClient({ providers }: { providers: Provider[] }) {
       <div className="max-w-7xl mx-auto px-6 pb-12">
         <div className="border border-gray-100 rounded-2xl bg-gray-50 px-8 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {[
-            { value: "134+", label: "Verified Providers" },
+            { value: "3,400+", label: "Verified Providers" },
             { value: "RN-Led", label: "Medical Teams" },
             { value: "Weekly", label: "Updated" },
             { value: "4.0★", label: "Min Rating" },

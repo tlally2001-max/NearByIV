@@ -12,12 +12,12 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: { absolute: "Mobile IV Therapy Near Me | Hangover IV, NAD+, GLP-1 | NearbyIV" },
   description:
-    "Search 134+ verified RN-led mobile IV therapy providers. Compare ratings, treatments, and pricing for concierge IV hydration, NAD+, GLP-1 weight loss, and more.",
+    "Search 3,400+ verified mobile IV therapy providers near you. Compare ratings, treatments, and pricing for hangover IV, hydration, NAD+, GLP-1 weight loss, and more. Book today.",
   alternates: { canonical: "https://nearbyiv.com/" },
   openGraph: {
     title: "NearbyIV — Find Mobile IV Therapy Providers Near You",
     description:
-      "Search 134+ verified RN-led mobile IV therapy providers. Compare ratings, treatments, and pricing.",
+      "Search 3,400+ verified mobile IV therapy providers. Hangover IV, NAD+, GLP-1 weight loss delivered to your door.",
     url: "/",
     type: "website",
   },
