@@ -139,7 +139,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "MedicalBusiness"],
-    "@id": `https://nearbyiv.com${p.seo_url_path}`,
+    "@id": `https://nearbyiv.com/${stateSlug}/${p.city_slug}/${p.provider_slug}`,
     name: p.name,
     url: p.website ?? undefined,
     telephone: p.phone ?? undefined,
@@ -199,7 +199,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
         "@type": "ListItem",
         position: 4,
         name: p.name,
-        item: `https://nearbyiv.com${p.seo_url_path}`
+        item: `https://nearbyiv.com/${stateSlug}/${p.city_slug}/${p.provider_slug}`
       }
     ]
   };

@@ -152,7 +152,7 @@ export default async function StatePage({
       item: {
         "@type": "LocalBusiness",
         name: provider.name,
-        url: `https://nearbyiv.com${provider.seo_url_path}`,
+        url: `https://nearbyiv.com/${state}/${provider.city_slug}/${provider.provider_slug}`,
         ...(provider.rating && {
           aggregateRating: {
             "@type": "AggregateRating",

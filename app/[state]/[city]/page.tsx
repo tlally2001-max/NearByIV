@@ -107,7 +107,7 @@ export default async function CityPage({
       item: {
         "@type": "LocalBusiness",
         name: provider.name,
-        url: `https://nearbyiv.com${provider.seo_url_path}`,
+        url: `https://nearbyiv.com/${state}/${city}/${provider.provider_slug}`,
         ...(provider.rating && {
           aggregateRating: {
             "@type": "AggregateRating",

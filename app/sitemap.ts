@@ -57,7 +57,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     if (supabaseUrl && supabaseKey) {
       const res = await fetch(
-        `${supabaseUrl}/rest/v1/providers?select=State,city_slug,seo_url_path&seo_url_path=not.is.null&city_slug=not.is.null`,
+        `${supabaseUrl}/rest/v1/providers?select=State,city_slug,provider_slug&city_slug=not.is.null&provider_slug=not.is.null`,
         {
           headers: {
             apikey: supabaseKey,
@@ -68,12 +68,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       );
 
       if (res.ok) {
-        const providers: Array<{ State: string; city_slug: string; seo_url_path: string }> = await res.json();
+        const providers: Array<{ State: string; city_slug: string; provider_slug: string }> = await res.json();
 
         // Track unique states and state+city combos
         const uniqueStates = new Set<string>();
         const uniqueStateCities = new Set<string>();
-        const urlPaths = new Set<string>();
+        const providerPaths = new Set<string>();
 
         providers.forEach((p) => {
           if (p.State) {
@@ -85,10 +85,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             if (p.city_slug) {
               uniqueStateCities.add(`${stateSlug}|${p.city_slug}`);
             }
-          }
 
-          if (p.seo_url_path) {
-            urlPaths.add(p.seo_url_path);
+            if (p.city_slug && p.provider_slug) {
+              providerPaths.add(`/${stateSlug}/${p.city_slug}/${p.provider_slug}`);
+            }
           }
         });
 
@@ -114,7 +114,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         });
 
         // Add provider profile pages
-        urlPaths.forEach((path) => {
+        providerPaths.forEach((path) => {
           dynamicPages.push({
             url: `${BASE_URL}${path}`,
             lastModified: new Date(),
