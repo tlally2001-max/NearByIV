@@ -38,6 +38,9 @@ export function Header() {
           <Link href="/faq" className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors whitespace-nowrap">
             FAQ
           </Link>
+          <Link href="/verification" className="text-sm text-gray-600 hover:text-[#0066FF] transition-colors whitespace-nowrap">
+            Our Standards
+          </Link>
           <Link
             href="/pricing"
             className="text-sm font-semibold text-white px-4 py-2 rounded-lg transition-colors whitespace-nowrap"

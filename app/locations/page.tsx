@@ -5,19 +5,19 @@ import { Header } from "@/components/header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { USAMapComponent } from "./usa-map-component";
 import { LocationSearch } from "./location-search";
-import { dedupeValidatedProviders, isValidCity, slugifyLocation } from "@/lib/directory-validation";
+import { canonicalStateName, dedupeValidatedProviders, isValidCity, slugifyLocation } from "@/lib/directory-validation";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: { absolute: "Best Mobile IV Therapy By City | NearbyIV" },
   description:
-    "Find the best mobile IV therapy providers in your city. Browse verified RN-led IV hydration, NAD+, hangover relief, and wellness services near you.",
+    "Find reviewed mobile IV therapy listings by city, including hydration, NAD+, hangover relief, and wellness services near you.",
   alternates: { canonical: "https://nearbyiv.com/locations" },
   openGraph: {
     title: "Best Mobile IV Therapy By City | NearbyIV",
     description:
-      "Find the best mobile IV therapy providers in your city. Browse verified RN-led IV hydration, NAD+, hangover relief, and wellness services near you.",
+      "Find reviewed mobile IV therapy listings by city and learn how NearbyIV evaluates directory evidence.",
     url: "https://nearbyiv.com/locations",
     type: "website",
   },
@@ -51,7 +51,7 @@ export default async function LocationsPage() {
   validatedProviders.forEach((provider) => {
     if (isValidCity(provider.City) && provider.State) {
       const city = provider.City!.trim();
-      const state = provider.State.trim();
+      const state = canonicalStateName(provider.State);
       const key = `${city.toLowerCase()}|${state.toLowerCase()}`;
       if (cityCounts.has(key)) {
         const existing = cityCounts.get(key)!;
@@ -88,17 +88,18 @@ export default async function LocationsPage() {
   // Get unique states with providers for Browse section
   const uniqueStates = new Set<string>();
   validatedProviders.forEach((provider) => {
-    if (provider.State) uniqueStates.add(provider.State);
+    if (provider.State) uniqueStates.add(canonicalStateName(provider.State));
   });
 
   const stateLocations: Record<string, string[]> = {};
   validatedProviders.forEach((provider) => {
     if (provider.State && isValidCity(provider.City)) {
-      if (!stateLocations[provider.State]) {
-        stateLocations[provider.State] = [];
+      const state = canonicalStateName(provider.State);
+      if (!stateLocations[state]) {
+        stateLocations[state] = [];
       }
-      if (!stateLocations[provider.State].includes(provider.City)) {
-        stateLocations[provider.State].push(provider.City);
+      if (!stateLocations[state].includes(provider.City)) {
+        stateLocations[state].push(provider.City);
       }
     }
   });
@@ -107,6 +108,9 @@ export default async function LocationsPage() {
   Object.keys(stateLocations).forEach((state) => {
     stateLocations[state].sort();
   });
+  const featuredUrls = new Set(
+    topCities.map(({ city, state }) => `/${slugifyLocation(state)}/${slugifyLocation(city)}`)
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -127,6 +131,10 @@ export default async function LocationsPage() {
           </p>
         </div>
       </header>
+
+      <div className="mx-auto max-w-7xl px-6 pt-6 text-center text-sm text-gray-600">
+        Listings use published directory evidence. <Link href="/verification" className="font-semibold text-blue-600 underline">Learn how our review labels work.</Link>
+      </div>
 
       {/* Interactive USA Map */}
       <section className="max-w-7xl mx-auto px-6 py-12 hidden md:block">
@@ -178,7 +186,7 @@ export default async function LocationsPage() {
                   {state} Mobile IV Therapy
                 </h3>
                 <div className="grid grid-cols-2 gap-2">
-                  {cities.map((city) => (
+                  {cities.filter((city) => !featuredUrls.has(`/${slugifyLocation(state)}/${slugifyLocation(city)}`)).map((city) => (
                     <Link
                       key={city}
                       href={`/${slugifyLocation(state)}/${slugifyLocation(city)}`}

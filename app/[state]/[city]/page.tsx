@@ -67,7 +67,7 @@ export async function generateMetadata({
 
   return {
     title: { absolute: `Mobile IV Therapy in ${display} | NearbyIV` },
-    description: `Book mobile IV therapy in ${display}. Reviewed providers for hydration and wellness services delivered to your home or hotel.`,
+    description: `Find reviewed mobile IV therapy listings in ${display}. Compare published services, ratings, and directory evidence.`,
     alternates: { canonical },
     openGraph: { url: canonical },
   };

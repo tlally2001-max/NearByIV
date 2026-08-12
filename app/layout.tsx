@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: "%s | NearbyIV",
   },
   description:
-    "The most trusted directory of RN-led mobile IV therapy providers. Find verified concierge IV hydration, NAD+, GLP-1, and wellness treatments delivered to your home or office.",
+    "A national directory of reviewed mobile IV therapy listings. Compare locations, services, ratings, and published directory evidence.",
   keywords: [
     "mobile IV therapy",
     "IV therapy near me",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     siteName: "NearbyIV",
     title: "NearbyIV — Find Mobile IV Therapy Providers Near You",
     description:
-      "The most trusted directory of RN-led mobile IV therapy providers. Verified quality, transparent pricing.",
+      "Browse reviewed mobile IV therapy listings with transparent directory evidence.",
     url: defaultUrl,
     images: [
       {
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "NearbyIV — Find Mobile IV Therapy Providers Near You",
     description:
-      "The most trusted directory of RN-led mobile IV therapy providers. Verified quality, transparent pricing.",
+      "Browse reviewed mobile IV therapy listings with transparent directory evidence.",
     images: ["/iv-bag-default.jpg"],
   },
 };

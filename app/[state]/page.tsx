@@ -59,7 +59,7 @@ export async function generateMetadata({
   return {
     title: { absolute: `Mobile IV Therapy in ${display} | NearbyIV` },
     alternates: { canonical: `https://nearbyiv.com/${state}` },
-    description: `Find mobile IV therapy near you in ${display}. Browse verified providers for hangover relief, hydration, NAD+, GLP-1 weight loss & wellness drips — delivered to your door.`,
+    description: `Find reviewed mobile IV therapy listings in ${display}. Compare published services, locations, ratings, and directory evidence.`,
   };
 }
 

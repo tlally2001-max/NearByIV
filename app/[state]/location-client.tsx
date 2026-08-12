@@ -337,7 +337,7 @@ export function LocationPageClient({
             Mobile IV Therapy in {display}
           </h1>
           <p className="mt-2 text-gray-500 text-sm">
-            Find verified mobile IV therapy providers. Book hangover relief,
+            Find reviewed mobile IV therapy listings. Confirm credentials directly. Browse hangover relief,
             hydration, NAD+, and wellness IV drips.
           </p>
         </div>

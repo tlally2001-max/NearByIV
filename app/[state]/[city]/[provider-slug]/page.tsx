@@ -31,6 +31,10 @@ type Provider = {
   personalized_bio: string | null;
   menu_highlights: Array<{ service: string; price: string }> | null;
   working_hours: string | null;
+  medical_staff_type: string | null;
+  verification_status: string | null;
+  last_verified_at: string | null;
+  verification_source: string | null;
 };
 
 export const dynamicParams = true;
@@ -91,7 +95,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
   const supabase = await createClient();
   const { data: provider } = await supabase
     .from("providers")
-    .select("name:business_name, city:City, state:State, id, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, hero_image, treatments, service_areas, is_confirmed_mobile, personalized_bio, menu_highlights, working_hours")
+    .select("name:business_name, city:City, state:State, id, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, hero_image, treatments, service_areas, is_confirmed_mobile, personalized_bio, menu_highlights, working_hours, medical_staff_type, verification_status, last_verified_at, verification_source")
     .eq("city_slug", city)
     .eq("provider_slug", providerSlug)
     .single();
@@ -238,7 +242,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
-              Verified Mobile
+              Mobile service reviewed
             </span>
           )}
           <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight text-center">
@@ -251,6 +255,21 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1 min-w-0">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+
+              <section className="mb-8 rounded-xl border border-blue-200 bg-blue-50 p-5" aria-labelledby="verification-evidence">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <h2 id="verification-evidence" className="text-lg font-bold text-gray-950">Directory review evidence</h2>
+                  <Link href="/verification" className="text-sm font-semibold text-blue-700 underline underline-offset-2">What this label means</Link>
+                </div>
+                <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
+                  <div><dt className="font-semibold text-gray-900">Review status</dt><dd className="mt-1 text-gray-600">{p.verification_status === "mobile_confirmed" ? "Mobile service confirmed from published evidence" : "Directory listing reviewed"}</dd></div>
+                  <div><dt className="font-semibold text-gray-900">Last reviewed</dt><dd className="mt-1 text-gray-600">{p.last_verified_at ? new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeZone: "UTC" }).format(new Date(p.last_verified_at)) : "Not yet published"}</dd></div>
+                  <div><dt className="font-semibold text-gray-900">Evidence source</dt><dd className="mt-1 text-gray-600">{p.verification_source || "Not yet published"}</dd></div>
+                  <div><dt className="font-semibold text-gray-900">Clinician information</dt><dd className="mt-1 text-gray-600">{p.medical_staff_type || "Confirm directly with the provider"}</dd></div>
+                </dl>
+                <p className="mt-4 text-xs leading-relaxed text-gray-600">NearbyIV does not guarantee licensure, medical-director oversight, pricing, or current availability. Verify credentials and treatment eligibility directly.</p>
+                <a href={`mailto:NearByIV@gmail.com?subject=${encodeURIComponent(`Correction for ${p.name}`)}&body=${encodeURIComponent(`Listing: https://nearbyiv.com/${stateSlug}/${p.city_slug}/${p.provider_slug}\n\nCorrection details:`)}`} className="mt-3 inline-flex text-sm font-semibold text-blue-700 underline underline-offset-2">Report an error in this listing</a>
+              </section>
 
               <div className="mb-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">About {p.name}</h3>

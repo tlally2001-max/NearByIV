@@ -162,7 +162,7 @@ export default function FAQPage() {
         <section className="mt-16 bg-gradient-to-r from-[#0066FF] to-blue-600 rounded-2xl p-12 text-center text-white">
           <h2 className="text-3xl font-bold mb-4">Ready to Find IV Therapy?</h2>
           <p className="text-lg mb-8 text-blue-100">
-            Browse verified providers near you or reach out to our team to learn more.
+            Browse reviewed listings near you or learn how our directory labels work.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -177,6 +177,12 @@ export default function FAQPage() {
             >
               Contact Us
             </a>
+            <Link
+              href="/verification"
+              className="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
+            >
+              Review Standards
+            </Link>
           </div>
         </section>
       </main>

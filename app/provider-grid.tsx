@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { canonicalStateName } from "@/lib/directory-validation";
 
 type Provider = {
   id: string;
@@ -79,7 +80,7 @@ function normalizeService(service: string): string {
   }
 
   // Normalize: lowercase, trim, remove extra spaces, apostrophes, and dashes
-  let normalized = service
+  const normalized = service
     .toLowerCase()
     .trim()
     .replace(/\s+/g, " ") // Replace multiple spaces with single space
@@ -95,7 +96,7 @@ function normalizeService(service: string): string {
 
 export function ProviderGrid({ providers }: { providers: Provider[] }) {
   const states = Array.from(
-    new Set(providers.map((p) => p.state).filter(Boolean))
+    new Set(providers.map((p) => p.state ? canonicalStateName(p.state) : null).filter(Boolean))
   ).sort() as string[];
 
   const searchParams = useSearchParams();
@@ -178,7 +179,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
   const cities = useMemo(() => {
     let cityProviders = providers;
     if (selectedState !== "all") {
-      cityProviders = providers.filter((p) => p.state === selectedState);
+      cityProviders = providers.filter((p) => p.state && canonicalStateName(p.state) === selectedState);
     }
     return Array.from(
       new Set(cityProviders.map((p) => p.city).filter(Boolean))
@@ -225,8 +226,6 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
       const parts = queryParam.split(",").map((p) => p.trim());
       if (parts.length === 2) {
         const searchedCity = parts[0];
-        const searchedState = parts[1].toLowerCase();
-
         // Try to find matching provider to get the correct state name
         const matchingProvider = providers.find(
           (p) => p.city?.toLowerCase() === searchedCity.toLowerCase()
@@ -241,7 +240,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
 
     // Filter by state
     if (filterState !== "all") {
-      result = result.filter((p) => p.state === filterState);
+      result = result.filter((p) => p.state && canonicalStateName(p.state) === filterState);
     }
 
     // Filter by city (case-insensitive)
@@ -285,7 +284,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
             >
               <option value="all">All States ({states.length})</option>
               {states.map((state) => {
-                const count = providers.filter((p) => p.state === state).length;
+                const count = providers.filter((p) => p.state && canonicalStateName(p.state) === state).length;
                 return (
                   <option key={state} value={state}>
                     {state} ({count})
@@ -370,7 +369,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
           >
             <option value="all">All States ({providers.length})</option>
             {states.map((state) => {
-              const count = providers.filter((p) => p.state === state).length;
+              const count = providers.filter((p) => p.state && canonicalStateName(p.state) === state).length;
               return (
                 <option key={state} value={state}>
                   {state} ({count})

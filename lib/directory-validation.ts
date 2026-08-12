@@ -48,6 +48,14 @@ export function slugifyLocation(value: string): string {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
+export function canonicalStateName(value: string): string {
+  const normalized = value.trim().toLowerCase().replace(/\./g, "");
+  if (["dc", "d c", "district of columbia", "washington dc"].includes(normalized)) {
+    return "District of Columbia";
+  }
+  return value.trim().replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
 export function dedupeValidatedProviders<T extends DirectoryProvider>(providers: T[]): T[] {
   const seen = new Set<string>();
   return providers.filter((provider) => {

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { dedupeValidatedProviders } from "@/lib/directory-validation";
+import Link from "next/link";
 
 // Allow query parameters to work with revalidation
 export const revalidate = 3600; // Revalidate every hour
@@ -11,12 +12,12 @@ export const revalidate = 3600; // Revalidate every hour
 export const metadata: Metadata = {
   title: "Mobile IV Therapy Providers — Browse All Listings",
   description:
-    "Browse all verified mobile IV therapy providers. Filter by city, treatment type, or rating. Find RN-led concierge IV hydration, NAD+, GLP-1, and wellness services near you.",
+    "Browse reviewed mobile IV therapy listings. Filter by city, treatment type, or rating and learn what each directory review label means.",
   alternates: { canonical: "https://nearbyiv.com/providers" },
   openGraph: {
     title: "Mobile IV Therapy Providers — Browse All Listings | NearbyIV",
     description:
-      "Browse all verified mobile IV therapy providers. Find RN-led concierge services near you.",
+      "Browse reviewed mobile IV therapy listings and see how NearbyIV evaluates directory evidence.",
     url: "/providers",
     type: "website",
   },
@@ -58,7 +59,7 @@ export default async function ProvidersPage() {
             Mobile IV Therapy Providers Near You
           </h1>
           <p className="mt-2 text-gray-500 text-sm">
-            Browse verified mobile IV therapy providers. Filter by state, city, or service below.
+            Browse reviewed mobile IV therapy listings. <Link href="/verification" className="text-blue-600 underline">See how our review labels work.</Link>
           </p>
         </div>
       </header>

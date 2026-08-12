@@ -9,8 +9,9 @@ export const dynamic = "force-static";
 export const metadata: Metadata = {
   title: "How It Works — Your Path to Feeling Unstoppable",
   description:
-    "Experience elite mobile medical care with verified RN-led providers. Learn how NearbyIV finds and vets the best practitioners in your area.",
+    "Learn how mobile IV services work, what to ask providers, and how NearbyIV reviews directory listings.",
   alternates: { canonical: "https://nearbyiv.com/how-it-works" },
+  openGraph: { url: "https://nearbyiv.com/how-it-works" },
 };
 
 export default function HowItWorks() {
@@ -144,7 +145,7 @@ export default function HowItWorks() {
             Ready to Feel the Difference?
           </h2>
           <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
-            Book your IV therapy appointment with a verified, RN-led provider
+            Review local IV therapy listings and confirm clinician credentials
             in your area today. Premium care delivered to your door.
           </p>
           <Link

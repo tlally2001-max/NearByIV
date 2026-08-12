@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: { absolute: "Terms of Service | NearbyIV" },
   description: "Read the terms that govern use of the NearbyIV mobile IV therapy directory.",
   alternates: { canonical: "https://nearbyiv.com/terms" },
+  openGraph: { url: "https://nearbyiv.com/terms" },
 };
 
 export default function TermsPage() {

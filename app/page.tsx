@@ -12,12 +12,12 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: { absolute: "Mobile IV Therapy Near Me | Hangover IV, NAD+, GLP-1 | NearbyIV" },
   description:
-    "Search 3,400+ verified mobile IV therapy providers near you. Compare ratings, treatments, and pricing for hangover IV, hydration, NAD+, GLP-1 weight loss, and more. Book today.",
+    "Search mobile IV therapy listings near you. Compare locations, treatments, ratings, and published directory evidence.",
   alternates: { canonical: "https://nearbyiv.com/" },
   openGraph: {
     title: "NearbyIV — Find Mobile IV Therapy Providers Near You",
     description:
-      "Search 3,400+ verified mobile IV therapy providers. Hangover IV, NAD+, GLP-1 weight loss delivered to your door.",
+      "Search reviewed mobile IV therapy listings and compare locations, services, ratings, and directory evidence.",
     url: "/",
     type: "website",
   },
@@ -185,7 +185,7 @@ export default function Home() {
           {/* Eyebrow */}
           <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-blue-300 mb-6">
             <span className="w-4 h-px bg-blue-400 inline-block" />
-            Verified Concierge Medical Directory
+            <Link href="/verification" className="underline decoration-blue-400/60 underline-offset-4">Reviewed Concierge Medical Directory</Link>
             <span className="w-4 h-px bg-blue-400 inline-block" />
           </span>
 
@@ -253,7 +253,7 @@ export default function Home() {
             {[
               {
                 title: "Available NOW / On-Call",
-                subtext: "Connect with verified clinicians currently available for mobile dispatch in your area.",
+                subtext: "Find listings with public evidence of mobile service. Confirm clinician credentials and current availability directly.",
                 icon: (
                   <svg className="w-14 h-14 text-[#4d94ff]" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M9 2C8.44772 2 8 2.44772 8 3V4H6C4.89543 4 4 4.89543 4 6V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V6C20 4.89543 19.1046 4 18 4H16V3C16 2.44772 15.5523 2 15 2C14.4477 2 14 2.44772 14 3V4H10V3C10 2.44772 9.55228 2 9 2ZM6 8H18V20H6V8Z" />
@@ -412,6 +412,7 @@ export default function Home() {
             <Link href="/faq" className="hover:text-white transition-colors">FAQ</Link>
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
+            <Link href="/verification" className="hover:text-white transition-colors">Verification</Link>
             <a href="mailto:NearByIV@gmail.com" className="hover:text-white transition-colors">Contact</a>
           </div>
           <p className="text-xs text-gray-700">&copy; 2026 NearbyIV.com. All rights reserved.</p>
