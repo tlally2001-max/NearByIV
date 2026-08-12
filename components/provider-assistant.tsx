@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -118,7 +119,9 @@ export function ProviderAssistant({
       >
         <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
           <div className="flex min-w-0 items-center gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-700 to-cyan-500 text-sm font-black text-white">N</span>
+            <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl border border-blue-100 bg-white shadow-sm">
+              <Image src="/provider-assistant-icon.png" alt="" fill sizes="40px" className="object-cover" priority />
+            </span>
             <div className="min-w-0">
               <p className="truncate text-sm font-bold text-slate-950">{providerName} Assistant</p>
               <p className="flex items-center gap-1.5 text-xs text-emerald-700"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Ready to help</p>
