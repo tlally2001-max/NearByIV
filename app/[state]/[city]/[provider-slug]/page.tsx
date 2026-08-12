@@ -303,14 +303,21 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
               {p.menu_highlights && Array.isArray(p.menu_highlights) && p.menu_highlights.length > 0 && (
                 <div className="mb-8">
                   <h3 className="text-xl font-bold text-slate-950 mb-4">Services Offered</h3>
-                  <p className="text-gray-700 leading-relaxed">
+                  <ul className="grid gap-3 sm:grid-cols-2" aria-label="Services offered">
                     {p.menu_highlights.map((item, index) => (
-                      <span key={index}>
-                        <span className="font-semibold">{item.service}</span>
-                        {index < p.menu_highlights!.length - 1 && " • "}
-                      </span>
+                      <li
+                        key={`${item.service}-${index}`}
+                        className="flex min-h-12 items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800"
+                      >
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-700" aria-hidden="true">
+                          <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M16.704 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.296-7.293a1 1 0 011.408 0z" clipRule="evenodd" />
+                          </svg>
+                        </span>
+                        <span>{item.service}</span>
+                      </li>
                     ))}
-                  </p>
+                  </ul>
                 </div>
               )}
 
