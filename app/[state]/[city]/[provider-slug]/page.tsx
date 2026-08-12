@@ -229,13 +229,13 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
       />
 
       <div className="max-w-6xl mx-auto px-6">
-      <div className="relative overflow-hidden rounded-[2rem] border border-violet-100 bg-white shadow-[0_24px_80px_-32px_rgba(79,70,229,0.35)]">
-        <div className="pointer-events-none absolute -left-20 -top-24 h-64 w-64 rounded-full bg-violet-200/50 blur-3xl" />
+      <div className="relative overflow-hidden rounded-[2rem] border border-blue-100 bg-white shadow-[0_24px_80px_-32px_rgba(37,99,235,0.35)]">
+        <div className="pointer-events-none absolute -left-20 -top-24 h-64 w-64 rounded-full bg-blue-200/50 blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 left-1/3 h-48 w-48 rounded-full bg-cyan-100/60 blur-3xl" />
         <div className="relative grid min-h-[420px] items-stretch lg:grid-cols-[1.05fr_0.95fr]">
         <div className="relative z-10 flex flex-col items-center justify-center p-8 text-center md:p-12 lg:p-14">
           {p.is_confirmed_mobile && (
-            <span className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-violet-700">
+            <span className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
@@ -251,8 +251,8 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
             {p.rating != null && <span className="rounded-full border border-amber-200 bg-amber-50 px-4 py-2 font-semibold text-amber-800 shadow-sm">★ {p.rating.toFixed(1)}{p.reviews ? ` · ${p.reviews} reviews` : ""}</span>}
           </div>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            {p.website && <a href={p.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-violet-200 transition hover:-translate-y-0.5 hover:shadow-xl">Visit provider website</a>}
-            {p.phone && <a href={`tel:${p.phone}`} className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-800 shadow-sm transition hover:border-violet-300 hover:text-violet-700">Call provider</a>}
+            {p.website && <a href={p.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-blue-700 to-cyan-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:shadow-xl">Visit provider website</a>}
+            {p.phone && <a href={`tel:${p.phone}`} className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-800 shadow-sm transition hover:border-blue-300 hover:text-blue-700">Call provider</a>}
           </div>
         </div>
         <div className="relative min-h-[300px] overflow-hidden lg:m-5 lg:ml-0 lg:min-h-0 lg:rounded-[1.5rem]">
@@ -473,7 +473,7 @@ export default function ProviderPage({
   params,
 }: ProviderPageProps) {
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(221,214,254,0.45),_transparent_28%),linear-gradient(to_bottom,_#fafaff,_#f8fafc_45%,_#ffffff)]">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(191,219,254,0.45),_transparent_28%),linear-gradient(to_bottom,_#f8fbff,_#f8fafc_45%,_#ffffff)]">
       <Header />
 
       <div className="max-w-6xl mx-auto px-6 py-4 pt-14">
