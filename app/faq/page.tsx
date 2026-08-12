@@ -133,6 +133,9 @@ export default function FAQPage() {
 
       {/* FAQ Content */}
       <main className="max-w-4xl mx-auto px-6 py-12">
+        <aside className="mb-10 rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm leading-relaxed text-amber-950">
+          <strong>Safety note:</strong> NearbyIV is an informational directory and does not provide medical care. This page was last reviewed August 11, 2026. IV therapy may cause infection, bruising, allergic reactions, medication interactions, or fluid and electrolyte complications. Eligibility must be decided by a licensed clinician who knows your history. Call 911 for severe symptoms or a medical emergency.
+        </aside>
         {faqs.map((section) => (
           <section key={section.category} className="mb-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 pb-4 border-b-2 border-[#0066FF]">

@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { isValidatedProvider } from "@/lib/directory-validation";
 
 interface ProviderPageProps {
   params: Promise<{ state: string; city: string; "provider-slug": string }>;
@@ -68,22 +69,21 @@ export async function generateMetadata({
   const supabase = await createClient();
   const { data } = await supabase
     .from("providers")
-    .select("name:business_name, city:City, state:State, treatments, is_confirmed_mobile")
+    .select("name:business_name, city:City, state:State, treatments, is_confirmed_mobile, personalized_bio, service_areas")
     .eq("city_slug", city)
     .eq("provider_slug", providerSlug)
     .single();
 
-  if (!data) {
-    return { title: "Provider Not Found | NearbyIV" };
+  if (!data || !isValidatedProvider(data)) {
+    return { title: "Provider Not Found | NearbyIV", robots: { index: false, follow: false } };
   }
 
   const location = [data.city, data.state].filter(Boolean).join(", ");
-  const services = data.is_confirmed_mobile ? ["Mobile IV"] : [];
-
   const title = `${data.name} | IV Therapy in ${location} | NearbyIV`;
   return {
     title: { absolute: title },
     description: `Book IV therapy with ${data.name} in ${location}. Professional IV therapy services in ${location}.`,
+    alternates: { canonical: `https://nearbyiv.com/${(data.state || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}/${city}/${providerSlug}` },
   };
 }
 
@@ -96,7 +96,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
     .eq("provider_slug", providerSlug)
     .single();
 
-  if (!provider) {
+  if (!provider || !isValidatedProvider(provider)) {
     notFound();
   }
 

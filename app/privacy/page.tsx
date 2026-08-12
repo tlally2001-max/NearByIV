@@ -1,5 +1,12 @@
 import Link from "next/link";
 import { Header } from "@/components/header";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: { absolute: "Privacy Policy | NearbyIV" },
+  description: "Learn how NearbyIV collects, uses, protects, and retains personal information.",
+  alternates: { canonical: "https://nearbyiv.com/privacy" },
+};
 
 export default function PrivacyPage() {
   return (

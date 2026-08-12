@@ -1,15 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : process.env.NODE_ENV === "production"
-    ? "https://nearbyiv.com"
-    : "http://localhost:3000";
+const defaultUrl = "https://nearbyiv.com";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -75,12 +70,6 @@ export const metadata: Metadata = {
   },
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  display: "swap",
-  subsets: ["latin"],
-});
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -97,7 +86,7 @@ export default function RootLayout({
           gtag('config', 'G-RHH8EB4R4Z');
         `}} />
       </head>
-      <body className={`${geistSans.className} antialiased`}>
+      <body className="antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

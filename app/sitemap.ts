@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { dedupeValidatedProviders, slugifyLocation } from "@/lib/directory-validation";
 
 const BASE_URL = "https://nearbyiv.com";
 
@@ -50,14 +51,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Fetch all providers for dynamic route generation
-  let dynamicPages: MetadataRoute.Sitemap = [];
+  const dynamicPages: MetadataRoute.Sitemap = [];
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
     if (supabaseUrl && supabaseKey) {
       const res = await fetch(
-        `${supabaseUrl}/rest/v1/providers?select=State,city_slug,provider_slug&city_slug=not.is.null&provider_slug=not.is.null`,
+        `${supabaseUrl}/rest/v1/providers?select=business_name,City,State,city_slug,provider_slug,treatments,personalized_bio,service_areas,is_confirmed_mobile&city_slug=not.is.null&provider_slug=not.is.null`,
         {
           headers: {
             apikey: supabaseKey,
@@ -68,7 +69,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       );
 
       if (res.ok) {
-        const providers: Array<{ State: string; city_slug: string; provider_slug: string }> = await res.json();
+        const providers = dedupeValidatedProviders(await res.json());
 
         // Track unique states and state+city combos
         const uniqueStates = new Set<string>();
@@ -77,9 +78,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
         providers.forEach((p) => {
           if (p.State) {
-            const stateSlug = p.State.toLowerCase()
-              .replace(/[^a-z0-9]+/g, "-")
-              .replace(/^-|-$/g, "");
+            const stateSlug = slugifyLocation(p.State);
             uniqueStates.add(stateSlug);
 
             if (p.city_slug) {
@@ -124,7 +123,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         });
       }
     }
-  } catch (e) {
+  } catch {
     // Fall back to static pages only
   }
 

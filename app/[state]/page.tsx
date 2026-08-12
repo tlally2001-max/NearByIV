@@ -1,9 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
-import { Header } from "@/components/header";
-import { Breadcrumbs } from "@/components/breadcrumbs";
 import { LocationPageClient } from "./location-client";
+import { dedupeValidatedProviders } from "@/lib/directory-validation";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -59,6 +58,7 @@ export async function generateMetadata({
 
   return {
     title: { absolute: `Mobile IV Therapy in ${display} | NearbyIV` },
+    alternates: { canonical: `https://nearbyiv.com/${state}` },
     description: `Find mobile IV therapy near you in ${display}. Browse verified providers for hangover relief, hydration, NAD+, GLP-1 weight loss & wellness drips — delivered to your door.`,
   };
 }
@@ -107,7 +107,7 @@ export default async function StatePage({
     .order("business_name", { ascending: true })
     .limit(5000);
 
-  let providers = result.data;
+  let providers = dedupeValidatedProviders(result.data || []);
 
   if (!providers || providers.length === 0) {
     notFound();

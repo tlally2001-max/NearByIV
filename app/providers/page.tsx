@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { dedupeValidatedProviders } from "@/lib/directory-validation";
 
 // Allow query parameters to work with revalidation
 export const revalidate = 3600; // Revalidate every hour
@@ -21,16 +22,19 @@ export const metadata: Metadata = {
   },
 };
 
-async function fetchAllProviders() {
-  const cols = "id,slug,name,city,state,website,rating,reviews,hero_image,treatments,is_confirmed_mobile";
-  const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=${cols}&is_confirmed_mobile=eq.true&order=rating.desc.nullslast`;
+async function fetchAllProviders(): Promise<Parameters<typeof ProviderGrid>[0]["providers"]> {
+  const cols = "id,slug,name:business_name,city:City,state:State,website,rating,reviews,hero_image,treatments,is_confirmed_mobile,personalized_bio,service_areas";
+  const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=${cols}&order=rating.desc.nullslast&limit=5000`;
 
   try {
     const res = await fetch(url, {
       headers: { apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "" },
     });
-    if (!res.ok) return [];
-    return res.json();
+    if (!res.ok) {
+      console.error("Provider inventory request failed", res.status, await res.text());
+      return [];
+    }
+    return dedupeValidatedProviders(await res.json()) as Parameters<typeof ProviderGrid>[0]["providers"];
   } catch {
     return [];
   }
@@ -62,9 +66,10 @@ export default async function ProvidersPage() {
       {/* Grid */}
       <section className="max-w-7xl mx-auto px-6 py-10">
         {providers.length === 0 ? (
-          <p className="text-gray-400 text-center py-16">
-            No providers found. Try again later.
-          </p>
+          <div className="mx-auto max-w-xl rounded-xl border border-amber-200 bg-amber-50 p-6 text-center text-amber-950">
+            <h2 className="font-semibold">Provider listings are temporarily unavailable</h2>
+            <p className="mt-2 text-sm">We are refreshing our reviewed inventory. Please browse by location or check back shortly.</p>
+          </div>
         ) : (
           <Suspense fallback={
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

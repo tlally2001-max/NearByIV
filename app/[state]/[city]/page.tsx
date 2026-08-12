@@ -1,9 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { Header } from "@/components/header";
-import { Breadcrumbs } from "@/components/breadcrumbs";
 import { LocationPageClient } from "../location-client";
+import { dedupeValidatedProviders, isValidCity } from "@/lib/directory-validation";
 
 export const dynamicParams = true;
 
@@ -20,6 +19,7 @@ const STATE_MAP: Record<string, string> = {
   "north-carolina": "North Carolina", "north-dakota": "North Dakota", ohio: "Ohio", oklahoma: "Oklahoma",
   oregon: "Oregon", pennsylvania: "Pennsylvania", "rhode-island": "Rhode Island", "south-carolina": "South Carolina",
   "south-dakota": "South Dakota", tennessee: "Tennessee", texas: "Texas", utah: "Utah",
+  "district-of-columbia": "District of Columbia",
   vermont: "Vermont", virginia: "Virginia", washington: "Washington", "west-virginia": "West Virginia",
   wisconsin: "Wisconsin", wyoming: "Wyoming",
 };
@@ -59,10 +59,17 @@ export async function generateMetadata({
   const fullStateName = STATE_MAP[state];
   const cityDisplay = city.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
   const display = `${cityDisplay}, ${fullStateName || state}`;
+  const canonical = `https://nearbyiv.com/${state}/${city}`;
+
+  if (!fullStateName || !isValidCity(cityDisplay)) {
+    return { title: "Location Not Found | NearbyIV", robots: { index: false, follow: false } };
+  }
 
   return {
     title: { absolute: `Mobile IV Therapy in ${display} | NearbyIV` },
-    description: `Book mobile IV therapy in ${display}. Verified providers for hangover relief, hydration, NAD+, GLP-1 weight loss & wellness drips delivered to your home or hotel. Available now.`,
+    description: `Book mobile IV therapy in ${display}. Reviewed providers for hydration and wellness services delivered to your home or hotel.`,
+    alternates: { canonical },
+    openGraph: { url: canonical },
   };
 }
 
@@ -91,7 +98,7 @@ export default async function CityPage({
     .ilike("State", fullStateName)
     .order("rating", { ascending: false, nullsFirst: false });
 
-  const providers = result.data;
+  const providers = dedupeValidatedProviders(result.data || []);
 
   if (!providers || providers.length === 0) {
     notFound();

@@ -10,23 +10,24 @@ export const metadata: Metadata = {
   title: "How It Works — Your Path to Feeling Unstoppable",
   description:
     "Experience elite mobile medical care with verified RN-led providers. Learn how NearbyIV finds and vets the best practitioners in your area.",
+  alternates: { canonical: "https://nearbyiv.com/how-it-works" },
 };
 
 export default function HowItWorks() {
   const benefits = [
     {
-      title: "Rehydrate Faster",
+      title: "Clinical Rehydration",
       description:
-        "Say goodbye to sluggishness. Our IV drips restore lost fluids quickly, giving you back the energy and vitality you need to power through your day with confidence.",
+        "IV fluids deliver hydration directly into the bloodstream. Whether treatment is appropriate, and how it compares with oral fluids, depends on an individual clinical assessment.",
       icon: Droplet,
       color: "text-blue-500",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-200",
     },
     {
-      title: "Boost Your Immunity",
+      title: "Discuss Vitamin Options",
       description:
-        "Build a shield against whatever life throws at you. With high-dose vitamins delivered straight to your cells, you'll stay ahead of cold, flu, and seasonal fatigue.",
+        "Some providers offer vitamin-containing infusions. Evidence and risks vary by ingredient, dose, and health history, so claims and options should be reviewed with a licensed clinician.",
       icon: Shield,
       color: "text-emerald-500",
       bgColor: "bg-emerald-50",
@@ -35,7 +36,7 @@ export default function HowItWorks() {
     {
       title: "Recover Like an Athlete",
       description:
-        "Whether you're hitting the gym or just feeling worn out, our nutrient-rich drips can speed up recovery, optimize performance, and get you back in action faster than ever.",
+        "Some people seek IV services after exertion. A clinician should evaluate symptoms and explain when rest, oral hydration, or medical care is more appropriate.",
       icon: Zap,
       color: "text-amber-500",
       bgColor: "bg-amber-50",
@@ -44,7 +45,7 @@ export default function HowItWorks() {
     {
       title: "Sharpen Your Mind",
       description:
-        "Feel the fog lift. Our tailored blends provide your body with maximum absorption of vitamins, amino acids and more, helping you reclaim your focus, improve memory, and stay sharp all day long.",
+        "Fatigue or difficulty concentrating can have many causes. IV therapy is not proven to improve memory or focus in otherwise healthy people; persistent symptoms need medical evaluation.",
       icon: Brain,
       color: "text-purple-500",
       bgColor: "bg-purple-50",
@@ -53,7 +54,7 @@ export default function HowItWorks() {
     {
       title: "Glow from Within",
       description:
-        "Achieve that natural glow with powerful antioxidants that hydrate and nourish your skin from the inside out. Vitamins and antioxidants can reduce wrinkles, blemishes, and restore that youthful radiance.",
+        "Cosmetic benefits from IV vitamins are not established. Ask a qualified clinician about evidence, possible side effects, and alternatives before treatment.",
       icon: Sparkles,
       color: "text-pink-500",
       bgColor: "bg-pink-50",
@@ -80,7 +81,7 @@ export default function HowItWorks() {
             </span>
           </h1>
           <p className="text-2xl md:text-3xl font-semibold text-gray-700 mb-3">
-            Get that instant boost to keep up with life's demands. Your body
+            Learn about IV services for life&apos;s demands. Your body
             needs it.
           </p>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
@@ -104,6 +105,9 @@ export default function HowItWorks() {
 
       {/* Benefit Grid */}
       <section className="max-w-7xl mx-auto px-6 py-12">
+        <div className="mb-10 rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-950">
+          <strong>Medical information notice:</strong> NearbyIV is a directory, not a medical provider. Content was last reviewed August 11, 2026 and is general information, not diagnosis or treatment advice. IV therapy can cause infection, bruising, allergic reactions, medication interactions, and fluid or electrolyte complications. People with heart or kidney disease, pregnancy, medication allergies, or other significant conditions should speak with their clinician. For severe symptoms or an emergency, call 911.
+        </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
           {benefits.map((benefit, index) => {
             const IconComponent = benefit.icon;

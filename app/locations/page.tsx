@@ -5,6 +5,7 @@ import { Header } from "@/components/header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { USAMapComponent } from "./usa-map-component";
 import { LocationSearch } from "./location-search";
+import { dedupeValidatedProviders, isValidCity, slugifyLocation } from "@/lib/directory-validation";
 
 export const dynamic = "force-dynamic";
 
@@ -21,10 +22,6 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
-
-function toSlug(text: string): string {
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-}
 
 export default async function LocationsPage() {
   const supabase = await createClient();
@@ -45,13 +42,17 @@ export default async function LocationsPage() {
   // Fetch top 20 cities by provider count
   const { data: allProviders } = await supabase
     .from("providers")
-    .select("City, State, postal_code")
+    .select("business_name, City, State, postal_code, treatments, personalized_bio, service_areas, is_confirmed_mobile")
     .limit(10000);
 
+  const validatedProviders = dedupeValidatedProviders(allProviders || []);
+
   const cityCounts = new Map<string, { city: string; state: string; count: number; zips: Set<string> }>();
-  (allProviders || []).forEach((provider: { City: string; State: string; postal_code?: string }) => {
-    if (provider.City && provider.State) {
-      const key = `${provider.City}, ${provider.State}`;
+  validatedProviders.forEach((provider) => {
+    if (isValidCity(provider.City) && provider.State) {
+      const city = provider.City!.trim();
+      const state = provider.State.trim();
+      const key = `${city.toLowerCase()}|${state.toLowerCase()}`;
       if (cityCounts.has(key)) {
         const existing = cityCounts.get(key)!;
         if (provider.postal_code) {
@@ -64,8 +65,8 @@ export default async function LocationsPage() {
           zips.add(provider.postal_code);
         }
         cityCounts.set(key, {
-          city: provider.City,
-          state: provider.State,
+          city,
+          state,
           count: 1,
           zips,
         });
@@ -86,13 +87,13 @@ export default async function LocationsPage() {
 
   // Get unique states with providers for Browse section
   const uniqueStates = new Set<string>();
-  (allProviders || []).forEach((provider: { State: string }) => {
+  validatedProviders.forEach((provider) => {
     if (provider.State) uniqueStates.add(provider.State);
   });
 
   const stateLocations: Record<string, string[]> = {};
-  (allProviders || []).forEach((provider: { State: string; City: string }) => {
-    if (provider.State && provider.City) {
+  validatedProviders.forEach((provider) => {
+    if (provider.State && isValidCity(provider.City)) {
       if (!stateLocations[provider.State]) {
         stateLocations[provider.State] = [];
       }
@@ -142,8 +143,8 @@ export default async function LocationsPage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Top Cities by Provider Count</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {topCities.map(({ city, state, count }) => {
-              const stateSlug = toSlug(state);
-              const citySlug = toSlug(city);
+              const stateSlug = slugifyLocation(state);
+              const citySlug = slugifyLocation(city);
               return (
                 <Link
                   key={`${state}-${city}`}
@@ -180,7 +181,7 @@ export default async function LocationsPage() {
                   {cities.map((city) => (
                     <Link
                       key={city}
-                      href={`/${toSlug(state)}/${toSlug(city)}`}
+                      href={`/${slugifyLocation(state)}/${slugifyLocation(city)}`}
                       className="text-sm text-[#0066FF] hover:text-[#0052cc] hover:underline transition-colors py-1"
                     >
                       {city}

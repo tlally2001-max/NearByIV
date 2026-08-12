@@ -1,6 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  turbopack: { root: process.cwd() },
+  outputFileTracingRoot: process.cwd(),
+  async redirects() {
+    return [
+      {
+        source: "/dc/washington",
+        destination: "/district-of-columbia/washington",
+        permanent: true,
+      },
+    ];
+  },
   // Use aggressive static generation and caching headers instead
   async headers() {
     return [
