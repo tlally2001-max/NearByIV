@@ -271,7 +271,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
               <div className="flex items-center gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-700 to-cyan-500 text-sm font-black text-white">N</span>
                 <div>
-                  <p className="text-sm font-bold text-slate-950">NearbyIV Assistant</p>
+                  <p className="text-sm font-bold text-slate-950">{p.name} Assistant</p>
                   <p className="flex items-center gap-1.5 text-xs text-emerald-700"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Ready to help</p>
                 </div>
               </div>
