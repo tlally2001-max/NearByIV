@@ -22,6 +22,7 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/privacy") ||
     request.nextUrl.pathname.startsWith("/terms") ||
     request.nextUrl.pathname.startsWith("/locations") ||
+    request.nextUrl.pathname === "/api/provider-chat" ||
     // SEO routes - must be public for search engines
     request.nextUrl.pathname === "/sitemap.xml" ||
     request.nextUrl.pathname === "/robots.txt" ||
