@@ -264,11 +264,6 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-10 md:py-14">
-        <div className="mb-8 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-2xl border border-violet-100 bg-violet-50/70 p-5 shadow-sm"><p className="text-xs font-bold uppercase tracking-wider text-violet-600">Service format</p><p className="mt-2 font-semibold text-slate-900">{p.is_confirmed_mobile ? "Mobile service published" : "Confirm with provider"}</p></div>
-          <div className="rounded-2xl border border-amber-100 bg-amber-50/70 p-5 shadow-sm"><p className="text-xs font-bold uppercase tracking-wider text-amber-700">Clinical staffing</p><p className="mt-2 font-semibold text-slate-900">{p.medical_staff_type || "Ask provider directly"}</p></div>
-          <div className="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-5 shadow-sm"><p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Directory review</p><p className="mt-2 font-semibold text-slate-900">Evidence published below</p></div>
-        </div>
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1 min-w-0">
             <div className="bg-white rounded-3xl shadow-[0_18px_50px_-34px_rgba(15,23,42,0.35)] border border-slate-200/80 p-7 md:p-10">
