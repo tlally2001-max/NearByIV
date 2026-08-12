@@ -6,7 +6,9 @@ type ChatMessage = {
   content: string;
 };
 
-const MAX_WEBSITE_TEXT = 12000;
+const MAX_PAGE_TEXT = 6000;
+const MAX_WEBSITE_CONTEXT = 24000;
+const MAX_WEBSITE_PAGES = 5;
 
 function extractReadableText(html: string) {
   return html
@@ -23,7 +25,7 @@ function extractReadableText(html: string) {
     .replace(/&gt;/gi, ">")
     .replace(/\s+/g, " ")
     .trim()
-    .slice(0, MAX_WEBSITE_TEXT);
+    .slice(0, MAX_PAGE_TEXT);
 }
 
 function getAllowedProviderUrl(value: string | null) {
@@ -43,9 +45,7 @@ function getAllowedProviderUrl(value: string | null) {
   }
 }
 
-async function getProviderWebsiteText(value: string | null) {
-  const url = getAllowedProviderUrl(value);
-  if (!url) return "";
+async function fetchProviderPage(url: URL) {
   try {
     const response = await fetch(url, {
       headers: {
@@ -55,11 +55,59 @@ async function getProviderWebsiteText(value: string | null) {
       signal: AbortSignal.timeout(8000),
       next: { revalidate: 3600 },
     });
-    if (!response.ok || !(response.headers.get("content-type") || "").includes("text/html")) return "";
-    return extractReadableText((await response.text()).slice(0, 500000));
+    if (!response.ok || !(response.headers.get("content-type") || "").includes("text/html")) return null;
+    return { url: response.url || url.toString(), html: (await response.text()).slice(0, 500000) };
   } catch {
-    return "";
+    return null;
   }
+}
+
+function findRelevantWebsiteLinks(html: string, baseUrl: URL) {
+  const keywords = ["service", "treatment", "therapy", "pricing", "price", "menu", "faq", "contact", "book", "appointment", "hours"];
+  const excluded = /\.(?:jpg|jpeg|png|gif|webp|svg|pdf|zip)(?:$|\?)/i;
+  const links = new Map<string, number>();
+  const anchorPattern = /<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
+  let match: RegExpExecArray | null;
+
+  while ((match = anchorPattern.exec(html))) {
+    try {
+      const candidate = new URL(match[1], baseUrl);
+      if (candidate.origin !== baseUrl.origin || excluded.test(candidate.pathname)) continue;
+      if (/\/(?:privacy|terms|login|account|cart|careers?)(?:\/|$)/i.test(candidate.pathname)) continue;
+      candidate.hash = "";
+      const label = extractReadableText(match[2]).toLowerCase();
+      const haystack = `${candidate.pathname} ${candidate.search} ${label}`.toLowerCase();
+      const score = keywords.reduce((total, keyword) => total + (haystack.includes(keyword) ? 1 : 0), 0);
+      if (score > 0 && candidate.toString() !== baseUrl.toString()) {
+        links.set(candidate.toString(), Math.max(score, links.get(candidate.toString()) || 0));
+      }
+    } catch {
+      // Ignore malformed links.
+    }
+  }
+
+  return [...links.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, MAX_WEBSITE_PAGES - 1)
+    .map(([url]) => new URL(url));
+}
+
+async function getProviderWebsiteText(value: string | null) {
+  const startingUrl = getAllowedProviderUrl(value);
+  if (!startingUrl) return "";
+
+  const startingPage = await fetchProviderPage(startingUrl);
+  if (!startingPage) return "";
+
+  const resolvedUrl = getAllowedProviderUrl(startingPage.url) || startingUrl;
+  const relatedUrls = findRelevantWebsiteLinks(startingPage.html, resolvedUrl);
+  const relatedPages = await Promise.all(relatedUrls.map(fetchProviderPage));
+  const pages = [startingPage, ...relatedPages.filter((page): page is NonNullable<typeof page> => Boolean(page))];
+
+  return pages
+    .map((page) => `Source page: ${page.url}\n${extractReadableText(page.html)}`)
+    .join("\n\n")
+    .slice(0, MAX_WEBSITE_CONTEXT);
 }
 
 export async function POST(request: NextRequest) {
