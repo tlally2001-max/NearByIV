@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { providerHref } from "@/lib/provider-url";
 
 type Provider = {
   id: string;
@@ -8,6 +9,8 @@ type Provider = {
   name: string;
   city: string | null;
   state: string | null;
+  city_slug: string;
+  provider_slug: string;
   website: string | null;
   rating: number | null;
   reviews: number | null;
@@ -102,7 +105,7 @@ export function FeaturedProviders({ providers }: { providers: Provider[] }) {
 
             {/* CTA */}
             <Link
-              href={`/providers/${p.slug}`}
+              href={providerHref(p)}
               className="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2.5 rounded-lg transition-colors cursor-pointer text-center block"
             >
               View Profile

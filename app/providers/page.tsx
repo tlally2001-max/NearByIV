@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 async function fetchAllProviders(): Promise<Parameters<typeof ProviderGrid>[0]["providers"]> {
-  const cols = "id,slug,name:business_name,city:City,state:State,website,rating,reviews,hero_image,treatments,is_confirmed_mobile,personalized_bio,service_areas";
+  const cols = "id,slug,name:business_name,city:City,state:State,city_slug,provider_slug,website,rating,reviews,hero_image,treatments,is_confirmed_mobile,personalized_bio,service_areas";
   const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=${cols}&order=rating.desc.nullslast&limit=5000`;
 
   try {

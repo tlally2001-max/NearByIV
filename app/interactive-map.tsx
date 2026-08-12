@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { providerHref } from "@/lib/provider-url";
 
 type Provider = {
   id: string;
@@ -8,6 +9,8 @@ type Provider = {
   name: string;
   city: string | null;
   state: string | null;
+  city_slug: string;
+  provider_slug: string;
   rating: number | null;
   reviews: number | null;
 };
@@ -181,7 +184,7 @@ export function InteractiveMap({
             <p style="margin: 0 0 8px 0; color: #666; font-size: 13px;">
               ${provider.city}, ${provider.state}
             </p>
-            <a href="/providers/${provider.slug}" style="display: inline-block; padding: 6px 12px; background: #0066FF; color: white; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer;">
+            <a href="${providerHref(provider)}" style="display: inline-block; padding: 6px 12px; background: #0066FF; color: white; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer;">
               View Profile
             </a>
           </div>

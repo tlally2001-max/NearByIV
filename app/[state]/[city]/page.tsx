@@ -1,8 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { LocationPageClient } from "../location-client";
-import { dedupeValidatedProviders, isValidCity } from "@/lib/directory-validation";
+import { dedupeValidatedProviders, isValidCity, slugifyLocation } from "@/lib/directory-validation";
 
 export const dynamicParams = true;
 
@@ -82,6 +82,19 @@ export default async function CityPage({
   const fullStateName = STATE_MAP[state];
 
   if (!fullStateName) {
+    const supabase = await createClient();
+    const { data: legacyProvider } = await supabase
+      .from("providers")
+      .select("state:State, city_slug, provider_slug")
+      .eq("city_slug", state)
+      .eq("provider_slug", city)
+      .limit(1)
+      .maybeSingle();
+
+    if (legacyProvider?.state && legacyProvider.city_slug && legacyProvider.provider_slug) {
+      permanentRedirect(`/${slugifyLocation(legacyProvider.state)}/${legacyProvider.city_slug}/${legacyProvider.provider_slug}`);
+    }
+
     notFound();
   }
 

@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { canonicalStateName } from "@/lib/directory-validation";
+import { providerHref } from "@/lib/provider-url";
 
 type Provider = {
   id: string;
@@ -11,6 +12,8 @@ type Provider = {
   name: string;
   city: string | null;
   state: string | null;
+  city_slug: string;
+  provider_slug: string;
   website: string | null;
   rating: number | null;
   reviews: number | null;
@@ -432,7 +435,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
                 className="group bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
               >
                 {/* Hero image */}
-                <Link href={`/providers/${p.slug}`} className="block relative h-44 bg-gray-50 overflow-hidden">
+                <Link href={providerHref(p)} className="block relative h-44 bg-gray-50 overflow-hidden">
                   <img
                     src={p.hero_image || "/iv-bag-default.jpg"}
                     alt={p.name}
@@ -495,7 +498,7 @@ export function ProviderGrid({ providers }: { providers: Provider[] }) {
                   )}
 
                   <Link
-                    href={`/providers/${p.slug}`}
+                    href={providerHref(p)}
                     className="mt-auto inline-flex items-center justify-center gap-2 rounded-lg bg-[#0066FF] hover:bg-[#0052cc] text-white text-sm font-semibold px-4 py-2.5 transition-colors"
                   >
                     View Profile

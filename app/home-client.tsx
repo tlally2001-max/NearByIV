@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { providerHref } from "@/lib/provider-url";
 
 type Provider = {
   id: string;
@@ -10,6 +11,8 @@ type Provider = {
   name: string;
   city: string | null;
   state: string | null;
+  city_slug: string;
+  provider_slug: string;
   website: string | null;
   phone: string | null;
   rating: number | null;
@@ -248,7 +251,7 @@ export function HomeClient({ providers }: { providers: Provider[] }) {
                             </a>
                           )}
                           <Link
-                            href={`/providers/${p.slug}`}
+                            href={providerHref(p)}
                             className={`text-sm font-semibold border border-gray-200 hover:border-[#0066FF] hover:text-[#0066FF] text-gray-600 px-4 py-2 rounded-lg transition-colors ${p.phone ? "" : "flex-1 text-center"}`}
                           >
                             View Profile
