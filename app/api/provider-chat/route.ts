@@ -8,6 +8,11 @@ type ChatMessage = {
 
 export async function POST(request: NextRequest) {
   try {
+    const contentLength = Number(request.headers.get("content-length") || "0");
+    if (contentLength > 20000) {
+      return NextResponse.json({ error: "Request too large" }, { status: 413 });
+    }
+
     const body = await request.json();
     const providerId = typeof body.providerId === "string" ? body.providerId : "";
     const message = typeof body.message === "string" ? body.message.trim().slice(0, 1000) : "";
