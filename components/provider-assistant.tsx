@@ -16,6 +16,16 @@ function cleanChatFormatting(content: string) {
     .trim();
 }
 
+function LinkedText({ text }: { text: string }) {
+  const parts = text.split(/(https?:\/\/[^\s]+)/g);
+  return <>{parts.map((part, index) => {
+    if (!/^https?:\/\//i.test(part)) return part;
+    const href = part.replace(/[.,;!?)]$/, "");
+    const trailing = part.slice(href.length);
+    return <span key={index}><a href={href} target="_blank" rel="noopener noreferrer" className="font-medium text-blue-700 underline decoration-blue-300 underline-offset-2 hover:text-blue-900">{href}</a>{trailing}</span>;
+  })}</>;
+}
+
 function ChatMessageContent({ content }: { content: string }) {
   const lines = cleanChatFormatting(content).split(/\n+/).filter(Boolean);
 
@@ -24,10 +34,10 @@ function ChatMessageContent({ content }: { content: string }) {
       {lines.map((line, index) => line.startsWith("• ") ? (
         <div key={index} className="flex items-start gap-2.5 rounded-xl bg-blue-50/70 px-3 py-2.5">
           <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600" aria-hidden="true" />
-          <span>{line.slice(2)}</span>
+          <span><LinkedText text={line.slice(2)} /></span>
         </div>
       ) : (
-        <p key={index}>{line}</p>
+        <p key={index}><LinkedText text={line} /></p>
       ))}
     </div>
   );
