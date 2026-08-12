@@ -43,7 +43,7 @@ export function ProviderAssistant({
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
-      content: "Hi! I'm here to help. What can I assist you with today?",
+      content: `Hi! I'm ${providerName} Assistant. What can I assist you with today?`,
     },
   ]);
   const [input, setInput] = useState("");
