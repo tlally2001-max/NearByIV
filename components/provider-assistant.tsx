@@ -7,6 +7,14 @@ type ChatMessage = {
   content: string;
 };
 
+function cleanChatFormatting(content: string) {
+  return content
+    .replace(/\*\*(.*?)\*\*/g, "$1")
+    .replace(/^\s*[-*]\s+/gm, "• ")
+    .replace(/#{1,6}\s+/g, "")
+    .trim();
+}
+
 export function ProviderAssistant({
   providerId,
   providerName,
@@ -17,7 +25,7 @@ export function ProviderAssistant({
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
-      content: `Hi! I can help you explore published information about ${providerName}. Ask me about services, hours, or how to contact the provider.`,
+      content: "Ask me about services, hours, or contact details.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -99,7 +107,7 @@ export function ProviderAssistant({
                 ? "ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-blue-700 px-4 py-3 text-[0.9rem] font-medium leading-6 tracking-[-0.01em] text-white shadow-sm"
                 : "max-w-[92%] whitespace-pre-wrap rounded-2xl rounded-bl-md border border-slate-200 bg-white px-4 py-3 text-[0.9rem] font-normal leading-6 tracking-[-0.01em] text-slate-700 shadow-sm"}
             >
-              {chatMessage.content}
+              {cleanChatFormatting(chatMessage.content)}
             </div>
           ))}
           {isLoading && (
