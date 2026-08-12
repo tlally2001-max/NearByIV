@@ -23,6 +23,8 @@ type Provider = {
   seo_url_path: string;
   website: string | null;
   phone: string | null;
+  address: string | null;
+  postal_code: string | null;
   rating: number | null;
   reviews: number | null;
   hero_image: string | null;
@@ -104,7 +106,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
   const supabase = await createClient();
   const { data: provider } = await supabase
     .from("providers")
-    .select("name:business_name, city:City, state:State, id, slug, city_slug, provider_slug, seo_url_path, website, phone, rating, reviews, hero_image, treatments, service_areas, is_confirmed_mobile, personalized_bio, menu_highlights, working_hours, medical_staff_type, verification_status, last_verified_at, verification_source")
+    .select("name:business_name, city:City, state:State, id, slug, city_slug, provider_slug, seo_url_path, website, phone, address, postal_code, rating, reviews, hero_image, treatments, service_areas, is_confirmed_mobile, personalized_bio, menu_highlights, working_hours, medical_staff_type, verification_status, last_verified_at, verification_source")
     .eq("city_slug", city)
     .eq("provider_slug", providerSlug)
     .single();
@@ -141,7 +143,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
   }
 
   const location = [p.city, p.state].filter(Boolean).join(", ");
-  const fullAddress = [p.city, p.state].filter(Boolean).join(", ");
+  const fullAddress = p.address?.trim() || location;
   const mapQuery = encodeURIComponent(p.name + (fullAddress ? `, ${fullAddress}` : ""));
 
   // Convert state name to slug
@@ -350,15 +352,12 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">Connect directly</p>
                 <h2 className="mt-2 text-2xl font-bold text-slate-950 mb-5">Contact provider</h2>
                 <div className="space-y-3">
-                  {location && (
+                  {fullAddress && (
                     <div className="flex items-start gap-3">
                       <svg className="w-5 h-5 text-red-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                       </svg>
-                      <div className="text-sm text-gray-700">
-                        {p.city && <div>{p.city}</div>}
-                        {p.state && <div>{p.state}</div>}
-                      </div>
+                      <div className="text-sm leading-6 text-gray-700">{fullAddress}</div>
                     </div>
                   )}
                   {p.phone && (
