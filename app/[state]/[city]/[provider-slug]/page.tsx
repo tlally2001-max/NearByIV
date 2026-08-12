@@ -256,21 +256,6 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
           <div className="flex-1 min-w-0">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
 
-              <section className="mb-8 rounded-xl border border-blue-200 bg-blue-50 p-5" aria-labelledby="verification-evidence">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <h2 id="verification-evidence" className="text-lg font-bold text-gray-950">Directory review evidence</h2>
-                  <Link href="/verification" className="text-sm font-semibold text-blue-700 underline underline-offset-2">What this label means</Link>
-                </div>
-                <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
-                  <div><dt className="font-semibold text-gray-900">Review status</dt><dd className="mt-1 text-gray-600">{p.verification_status === "mobile_confirmed" ? "Mobile service confirmed from published evidence" : "Directory listing reviewed"}</dd></div>
-                  <div><dt className="font-semibold text-gray-900">Last reviewed</dt><dd className="mt-1 text-gray-600">{p.last_verified_at ? new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeZone: "UTC" }).format(new Date(p.last_verified_at)) : "Not yet published"}</dd></div>
-                  <div><dt className="font-semibold text-gray-900">Evidence source</dt><dd className="mt-1 text-gray-600">{p.verification_source || "Not yet published"}</dd></div>
-                  <div><dt className="font-semibold text-gray-900">Clinician information</dt><dd className="mt-1 text-gray-600">{p.medical_staff_type || "Confirm directly with the provider"}</dd></div>
-                </dl>
-                <p className="mt-4 text-xs leading-relaxed text-gray-600">NearbyIV does not guarantee licensure, medical-director oversight, pricing, or current availability. Verify credentials and treatment eligibility directly.</p>
-                <a href={`mailto:NearByIV@gmail.com?subject=${encodeURIComponent(`Correction for ${p.name}`)}&body=${encodeURIComponent(`Listing: https://nearbyiv.com/${stateSlug}/${p.city_slug}/${p.provider_slug}\n\nCorrection details:`)}`} className="mt-3 inline-flex text-sm font-semibold text-blue-700 underline underline-offset-2">Report an error in this listing</a>
-              </section>
-
               <div className="mb-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">About {p.name}</h3>
                 {p.personalized_bio ? (
@@ -438,6 +423,21 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
             </div>
           </div>
         </div>
+
+        <section className="mt-10 rounded-xl border border-blue-200 bg-blue-50 p-5" aria-labelledby="verification-evidence">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 id="verification-evidence" className="text-lg font-bold text-gray-950">Directory review evidence</h2>
+            <Link href="/verification" className="text-sm font-semibold text-blue-700 underline underline-offset-2">What this label means</Link>
+          </div>
+          <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
+            <div><dt className="font-semibold text-gray-900">Review status</dt><dd className="mt-1 text-gray-600">{p.verification_status === "mobile_confirmed" ? "Mobile service confirmed from published evidence" : "Directory listing reviewed"}</dd></div>
+            <div><dt className="font-semibold text-gray-900">Last reviewed</dt><dd className="mt-1 text-gray-600">{p.last_verified_at ? new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeZone: "UTC" }).format(new Date(p.last_verified_at)) : "Not yet published"}</dd></div>
+            <div><dt className="font-semibold text-gray-900">Evidence source</dt><dd className="mt-1 text-gray-600">{p.verification_source || "Not yet published"}</dd></div>
+            <div><dt className="font-semibold text-gray-900">Clinician information</dt><dd className="mt-1 text-gray-600">{p.medical_staff_type || "Confirm directly with the provider"}</dd></div>
+          </dl>
+          <p className="mt-4 text-xs leading-relaxed text-gray-600">NearbyIV does not guarantee licensure, medical-director oversight, pricing, or current availability. Verify credentials and treatment eligibility directly.</p>
+          <a href={`mailto:NearByIV@gmail.com?subject=${encodeURIComponent(`Correction for ${p.name}`)}&body=${encodeURIComponent(`Listing: https://nearbyiv.com/${stateSlug}/${p.city_slug}/${p.provider_slug}\n\nCorrection details:`)}`} className="mt-3 inline-flex text-sm font-semibold text-blue-700 underline underline-offset-2">Report an error in this listing</a>
+        </section>
       </div>
     </>
   );
