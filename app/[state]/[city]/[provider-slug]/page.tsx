@@ -229,45 +229,49 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
       />
 
       <div className="max-w-6xl mx-auto px-6">
-      <div className="relative min-h-[340px] md:min-h-[420px] bg-slate-950 rounded-[2rem] overflow-hidden shadow-2xl shadow-blue-950/20 ring-1 ring-white/10">
-        <img
-          src={p.hero_image || "/iv-bag-default.jpg"}
-          alt={p.name}
-          className="absolute inset-0 w-full h-full object-cover opacity-55"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-blue-950/35" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
-
-        <div className="relative z-10 flex min-h-[340px] md:min-h-[420px] max-w-3xl flex-col justify-end p-7 md:p-12">
+      <div className="relative overflow-hidden rounded-[2rem] border border-violet-100 bg-white shadow-[0_24px_80px_-32px_rgba(79,70,229,0.35)]">
+        <div className="pointer-events-none absolute -left-20 -top-24 h-64 w-64 rounded-full bg-violet-200/50 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 left-1/3 h-48 w-48 rounded-full bg-cyan-100/60 blur-3xl" />
+        <div className="relative grid min-h-[420px] items-stretch lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="relative z-10 flex flex-col justify-center p-8 md:p-12 lg:p-14">
           {p.is_confirmed_mobile && (
-            <span className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-emerald-300/30 bg-emerald-400/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-emerald-100 backdrop-blur-md">
+            <span className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-violet-700">
               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               Mobile service reviewed
             </span>
           )}
-          <h1 className="text-4xl font-bold leading-[1.05] tracking-tight text-white md:text-6xl">
+          <h1 className="max-w-2xl text-4xl font-bold leading-[1.05] tracking-tight text-slate-950 md:text-6xl">
             {p.name}
           </h1>
-          <p className="mt-4 text-lg text-slate-200 md:text-xl">Mobile IV therapy in {location || "your area"}</p>
-          <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-white">
-            {location && <span className="rounded-full border border-white/20 bg-white/10 px-4 py-2 backdrop-blur-md">{location}</span>}
-            {p.rating != null && <span className="rounded-full border border-amber-300/30 bg-amber-300/15 px-4 py-2 font-semibold text-amber-100 backdrop-blur-md">★ {p.rating.toFixed(1)}{p.reviews ? ` · ${p.reviews} reviews` : ""}</span>}
+          <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate-600 md:text-xl">Mobile IV therapy and wellness services in {location || "your area"}.</p>
+          <div className="mt-7 flex flex-wrap items-center gap-3 text-sm">
+            {location && <span className="rounded-full border border-slate-200 bg-white px-4 py-2 font-medium text-slate-700 shadow-sm">{location}</span>}
+            {p.rating != null && <span className="rounded-full border border-amber-200 bg-amber-50 px-4 py-2 font-semibold text-amber-800 shadow-sm">★ {p.rating.toFixed(1)}{p.reviews ? ` · ${p.reviews} reviews` : ""}</span>}
           </div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            {p.website && <a href={p.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-violet-200 transition hover:-translate-y-0.5 hover:shadow-xl">Visit provider website</a>}
+            {p.phone && <a href={`tel:${p.phone}`} className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-800 shadow-sm transition hover:border-violet-300 hover:text-violet-700">Call provider</a>}
+          </div>
+        </div>
+        <div className="relative min-h-[300px] overflow-hidden lg:m-5 lg:ml-0 lg:min-h-0 lg:rounded-[1.5rem]">
+          <img src={p.hero_image || "/iv-bag-default.jpg"} alt={p.name} className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/25 via-transparent to-white/5" />
+        </div>
         </div>
       </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-10 md:py-14">
-        <div className="mb-8 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><p className="text-xs font-bold uppercase tracking-wider text-slate-400">Service format</p><p className="mt-1 font-semibold text-slate-900">{p.is_confirmed_mobile ? "Mobile service published" : "Confirm with provider"}</p></div>
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><p className="text-xs font-bold uppercase tracking-wider text-slate-400">Clinical staffing</p><p className="mt-1 font-semibold text-slate-900">{p.medical_staff_type || "Ask provider directly"}</p></div>
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><p className="text-xs font-bold uppercase tracking-wider text-slate-400">Directory review</p><p className="mt-1 font-semibold text-slate-900">Evidence published below</p></div>
+        <div className="mb-8 grid gap-4 sm:grid-cols-3">
+          <div className="rounded-2xl border border-violet-100 bg-violet-50/70 p-5 shadow-sm"><p className="text-xs font-bold uppercase tracking-wider text-violet-600">Service format</p><p className="mt-2 font-semibold text-slate-900">{p.is_confirmed_mobile ? "Mobile service published" : "Confirm with provider"}</p></div>
+          <div className="rounded-2xl border border-amber-100 bg-amber-50/70 p-5 shadow-sm"><p className="text-xs font-bold uppercase tracking-wider text-amber-700">Clinical staffing</p><p className="mt-2 font-semibold text-slate-900">{p.medical_staff_type || "Ask provider directly"}</p></div>
+          <div className="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-5 shadow-sm"><p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Directory review</p><p className="mt-2 font-semibold text-slate-900">Evidence published below</p></div>
         </div>
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1 min-w-0">
-            <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-7 md:p-10">
+            <div className="bg-white rounded-3xl shadow-[0_18px_50px_-34px_rgba(15,23,42,0.35)] border border-slate-200/80 p-7 md:p-10">
 
               <div className="mb-8">
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">Provider overview</p>
@@ -307,9 +311,9 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
                     {p.menu_highlights.map((item, index) => (
                       <li
                         key={`${item.service}-${index}`}
-                        className="flex min-h-12 items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800"
+                        className="flex min-h-14 items-center gap-3 rounded-2xl border border-violet-100 bg-gradient-to-br from-white to-violet-50/70 px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm transition hover:-translate-y-0.5 hover:border-violet-200 hover:shadow-md"
                       >
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-700" aria-hidden="true">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-violet-100 text-violet-700" aria-hidden="true">
                           <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M16.704 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.296-7.293a1 1 0 011.408 0z" clipRule="evenodd" />
                           </svg>
@@ -321,7 +325,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
                 </div>
               )}
 
-              <p className="mt-8 rounded-2xl bg-blue-50 p-5 text-blue-950 leading-relaxed">
+              <p className="mt-8 rounded-2xl border border-violet-100 bg-gradient-to-r from-violet-50 to-blue-50 p-5 font-medium text-slate-800 leading-relaxed">
                 Get in touch with {p.name} to book your mobile IV therapy appointment in {location || "your area"} today!
               </p>
             </div>
@@ -341,8 +345,8 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
                 />
               </div>
 
-              <div className="bg-white rounded-3xl shadow-lg shadow-slate-200/60 border border-slate-200 p-7">
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">Connect directly</p>
+              <div className="bg-white rounded-3xl shadow-[0_20px_55px_-32px_rgba(79,70,229,0.35)] border border-violet-100 p-7">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">Connect directly</p>
                 <h2 className="mt-2 text-2xl font-bold text-slate-950 mb-5">Contact provider</h2>
                 <div className="space-y-3">
                   {location && (
@@ -425,7 +429,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
 
                 <div className="mt-6 space-y-3">
                   {p.phone && (
-                    <a href={`tel:${p.phone}`} className="flex items-center justify-center gap-2 w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                    <a href={`tel:${p.phone}`} className="flex items-center justify-center gap-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-semibold text-slate-800 transition hover:border-violet-300 hover:text-violet-700">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                       </svg>
@@ -433,7 +437,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
                     </a>
                   )}
                   {p.website && (
-                    <a href={p.website} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                    <a href={p.website} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 px-4 py-3 font-semibold text-white shadow-lg shadow-violet-200 transition hover:-translate-y-0.5 hover:shadow-xl">
                       Visit Website
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -447,7 +451,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
         </div>
 
         <section className="mt-10 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm" aria-labelledby="verification-evidence">
-          <div className="h-1.5 bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500" />
+          <div className="h-1.5 bg-gradient-to-r from-violet-600 via-blue-500 to-cyan-400" />
           <div className="p-7 md:p-9">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">Transparency record</p><h2 id="verification-evidence" className="mt-2 text-2xl font-bold text-slate-950">Directory review evidence</h2></div>
@@ -474,7 +478,7 @@ export default function ProviderPage({
   params,
 }: ProviderPageProps) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(221,214,254,0.45),_transparent_28%),linear-gradient(to_bottom,_#fafaff,_#f8fafc_45%,_#ffffff)]">
       <Header />
 
       <div className="max-w-6xl mx-auto px-6 py-4 pt-14">
