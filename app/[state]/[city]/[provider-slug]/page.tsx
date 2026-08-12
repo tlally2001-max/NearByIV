@@ -450,24 +450,21 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
           </div>
         </div>
 
-        <section className="mt-10 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm" aria-labelledby="verification-evidence">
-          <div className="h-1.5 bg-gradient-to-r from-violet-600 via-blue-500 to-cyan-400" />
-          <div className="p-7 md:p-9">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">Transparency record</p><h2 id="verification-evidence" className="mt-2 text-2xl font-bold text-slate-950">Directory review evidence</h2></div>
-            <Link href="/verification" className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">What this label means</Link>
+        <section className="mt-8 rounded-2xl border border-slate-200 bg-white/80 px-5 py-4" aria-labelledby="verification-evidence">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-slate-600">
+              <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
+              <h2 id="verification-evidence" className="font-semibold text-slate-800">Directory reviewed</h2>
+              <span className="text-slate-300" aria-hidden="true">•</span>
+              <span>{p.verification_status === "mobile_confirmed" ? "Mobile service confirmed" : "Listing reviewed"}</span>
+              {p.last_verified_at && <><span className="text-slate-300" aria-hidden="true">•</span><span>{new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeZone: "UTC" }).format(new Date(p.last_verified_at))}</span></>}
+            </div>
+            <div className="flex shrink-0 items-center gap-4 text-xs font-semibold">
+              <Link href="/verification" className="text-blue-700 hover:underline">Review standards</Link>
+              <a href={`mailto:NearByIV@gmail.com?subject=${encodeURIComponent(`Correction for ${p.name}`)}&body=${encodeURIComponent(`Listing: https://nearbyiv.com/${stateSlug}/${p.city_slug}/${p.provider_slug}\n\nCorrection details:`)}`} className="text-slate-600 hover:text-blue-700 hover:underline">Report an error</a>
+            </div>
           </div>
-          <dl className="mt-6 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-2xl bg-slate-50 p-4"><dt className="font-semibold text-slate-500">Review status</dt><dd className="mt-2 font-medium leading-relaxed text-slate-900">{p.verification_status === "mobile_confirmed" ? "Mobile service confirmed from published evidence" : "Directory listing reviewed"}</dd></div>
-            <div className="rounded-2xl bg-slate-50 p-4"><dt className="font-semibold text-slate-500">Last reviewed</dt><dd className="mt-2 font-medium text-slate-900">{p.last_verified_at ? new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeZone: "UTC" }).format(new Date(p.last_verified_at)) : "Not yet published"}</dd></div>
-            <div className="rounded-2xl bg-slate-50 p-4"><dt className="font-semibold text-slate-500">Evidence source</dt><dd className="mt-2 font-medium leading-relaxed text-slate-900">{p.verification_source || "Not yet published"}</dd></div>
-            <div className="rounded-2xl bg-slate-50 p-4"><dt className="font-semibold text-slate-500">Clinician information</dt><dd className="mt-2 font-medium text-slate-900">{p.medical_staff_type || "Confirm directly with the provider"}</dd></div>
-          </dl>
-          <div className="mt-6 flex flex-col gap-4 border-t border-slate-200 pt-6 md:flex-row md:items-center md:justify-between">
-            <p className="max-w-3xl text-xs leading-relaxed text-slate-500">NearbyIV does not guarantee licensure, medical-director oversight, pricing, or current availability. Verify credentials and treatment eligibility directly.</p>
-            <a href={`mailto:NearByIV@gmail.com?subject=${encodeURIComponent(`Correction for ${p.name}`)}&body=${encodeURIComponent(`Listing: https://nearbyiv.com/${stateSlug}/${p.city_slug}/${p.provider_slug}\n\nCorrection details:`)}`} className="inline-flex shrink-0 items-center justify-center rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:border-blue-500 hover:text-blue-700">Report an error</a>
-          </div>
-          </div>
+          <p className="mt-2 text-[11px] leading-relaxed text-slate-400">Confirm credentials, pricing, availability, and treatment eligibility directly with the provider.</p>
         </section>
       </div>
     </>
