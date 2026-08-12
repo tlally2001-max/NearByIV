@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -22,6 +22,16 @@ export function ProviderAssistant({
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const conversationRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const conversation = conversationRef.current;
+    if (!conversation) return;
+    conversation.scrollTo({
+      top: conversation.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messages, isLoading]);
 
   async function sendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -65,7 +75,11 @@ export function ProviderAssistant({
     <div className="relative flex min-h-[360px] items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-6 lg:m-5 lg:ml-0 lg:min-h-0 lg:rounded-[1.5rem] lg:p-8">
       <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-blue-300/35 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-20 -left-12 h-52 w-52 rounded-full bg-cyan-300/30 blur-3xl" />
-      <div className="relative flex w-full max-w-md flex-col overflow-hidden rounded-[1.6rem] border border-blue-100 bg-white shadow-[0_24px_70px_-28px_rgba(37,99,235,0.38)]" aria-label={`${providerName} assistant`}>
+      <div
+        className="relative flex w-full max-w-md flex-col overflow-hidden rounded-[1.6rem] border border-blue-100 bg-white shadow-[0_24px_70px_-28px_rgba(37,99,235,0.38)]"
+        style={{ fontFamily: 'Inter, "Avenir Next", "Segoe UI", sans-serif' }}
+        aria-label={`${providerName} assistant`}
+      >
         <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
           <div className="flex min-w-0 items-center gap-3">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-700 to-cyan-500 text-sm font-black text-white">N</span>
@@ -77,13 +91,13 @@ export function ProviderAssistant({
           <span className="ml-3 shrink-0 rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-700">AI assistant</span>
         </div>
 
-        <div className="h-64 space-y-4 overflow-y-auto bg-slate-50/70 p-5" aria-live="polite">
+        <div ref={conversationRef} className="h-64 scroll-smooth space-y-4 overflow-y-auto bg-slate-50/70 p-5" aria-live="polite">
           {messages.map((chatMessage, index) => (
             <div
               key={`${chatMessage.role}-${index}`}
               className={chatMessage.role === "user"
-                ? "ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-blue-700 px-4 py-3 text-sm leading-relaxed text-white shadow-sm"
-                : "max-w-[92%] whitespace-pre-wrap rounded-2xl rounded-bl-md border border-slate-200 bg-white px-4 py-3 text-sm leading-relaxed text-slate-700 shadow-sm"}
+                ? "ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-blue-700 px-4 py-3 text-[0.9rem] font-medium leading-6 tracking-[-0.01em] text-white shadow-sm"
+                : "max-w-[92%] whitespace-pre-wrap rounded-2xl rounded-bl-md border border-slate-200 bg-white px-4 py-3 text-[0.9rem] font-normal leading-6 tracking-[-0.01em] text-slate-700 shadow-sm"}
             >
               {chatMessage.content}
             </div>
