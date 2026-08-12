@@ -25,7 +25,7 @@ export function ProviderAssistant({
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
-      content: "Ask me about services, hours, or contact details.",
+      content: "Hi! I'm here to help. What can I assist you with today?",
     },
   ]);
   const [input, setInput] = useState("");
