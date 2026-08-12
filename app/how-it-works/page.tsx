@@ -111,9 +111,6 @@ export default function HowItWorks() {
 
       {/* Benefit Grid */}
       <section className="max-w-7xl mx-auto px-6 py-12">
-        <div className="mb-10 rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-950">
-          <strong>Medical information notice:</strong> NearbyIV is a directory, not a medical provider. Content was last reviewed August 11, 2026 and is general information, not diagnosis or treatment advice. IV therapy can cause infection, bruising, allergic reactions, medication interactions, and fluid or electrolyte complications. People with heart or kidney disease, pregnancy, medication allergies, or other significant conditions should speak with their clinician. For severe symptoms or an emergency, call 911.
-        </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
           {benefits.map((benefit, index) => {
             const IconComponent = benefit.icon;
