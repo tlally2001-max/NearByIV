@@ -1,0 +1,45 @@
+name: Notify IndexNow
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  submit-current-urls:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for production deployment
+        run: sleep 90
+
+      - name: Submit sitemap URLs to IndexNow
+        env:
+          INDEXNOW_KEY: 279d8b12484c45838a4fd3cf66a22c92
+        run: |
+          python - <<'PY'
+          import json, os, time, urllib.request, xml.etree.ElementTree as ET
+
+          sitemap_url = "https://nearbyiv.com/sitemap.xml"
+          key = os.environ["INDEXNOW_KEY"]
+          with urllib.request.urlopen(sitemap_url, timeout=30) as response:
+              root = ET.fromstring(response.read())
+
+          urls = [node.text for node in root.findall("{http://www.sitemaps.org/schemas/sitemap/0.9}url/{http://www.sitemaps.org/schemas/sitemap/0.9}loc") if node.text]
+          payload = json.dumps({
+              "host": "nearbyiv.com",
+              "key": key,
+              "keyLocation": f"https://nearbyiv.com/{key}.txt",
+              "urlList": urls[:10000],
+          }).encode()
+          request = urllib.request.Request(
+              "https://api.indexnow.org/indexnow",
+              data=payload,
+              headers={"Content-Type": "application/json; charset=utf-8"},
+              method="POST",
+          )
+          with urllib.request.urlopen(request, timeout=60) as response:
+              print(f"IndexNow accepted {len(urls)} URLs with status {response.status}")
+          PY

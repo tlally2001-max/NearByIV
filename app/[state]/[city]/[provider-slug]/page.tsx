@@ -151,24 +151,49 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
   const cityDisplay = p.city_slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   const stateDisplay = p.state || "";
 
+  const toSchemaTime = (value: string) => {
+    const match = value.match(/^(\d{1,2})(?::(\d{2}))?\s*(AM|PM)$/i);
+    if (!match) return value;
+    let hour = Number(match[1]) % 12;
+    if (match[3].toUpperCase() === "PM") hour += 12;
+    return `${String(hour).padStart(2, "0")}:${match[2] || "00"}`;
+  };
+
+  let openingHoursSpecification: Array<Record<string, string>> = [];
+  try {
+    const hours = JSON.parse(p.working_hours || "{}") as Record<string, string[]>;
+    openingHoursSpecification = Object.entries(hours).flatMap(([day, ranges]) => {
+      const range = ranges?.[0];
+      if (!range || range.toLowerCase() === "closed") return [];
+      const [opens, closes] = range.split("-").map((value) => value.trim());
+      return opens && closes ? [{ "@type": "OpeningHoursSpecification", dayOfWeek: day, opens: toSchemaTime(opens), closes: toSchemaTime(closes) }] : [];
+    });
+  } catch {
+    openingHoursSpecification = [];
+  }
+
+  const canonicalProviderUrl = `https://nearbyiv.com/${stateSlug}/${p.city_slug}/${p.provider_slug}`;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "MedicalBusiness"],
-    "@id": `https://nearbyiv.com/${stateSlug}/${p.city_slug}/${p.provider_slug}`,
+    "@id": `${canonicalProviderUrl}#provider`,
     name: p.name,
-    url: p.website ?? undefined,
+    url: canonicalProviderUrl,
+    sameAs: p.website ? [p.website] : undefined,
     telephone: p.phone ?? undefined,
     priceRange: "$$",
     serviceType: "IV Therapy",
-    areaServed: {
-      "@type": "GeoShape",
-      addressCountry: "US",
-    },
+    areaServed: serviceAreas.length
+      ? serviceAreas.map((name) => ({ "@type": "City", name }))
+      : { "@type": "City", name: location },
     address: p.city
       ? {
           "@type": "PostalAddress",
+          streetAddress: p.address ?? undefined,
           addressLocality: p.city,
           addressRegion: p.state ?? undefined,
+          postalCode: p.postal_code ?? undefined,
           addressCountry: "US",
         }
       : undefined,
@@ -186,6 +211,11 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
     description: `${p.name} provides mobile IV therapy in ${location || "your area"}.`,
     medicalSpecialty: "IV Therapy",
     knowsAbout: treatments.slice(0, 10),
+    makesOffer: treatments.slice(0, 20).map((service) => ({
+      "@type": "Offer",
+      itemOffered: { "@type": "Service", name: service },
+    })),
+    openingHoursSpecification: openingHoursSpecification.length ? openingHoursSpecification : undefined,
   };
 
   const breadcrumbLd = {
