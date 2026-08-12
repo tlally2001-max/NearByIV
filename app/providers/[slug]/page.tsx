@@ -11,23 +11,27 @@ export default async function LegacyProviderPage({
 }) {
   const { slug } = await params;
   const supabase = await createClient();
-  const { data: legacySlugMatch } = await supabase
+  const { data: legacySlugMatches } = await supabase
     .from("providers")
     .select("state:State, city_slug, provider_slug")
     .eq("slug", slug)
-    .limit(1)
-    .maybeSingle();
+    .limit(2);
 
-  const { data: providerSlugMatch } = legacySlugMatch
+  const { data: providerSlugMatches } = legacySlugMatches?.length
     ? { data: null }
     : await supabase
         .from("providers")
         .select("state:State, city_slug, provider_slug")
         .eq("provider_slug", slug)
-        .limit(1)
-        .maybeSingle();
+        .limit(2);
 
-  const data = legacySlugMatch || providerSlugMatch;
+  const matches = legacySlugMatches?.length ? legacySlugMatches : providerSlugMatches || [];
+
+  if (matches.length > 1) {
+    permanentRedirect(`/providers?q=${encodeURIComponent(slug.replace(/-/g, " "))}`);
+  }
+
+  const data = matches[0];
 
   if (!data?.state || !data.city_slug || !data.provider_slug) {
     notFound();
