@@ -11,8 +11,26 @@ function cleanChatFormatting(content: string) {
   return content
     .replace(/\*\*(.*?)\*\*/g, "$1")
     .replace(/^\s*[-*]\s+/gm, "• ")
+    .replace(/\s+•\s+/g, "\n• ")
     .replace(/#{1,6}\s+/g, "")
     .trim();
+}
+
+function ChatMessageContent({ content }: { content: string }) {
+  const lines = cleanChatFormatting(content).split(/\n+/).filter(Boolean);
+
+  return (
+    <div className="space-y-2.5">
+      {lines.map((line, index) => line.startsWith("• ") ? (
+        <div key={index} className="flex items-start gap-2.5 rounded-xl bg-blue-50/70 px-3 py-2.5">
+          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600" aria-hidden="true" />
+          <span>{line.slice(2)}</span>
+        </div>
+      ) : (
+        <p key={index}>{line}</p>
+      ))}
+    </div>
+  );
 }
 
 export function ProviderAssistant({
@@ -107,7 +125,9 @@ export function ProviderAssistant({
                 ? "ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-blue-700 px-4 py-3 text-[0.9rem] font-medium leading-6 tracking-[-0.01em] text-white shadow-sm"
                 : "max-w-[92%] whitespace-pre-wrap rounded-2xl rounded-bl-md border border-slate-200 bg-white px-4 py-3 text-[0.9rem] font-normal leading-6 tracking-[-0.01em] text-slate-700 shadow-sm"}
             >
-              {cleanChatFormatting(chatMessage.content)}
+              {chatMessage.role === "assistant"
+                ? <ChatMessageContent content={chatMessage.content} />
+                : cleanChatFormatting(chatMessage.content)}
             </div>
           ))}
           {isLoading && (
