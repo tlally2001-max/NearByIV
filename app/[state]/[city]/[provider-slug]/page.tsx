@@ -84,10 +84,18 @@ export async function generateMetadata({
 
   const location = [data.city, data.state].filter(Boolean).join(", ");
   const title = `${data.name} | IV Therapy in ${location} | NearbyIV`;
+  const description = `Book IV therapy with ${data.name} in ${location}. Professional IV therapy services in ${location}.`;
+  const canonical = `https://nearbyiv.com/${(data.state || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}/${city}/${providerSlug}`;
   return {
     title: { absolute: title },
-    description: `Book IV therapy with ${data.name} in ${location}. Professional IV therapy services in ${location}.`,
-    alternates: { canonical: `https://nearbyiv.com/${(data.state || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}/${city}/${providerSlug}` },
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      type: "website",
+    },
   };
 }
 
