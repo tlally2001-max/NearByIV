@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { ProviderAssistant } from "@/components/provider-assistant";
 import { isValidatedProvider } from "@/lib/directory-validation";
 
 interface ProviderPageProps {
@@ -263,41 +264,7 @@ async function ProfileContent({ city, providerSlug }: { city: string; providerSl
             {p.phone && <a href={`tel:${p.phone}`} className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-800 shadow-sm transition hover:border-blue-300 hover:text-blue-700">Call provider</a>}
           </div>
         </div>
-        <div className="relative flex min-h-[360px] items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-6 lg:m-5 lg:ml-0 lg:min-h-0 lg:rounded-[1.5rem] lg:p-8">
-          <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-blue-300/35 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-20 -left-12 h-52 w-52 rounded-full bg-cyan-300/30 blur-3xl" />
-          <div className="relative w-full max-w-md overflow-hidden rounded-[1.6rem] border border-blue-100 bg-white shadow-[0_24px_70px_-28px_rgba(37,99,235,0.38)]" aria-label="NearbyIV assistant preview">
-            <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-              <div className="flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-700 to-cyan-500 text-sm font-black text-white">N</span>
-                <div>
-                  <p className="text-sm font-bold text-slate-950">{p.name} Assistant</p>
-                  <p className="flex items-center gap-1.5 text-xs text-emerald-700"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Ready to help</p>
-                </div>
-              </div>
-              <span className="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-700">AI preview</span>
-            </div>
-            <div className="space-y-4 bg-slate-50/70 p-5">
-              <div className="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-blue-700 px-4 py-3 text-sm leading-relaxed text-white shadow-sm">
-                What services does {p.name} offer?
-              </div>
-              <div className="max-w-[92%] rounded-2xl rounded-bl-md border border-slate-200 bg-white px-4 py-3 text-sm leading-relaxed text-slate-700 shadow-sm">
-                <p className="font-semibold text-slate-950">Here’s what I found:</p>
-                <p className="mt-1.5">
-                  {p.menu_highlights?.slice(0, 3).map((item) => item.service).join(", ") || "IV therapy and wellness services"}
-                  {p.menu_highlights && p.menu_highlights.length > 3 ? ", and more." : "."}
-                </p>
-                <p className="mt-2 text-xs text-slate-500">Always confirm services and eligibility directly with the provider.</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 border-t border-slate-100 bg-white p-4">
-              <span className="flex-1 rounded-full border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-400">Ask about this provider…</span>
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-700 text-white shadow-md shadow-blue-200" aria-hidden="true">
-                <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M3.105 2.289a.75.75 0 00-.826.95l1.414 5.153a1.75 1.75 0 001.194 1.194L9.25 10.75l-4.363 1.164a1.75 1.75 0 00-1.194 1.194L2.279 18.26a.75.75 0 00.95.826l15-5.25a.75.75 0 000-1.414l-15-5.25z" /></svg>
-              </span>
-            </div>
-          </div>
-        </div>
+        <ProviderAssistant providerId={p.id} providerName={p.name} />
         </div>
       </div>
       </div>
