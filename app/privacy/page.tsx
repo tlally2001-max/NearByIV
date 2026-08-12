@@ -6,7 +6,12 @@ export const metadata: Metadata = {
   title: { absolute: "Privacy Policy | NearbyIV" },
   description: "Learn how NearbyIV collects, uses, protects, and retains personal information.",
   alternates: { canonical: "https://nearbyiv.com/privacy" },
-  openGraph: { url: "https://nearbyiv.com/privacy" },
+  openGraph: {
+    title: "Privacy Policy | NearbyIV",
+    description: "Learn how NearbyIV collects, uses, protects, and retains personal information.",
+    url: "https://nearbyiv.com/privacy",
+    type: "website",
+  },
 };
 
 export default function PrivacyPage() {

@@ -11,7 +11,12 @@ export const metadata: Metadata = {
   description:
     "Learn how mobile IV services work, what to ask providers, and how NearbyIV reviews directory listings.",
   alternates: { canonical: "https://nearbyiv.com/how-it-works" },
-  openGraph: { url: "https://nearbyiv.com/how-it-works" },
+  openGraph: {
+    title: "How Mobile IV Therapy Works | NearbyIV",
+    description: "Learn how mobile IV services work, what to ask providers, and how NearbyIV reviews directory listings.",
+    url: "https://nearbyiv.com/how-it-works",
+    type: "website",
+  },
 };
 
 export default function HowItWorks() {
